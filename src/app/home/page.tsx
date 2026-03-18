@@ -10,10 +10,12 @@ import { Footer } from '@/components/Footer/Footer'
 import { Hero } from '@/components/Hero/Hero'
 import { About } from '@/components/About/About'
 import { Projects } from '@/components/Projects/Projects'
+import FlipCard from '@/components/FlipCard/FlipCard'
 
 export default function Page() {
   const [showHeader, setShowHeader] = useState(false)
   const lastScrollY = useRef(0)
+  const [onCard, setOnCard] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,11 +41,21 @@ export default function Page() {
 
   return (
     <div className={styles.main_cont}>
-      <Header showHeader={showHeader} />
+      <Header showHeader={showHeader} setOnCard={setOnCard} />
       <Hero />
       <About />
       <Projects />
       <Footer />
+
+      <div
+        onClick={() => setOnCard(false)}
+        className={styles.shadow} style={{
+          opacity: onCard ? 1 : 0,
+          pointerEvents: !onCard ? 'none' : undefined
+        }} />
+
+      <FlipCard onCard={onCard}/>
+
 
       {/* <div>
 

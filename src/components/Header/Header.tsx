@@ -4,9 +4,10 @@ import { ArrowUpRight} from 'lucide-react'
 
 interface HeaderProps {
     showHeader: boolean
+    setOnCard: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Header = ({ showHeader }: HeaderProps) => {
+export const Header = ({ showHeader, setOnCard }: HeaderProps) => {
     return (
         <div
             className={`${styles.header_main_cont} ${showHeader ? styles.show : styles.hide
@@ -16,6 +17,7 @@ export const Header = ({ showHeader }: HeaderProps) => {
                 <img src="/ai.svg" alt="" className={styles.header_image} />
 
                 <Button 
+                onClick={() => setOnCard(true)}
                 icon={<ArrowUpRight size={16} />}
                 type='primary'
                 style={{

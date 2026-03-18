@@ -7,9 +7,19 @@
     position: relative;
     padding-bottom: 64px;
     box-sizing: border-box;
+    overflow-x: hidden;
 
 }
 
+.shadow {
+    position: absolute;
+    width: 100%;
+    height: calc(100% + 60px);
+    z-index: 999;
+    background-color: #00000040;
+    mix-blend-mode: multiply;
+    transition: all 0.3s ease;
+}
 
 
 
