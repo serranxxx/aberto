@@ -37,7 +37,6 @@ export default function FlipCard({
                 <div className={styles.flipInner}>
                     <div
                         className={styles.front}
-                        style={{ backgroundColor: frontColor }}
                     >
 
                         <div className={styles.image}>
@@ -73,7 +72,6 @@ export default function FlipCard({
                     </div>
                     <div
                         className={styles.back}
-                        style={{ backgroundColor: backColor }}
                     >
                         <Image fill src="/presentation.jpg" alt="" style={{ objectFit: 'cover' }} />
                     </div>
