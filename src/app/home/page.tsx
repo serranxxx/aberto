@@ -52,14 +52,10 @@ export default function Page() {
         className={styles.shadow} style={{
           opacity: onCard ? 1 : 0,
           pointerEvents: !onCard ? 'none' : undefined
-        }} />
+        }}/>
 
       <FlipCard onCard={onCard}/>
 
-
-      {/* <div>
-
-      </div> */}
     </div>
   )
 }
