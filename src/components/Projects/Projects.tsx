@@ -14,7 +14,7 @@ export const Projects = () => {
     const scrollLeft = () => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
-                left: -800,
+                left: -400,
                 behavior: "smooth"
             });
         }
@@ -23,7 +23,7 @@ export const Projects = () => {
     const scrollRight = () => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
-                left: 800,
+                left: 400,
                 behavior: "smooth"
             });
         }
