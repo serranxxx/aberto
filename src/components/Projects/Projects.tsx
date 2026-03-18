@@ -6,6 +6,7 @@ import styles from './projects.module.css'
 import Image from 'next/image'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef } from 'react'
+import Link from 'next/link'
 
 export const Projects = () => {
 
@@ -14,7 +15,7 @@ export const Projects = () => {
   const scrollLeft = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: -400,
+        left: -350,
         behavior: "smooth"
       });
     }
@@ -23,7 +24,7 @@ export const Projects = () => {
   const scrollRight = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: 400,
+        left: 350,
         behavior: "smooth"
       });
     }
@@ -66,9 +67,15 @@ export const Projects = () => {
             </div>
 
 
-            <Button style={{
-              backgroundColor: '#1D1D1B'
-            }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button>
+            <Link href="/iattend">
+              <Button
+                style={{ backgroundColor: '#1D1D1B' }}
+                icon={<ArrowUpRight size={16} />}
+                type="primary"
+              >
+                Explore case
+              </Button>
+            </Link>
 
           </div>
         </div>
