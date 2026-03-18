@@ -1,0 +1,31 @@
+.footer_cont {
+    width: 100%;
+    background: linear-gradient(to bottom,
+            #F5F5F7 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    /* color: #FFF; */
+    font-size: 14px;
+    font-weight: 400;
+    padding: 40px 0px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #000;
+    text-decoration: wavy;
+}
+
+@media (max-width: 768px) {
+
+    .footer_cont {
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+}
