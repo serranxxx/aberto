@@ -1,21 +1,22 @@
 .footer_cont {
     width: 100%;
-    background: linear-gradient(to bottom,
-            #F5F5F7 50%);
+    background: #F5F5F780;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 12px;
     /* color: #FFF; */
     font-size: 14px;
     font-weight: 400;
-    padding: 40px 0px;
+    padding: 40px 24px;
 }
 
 .row {
     display: flex;
     align-items: center;
     justify-content: center;
+    
     gap: 6px;
     color: #000;
     text-decoration: wavy;

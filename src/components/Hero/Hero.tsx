@@ -4,7 +4,7 @@ import styles from './hero.module.css'
 export const Hero = () => {
     return (
         <div className={styles.content}>
-            <span className={styles.key_title}>Luis Alberto Serrano</span>
+            <span className={styles.key_title}>Alberto Serrano</span>
 
             <span className={styles.key_sub_title}>Product designer & Developer</span>
 
