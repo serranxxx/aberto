@@ -75,8 +75,22 @@
     position: relative;
     width: 100%;
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: flex-end;
+    justify-content: flex-end;
+    transform: scaleX(-1) rotate(10deg);
+  }
+
+  .label {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    gap: 8px;
+    opacity: 0.4;
+    font-size: 14px;
   }
 
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./FlipCard.module.css";
 import Image from "next/image";
 import { Button } from "antd";
-import { ArrowDownToLine } from "lucide-react";
+import { ArrowDownToLine, ArrowRightLeft } from "lucide-react";
 
 type FlipCardProps = {
     width?: number | string;
@@ -41,7 +41,12 @@ export default function FlipCard({
                     >
 
                         <div className={styles.image}>
-                            <Image src="/cartoon.jpg" height={248} width={150} alt="" style={{objectFit:'contain',}}/>
+                            <Image src="/cartoon.png" height={238} width={190} alt="" style={{ objectFit: 'cover', }} />
+                        </div>
+
+                        <div className={styles.label}>
+                            <ArrowRightLeft size={14} />
+                            <span>Tap to flip</span>
                         </div>
 
                         <div className={styles.col}>
@@ -58,6 +63,7 @@ export default function FlipCard({
                             icon={<ArrowDownToLine size={16} />}
                             style={{
                                 backgroundColor: '#1D1D1B',
+                                minHeight: '32px'
                                 // width:'100%'
                             }} type="primary">
                             Resume
