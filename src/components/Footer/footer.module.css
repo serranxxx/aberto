@@ -10,6 +10,8 @@
     font-size: 14px;
     font-weight: 400;
     padding: 40px 24px;
+    position: absolute;
+    bottom: 0;
 }
 
 .row {

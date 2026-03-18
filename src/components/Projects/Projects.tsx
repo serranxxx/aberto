@@ -1,10 +1,35 @@
 
+'use client'
+
 import { Button } from 'antd'
 import styles from './projects.module.css'
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useRef } from 'react'
 
 export const Projects = () => {
+
+    const scrollRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollLeft = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: -800,
+                behavior: "smooth"
+            });
+        }
+    };
+
+    const scrollRight = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: 800,
+                behavior: "smooth"
+            });
+        }
+    };
+
+
   return (
     <div className={styles.projects}>
 
@@ -12,7 +37,7 @@ export const Projects = () => {
           <span className={styles.key_sub}  >Featured projects.</span>
         </div>
 
-        <div className={styles.projects_cards_cont}>
+        <div ref={scrollRef} className={styles.projects_cards_cont}>
           <div className={styles.card_col}>
             <div className={styles.project_card}>
               <Image fill src="/meta.png" alt='' style={{ objectFit: 'cover' }} />
@@ -128,6 +153,11 @@ export const Projects = () => {
 
 
 
+        </div>
+
+        <div className={styles.buttons_cont}>
+              <Button onClick={scrollLeft} icon={<ChevronLeft size={16}/>}/>
+              <Button onClick={scrollRight} icon={<ChevronRight size={16}/>}/>
         </div>
       </div>
   )

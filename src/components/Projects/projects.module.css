@@ -130,6 +130,19 @@
     opacity: 0.6;
 }
 
+.buttons_cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    gap: 12px;
+}
+
+.buttons_cont  button {
+    background-color: #F5F5F7;
+    border-radius: 99px;
+}
+
 
 @media (max-width: 768px) {
 

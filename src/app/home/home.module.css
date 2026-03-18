@@ -5,6 +5,8 @@
     justify-content: center;
     flex-direction: column;
     position: relative;
+    padding-bottom: 36px;
+    box-sizing: border-box;
 
 }
 

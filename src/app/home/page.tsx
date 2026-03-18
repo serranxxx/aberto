@@ -44,6 +44,10 @@ export default function Page() {
       <About />
       <Projects />
       <Footer />
+
+      {/* <div>
+
+      </div> */}
     </div>
   )
 }
