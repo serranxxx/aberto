@@ -82,7 +82,7 @@ export const Projects = () => {
 
         <div className={styles.card_col}>
           <div className={styles.project_card}>
-            <Image fill src="/cpm_d.jpg" alt='' style={{ objectFit: 'cover' }} />
+            <Image fill src="/cpm/cpm_d.jpg" alt='' style={{ objectFit: 'cover' }} />
           </div>
 
           <div className={styles.info_stack}>
@@ -98,10 +98,12 @@ export const Projects = () => {
               </div>
             </div>
 
-
-            <Button style={{
-              backgroundColor: '#1D1D1B'
-            }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button>
+            <Link href="/consola">
+              <Button style={{
+                backgroundColor: '#1D1D1B'
+              }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button  >
+            </Link>
+          
 
           </div>
         </div>

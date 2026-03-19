@@ -6,7 +6,7 @@
     width: 100%;
     flex: 1;
     gap: 0px;
-    max-width: 1050px;
+    /* max-width: 1050px; */
     min-height: 100vh;
     /* border: 1px solid; */
     background: radial-gradient(circle,
@@ -20,7 +20,7 @@
     font-size: 76px;
     color: #1D1D1B;
 
-line-height: 120%;
+    line-height: 120%;
     z-index: 2;
 
     background: linear-gradient(90deg,
@@ -63,6 +63,11 @@ line-height: 120%;
 
 .single_text b {
     font-weight: 500;
+}
+
+.key_sub_title,
+.single_text {
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
 @media (max-width: 768px) {
