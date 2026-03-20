@@ -46,7 +46,7 @@ export const Projects = () => {
       <div ref={scrollRef} className={styles.projects_cards_cont}>
         <div className={styles.card_col}>
           <div className={styles.project_card}>
-            <Image fill src="/meta.jpg" alt='' style={{ objectFit: 'cover' }} />
+            <Image fill src="/iattend/iattend_d.png" alt='' style={{ objectFit: 'cover' }} />
           </div>
 
           <div className={styles.info_stack}>
@@ -103,14 +103,14 @@ export const Projects = () => {
                 backgroundColor: '#1D1D1B'
               }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button  >
             </Link>
-          
+
 
           </div>
         </div>
 
         <div className={styles.card_col}>
           <div className={styles.project_card}>
-            <Image fill src="/whats_d.png" alt='' style={{ objectFit: 'cover' }} />
+            <Image fill src="/whats/whats_d.png" alt='' style={{ objectFit: 'cover' }} />
           </div>
 
           <div className={styles.info_stack}>
@@ -129,16 +129,18 @@ export const Projects = () => {
             </div>
 
 
-            <Button style={{
-              backgroundColor: '#1D1D1B'
-            }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button>
+            <Link href="/whats">
+              <Button style={{
+                backgroundColor: '#1D1D1B'
+              }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button>
+            </Link>
 
           </div>
         </div>
 
         <div className={styles.card_col}>
           <div className={styles.project_card}>
-            <Image fill src="/frama_d.jpg" alt='' style={{ objectFit: 'cover' }} />
+            <Image fill src="/frama/frama_d.jpg" alt='' style={{ objectFit: 'cover' }} />
           </div>
 
           <div className={styles.info_stack}>
@@ -155,9 +157,11 @@ export const Projects = () => {
               </div>
             </div>
 
-            <Button style={{
-              backgroundColor: '#1D1D1B'
-            }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button>
+            <Link href="/frama-tech">
+              <Button style={{
+                backgroundColor: '#1D1D1B'
+              }} icon={<ArrowUpRight size={16} />} type='primary'>Explore case</Button>
+            </Link>
 
           </div>
         </div>

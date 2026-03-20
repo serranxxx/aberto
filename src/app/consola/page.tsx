@@ -60,13 +60,13 @@ export default function Page() {
                     <img src="/cpm/after.jpg" alt='' />
                 </div>
 
-                <small>Afer</small>
+                <small>Old Console</small>
 
                 <div className={styles.image_cont} style={{border:'1px solid #ebebeb', maxHeight:'900px',}}>
                     <img src="/cpm/before.jpg" alt='' />
                 </div>
 
-                <small>Before</small>
+                <small>New Console</small>
 
                 <h4>Goal</h4>
                 <span>The goal was to design a platform that is:                </span>
@@ -113,6 +113,8 @@ export default function Page() {
                     <img src="/cpm/sidebar.jpg" alt='' style={{width:'70%'}}/>
                 </div>
 
+                <small>Sidebar integration</small>
+
                 <h4>Design System</h4>
                 <span>A complete design system was created to ensure consistency, scalability, and clarity across the platform.</span>
                 <span>This system defined the visual language of the product, including colors, typography, reusable components, and interaction patterns.</span>
@@ -130,9 +132,13 @@ export default function Page() {
                     <img src="/cpm/palette.jpg" alt=''/>
                 </div>
 
+                <small>Color palette</small>
+
                 <div className={styles.image_cont} style={{border:'1px solid #ebebeb', maxHeight:'900px', }}>
                     <img src="/cpm/weights.jpg" alt='' />
                 </div>
+
+                <small>Color weights</small>
 
 
                 <h4>Typography</h4>
@@ -143,6 +149,8 @@ export default function Page() {
                     <img src="/cpm/fonts.jpg" alt='' />
                 </div>
 
+                <small>Typography</small>
+
                 <h4>Components</h4>
                 <span>Once the design direction was defined, I designed a collection of reusable components for the platform.</span>
                 <span>This included modals, drawers, popups, and other interactive UI elements that needed to feel visually balanced, consistent, and aligned with the Canplast brand.</span>
@@ -152,9 +160,13 @@ export default function Page() {
                     <img src="/cpm/component_1.jpg" alt='' style={{maxHeight:'100%'}}/>
                 </div>
 
+                <small>Drawer component</small>
+
                 <div className={styles.image_cont} style={{ maxHeight:'550px', border:'1px solid #ebebeb'}}>
                     <img src="/cpm/component_2.jpg" alt='' />
                 </div>
+
+                <small>Modal component</small>
 
                 <h4>Development</h4>
                 <span>The platform was developed using Next.js with TypeScript.</span>

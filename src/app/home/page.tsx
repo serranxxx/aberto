@@ -11,6 +11,7 @@ import { Hero } from '@/components/Hero/Hero'
 import { About } from '@/components/About/About'
 import { Projects } from '@/components/Projects/Projects'
 import FlipCard from '@/components/FlipCard/FlipCard'
+import { Visual } from '@/components/Visual/Visual'
 
 export default function Page() {
   const [showHeader, setShowHeader] = useState(false)
@@ -45,6 +46,7 @@ export default function Page() {
       <Hero />
       <About />
       <Projects />
+      <Visual />
       <Footer />
 
       <div

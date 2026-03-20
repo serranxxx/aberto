@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import styles from './iattend.module.css'
 import { Button } from 'antd'
-import { CornerDownLeft } from 'lucide-react'
+import { CornerDownLeft, Globe, Instagram, Linkedin } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Page() {
@@ -14,8 +14,8 @@ export default function Page() {
 
 
 
-                <div className={styles.image_cont} style={{ minHeight: '250px' }} >
-                    <img src="/iattend/side_u.jpg" alt='' className={styles.hero_img} />
+                <div className={styles.image_cont}  >
+                    <img src="/iattend/iattend_d.png" alt='' />
                 </div>
 
 
@@ -101,16 +101,17 @@ export default function Page() {
                 <span>This involved identifying the essential modules and designing a responsive layout that works across devices.</span>
                 <span>A key principle was simplicity: users should not need more than two taps to perform any action.</span>
 
-
                 <h4>Design Module</h4>
                 <span>The design module became one of the most challenging parts of the product.</span>
                 <span>The goal was to create a real-time editing experience where users could visually build their invitation and see changes instantly.</span>
                 <span>This required designing a canvas-like system that balances flexibility, control, and simplicity.</span>
                 <span>The main challenge was UX: making a powerful tool feel simple enough for anyone to use, even without technical knowledge.</span>
 
-                <div className={styles.image_cont} style={{ maxHeight: '550px' }}>
-                    <img src="/iattend/design_bg.jpg" alt='' />
+                <div className={styles.image_cont} style={{ maxHeight: '550px', border: '1px solid #ebebeb' }}>
+                    <img src="/iattend/design_m.jpg" alt='' style={{ maxHeight: '100%' }} />
                 </div>
+
+                <small>Design module</small>
 
 
                 <h4>Guest Management</h4>
@@ -120,8 +121,26 @@ export default function Page() {
                 <span>All responses are updated in real time, giving users full control and visibility.</span>
 
                 <div className={styles.image_cont} style={{ maxHeight: '500px' }}>
-                    <img src="/iattend/iattend_d.png" alt='' />
+                    <img src="/iattend/guests_m.jpg" alt='' />
                 </div>
+
+                <small>Guests managment</small>
+
+                <div className={styles.stack_cont} style={{flexWrap:'nowrap', gap:'12px'}}>
+                    <div className={styles.image_cont} style={{ maxHeight: '650px' }}>
+                        <img src="/iattend/download_m.jpg" alt='' style={{ maxWidth: '450px' }} />
+                    </div>
+
+                    <div className={styles.image_cont} style={{ maxHeight: '850px' }}>
+                        <img src="/iattend/tickets_m.jpg" alt='' style={{ maxWidth: '450px' }} />
+                    </div>
+                </div>
+
+
+
+                <small>Control settings</small>
+
+
 
                 <h4>Table Planning</h4>
                 <span>The final step was building a table planning system.</span>
@@ -129,8 +148,9 @@ export default function Page() {
                 <span>The experience was designed to feel intuitive and flexible, replicating real-world planning in a digital interface.</span>
 
                 <div className={styles.image_cont} style={{ maxHeight: '500px' }}>
-                    <img src="/iattend/lap_u.jpg" alt='' />
+                    <img src="/iattend/table_m.jpg" alt='' />
                 </div>
+                <small>Table Planning</small>
 
                 <h4>System Architecture</h4>
                 <span>I attend is built as a multi-platform system composed of four main projects:</span>
@@ -165,6 +185,11 @@ export default function Page() {
                     <li>Access control (passes)</li>
                 </ul>
 
+                <div className={styles.image_cont} style={{ maxHeight: '500px' }}>
+                    <img src="/iattend/side_m.jpg" alt='' />
+                </div>
+                <small>Side Events</small>
+
 
                 <h4>Result</h4>
                 <span>I attend has evolved into a complete guest management platform.</span>
@@ -181,6 +206,21 @@ export default function Page() {
                 <h4>Vision</h4>
                 <span>My goal is for I attend to become the default platform for event organization.</span>
                 <span>I continue working on improving the product, expanding its capabilities, and building a modern, efficient, and intuitive experience.</span>
+
+                <span>To learn more about I attend, please visit our pages</span>
+                <div className={styles.stack_cont}>
+                    <Link href="https://www.iattend.mx/about" target='_blank'>
+                        <div className={styles.stack_label_button} ><Globe size={16} />iattend.mx</div>
+                    </Link>
+                    <Link href="https://www.instagram.com/iattend.mx?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target='_blank'>
+                        <div className={styles.stack_label_button} ><Instagram size={16} />Instagram</div>
+                    </Link>
+                    <Link href="https://www.linkedin.com/company/i-attend/" target='_blank'>
+                        <div className={styles.stack_label_button} ><Linkedin size={16} style={{ marginTop: '-4px' }} /> Linkedin</div>
+                    </Link>
+
+                </div>
+
             </div>
 
             <Link href="/home">

@@ -60,6 +60,11 @@
     width: 90%;
 }
 
+.container small {
+    margin-top: -12px;
+    margin-bottom: 12px;
+}
+
 .image_cont {
     overflow: hidden;
     display: flex;
@@ -70,6 +75,7 @@
     border-radius: 24px;
     width: 100%;
     margin: 24px 0px;
+    border: 1px solid #ebebeb;
 }
 
 .image_cont img {
@@ -98,6 +104,20 @@
     opacity: 0.6;
 }
 
+.stack_label_button {
+    border: 1px solid #ebebeb;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    opacity: 0.6; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #000;
+}
+
 .row {
     display: flex;
     align-items: center;
@@ -124,6 +144,8 @@
 }
 
 
+
+
 @media (max-width: 768px) {
 
     .container h1 {
@@ -148,6 +170,10 @@
 
     .hero_img {
         max-width: 75%;
+    }
+
+    .image_cont {
+        border-radius: 12px;
     }
 
 }
