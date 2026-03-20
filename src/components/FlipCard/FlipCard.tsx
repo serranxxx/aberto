@@ -5,6 +5,7 @@ import styles from "./FlipCard.module.css";
 import Image from "next/image";
 import { Button } from "antd";
 import { ArrowDownToLine, ArrowRightLeft } from "lucide-react";
+import PdfViewer from "../PdfViewer/PdfViewer";
 
 type FlipCardProps = {
     width?: number | string;
@@ -54,20 +55,27 @@ export default function FlipCard({
                         </div>
 
                         <div className={styles.col}>
-                            <a href="tel:+526145394836"><b>Contact me:</b> 614 539 4836</a>
-                            <a href="mailto:albserrano8@gmail.com"><b>Email me:</b> albserrano8@gmail.com</a>
+                            <a
+                                href="tel:+526145394836"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <b>Contact me:</b> 614 539 4836
+                            </a>
+
+                            <a
+                                href="mailto:albserrano8@gmail.com"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <b>Email me:</b> albserrano8@gmail.com
+                            </a>
                         </div>
 
-                        <Button
-                            icon={<ArrowDownToLine size={16} />}
-                            style={{
-                                backgroundColor: '#1D1D1B',
-                                minHeight: '32px'
-                                // width:'100%'
-                            }} type="primary">
-                            Resume
-                        </Button>
-
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <PdfViewer
+                                pdfUrl="https://jblcqcxckefmydvtrxbi.supabase.co/storage/v1/object/public/personal/ResumeAS.pdf"
+                                title="Mi PDF"
+                            />
+                        </div>
 
                     </div>
                     <div

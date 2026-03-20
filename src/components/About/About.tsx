@@ -1,3 +1,4 @@
+import PdfViewer from '../PdfViewer/PdfViewer'
 import styles from './about.module.css'
 import Image from 'next/image'
 
@@ -25,6 +26,8 @@ export const About = () => {
                     <span className={styles.text_c} style={{ marginTop: '0' }}>
                         I believe the best digital products are created when <b>functionality and aesthetics are developed together.</b> To me, good software doesn’t just solve problems, <b>it should also look good and feel good to use.</b></span>
                 </div>
+
+                <PdfViewer pdfUrl="https://jblcqcxckefmydvtrxbi.supabase.co/storage/v1/object/public/personal/ResumeAS.pdf" title="Mi PDF" />
             </div>
 
         </div>
