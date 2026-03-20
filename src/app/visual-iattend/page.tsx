@@ -32,10 +32,12 @@ export default function Page() {
                 <span>I chose a spiral as the core element, representing continuity, interaction, and the evolving nature of events and experiences.</span>
                 <span>This shape became a fundamental part of both the logo and the visual system.</span>
 
-                <div className={styles.stack_cont} style={{ flexWrap: 'nowrap', gap: '12px' }}>
-                    <div className={styles.image_cont} style={{ maxHeight: '650px' }}>
-                        <img src="/iattend/blanco-bg.jpg" alt='' style={{ maxWidth: '450px' }} />
+                <div className={styles.image_cont} style={{ maxHeight: '350px' }}>
+                        <img src="/iattend/blanco-bg.jpg" alt=''  />
                     </div>
+
+                <div className={styles.stack_cont} style={{ flexWrap: 'nowrap', gap: '24px', marginTop:'-24px' }}>
+                    
 
                     <div className={styles.image_cont} style={{ maxHeight: '850px' }}>
                         <img src="/iattend/negro-morado.jpg" alt='' style={{ maxWidth: '450px' }} />

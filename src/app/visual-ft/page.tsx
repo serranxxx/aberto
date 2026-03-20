@@ -58,22 +58,22 @@ export default function Page() {
                 <span>Each piece is designed with attention to clarity, brand alignment, and visual impact.</span>
                 <span>The goal is to create materials that are both functional and visually engaging.</span>
 
-                <div className={styles.stack_cont} style={{ flexWrap: 'nowrap', gap: '12px' }}>
+                <div className={styles.stack_cont} style={{ flexWrap: 'nowrap', gap: '24px' }}>
 
 
 
-                    <div className={styles.image_cont} style={{ minHeight: '400px' }}>
+                    <div className={styles.image_cont} style={{ minHeight: '400px', maxHeight:'400px', backgroundColor: '#F6F6F6'  }}>
                         <img src="/frama/shirt.jpg" alt='' style={{ width: '110%' }} />
                     </div>
 
-                    <div className={styles.image_cont} style={{ maxHeight: '400px', backgroundColor: '#F6F6F6' }}  >
+                    <div className={styles.image_cont} style={{ minHeight: '400px',maxHeight: '400px', backgroundColor: '#F6F6F6' }}  >
                         <img src="/frama/caps.jpg" alt='' style={{ width: '80%' }} />
                     </div>
 
 
                 </div>
 
-                <div className={styles.image_cont} style={{ maxHeight: '400px', marginTop: '-36px' }}  >
+                <div className={styles.image_cont} style={{ maxHeight: '400px', marginTop: '-24px' }}  >
                     <img src="/frama/merch.jpg" alt='' style={{ width: '100%' }} />
                 </div>
 

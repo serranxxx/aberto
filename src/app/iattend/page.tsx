@@ -168,6 +168,8 @@ export default function Page() {
                     <li>React · Next.js · Node.js · Supabase</li>
                     <li>Ant Design · Lucide Icons</li>
                     <li>WhatsApp API (Meta)</li>
+                    <li>Stripe</li>
+                    <li>DeepL</li>
                 </ul>
 
 

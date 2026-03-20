@@ -59,7 +59,7 @@ export default function FlipCard({
                                 href="tel:+526145394836"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <b>Contact me:</b> 614 539 4836
+                                <b>Contact me:</b> + 52 614 539 4836
                             </a>
 
                             <a
