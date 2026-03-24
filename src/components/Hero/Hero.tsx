@@ -34,14 +34,14 @@ export const Hero = () => {
 
             <span
                 className={styles.key_sub_title}
-                style={{ opacity, transform: isLargeScreen ? `translateY(${scrollY * 0.2}px)` : undefined}}
+                style={{ opacity }}
             >
                 Product designer & Developer
             </span>
 
             <span
                 className={styles.single_text}
-                style={{ opacity, transform: isLargeScreen ? `translateY(${scrollY * 0.3}px)` : undefined }}
+                style={{ opacity}}
             >
                 I create digital products where <b>technology, design, and user experience work in harmony.</b> My approach combines the structured thinking of engineering with the creativity of design to build software with intention and purpose.
             </span>
