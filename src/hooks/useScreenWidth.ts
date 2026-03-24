@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function useScreenWidth() {
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
 
-    // Agrega el listener
+    handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Limpieza al desmontar el componente
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 

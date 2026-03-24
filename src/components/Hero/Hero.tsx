@@ -6,7 +6,7 @@ export const Hero = () => {
     const [scrollY, setScrollY] = useState(0)
 
     const width = useScreenWidth();
-    const isLargeScreen = width >= 768;
+    const isLargeScreen = width ?? 0 >= 768;
 
     useEffect(() => {
         const handleScroll = () => {
