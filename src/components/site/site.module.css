@@ -1,0 +1,333 @@
+/* Piezas compartidas entre el home y las páginas de feature */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.accent {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bar {
+  width: 48px;
+  height: 3px;
+  background: var(--grad-h);
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(28px, 3.6vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 16px 0 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.logo {
+  display: inline-block;
+  flex: none;
+  background: var(--grad);
+  -webkit-mask: url('/logo.svg') center / contain no-repeat;
+  mask: url('/logo.svg') center / contain no-repeat;
+}
+
+/* Botones */
+
+.btn {
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btnDark {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btnDark:hover {
+  background: var(--ink-2);
+  color: var(--paper);
+}
+
+.btnOutline {
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
+.btnOutline:hover {
+  border-color: var(--ink-2);
+}
+
+.btnLight {
+  height: 56px;
+  padding: 0 28px;
+  font-size: 16px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.btnLight:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.btnGhostDark {
+  height: 56px;
+  padding: 0 28px;
+  font-size: 16px;
+  border: 1px solid var(--ink-3);
+  color: var(--paper);
+}
+
+.btnGhostDark:hover {
+  border-color: var(--paper);
+  color: var(--paper);
+}
+
+/* Header */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(252, 252, 253, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.headerInner {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.brandName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  font-size: 14px;
+}
+
+.nav a {
+  color: var(--ink-3);
+  transition: color 0.2s;
+}
+
+.nav a:hover {
+  color: var(--ink);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+}
+
+.langSwitch {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px;
+}
+
+.langBtn {
+  border: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink-3);
+}
+
+.langBtnOn {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.headerCta {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.headerCta:hover {
+  background: var(--ink-2);
+  color: var(--paper);
+}
+
+@media (max-width: 860px) {
+  .nav {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .brandName {
+    display: none;
+  }
+}
+
+/* Contacto + footer */
+
+.contact {
+  background: var(--ink);
+}
+
+.contactInner {
+  padding-top: clamp(80px, 12vw, 152px);
+  padding-bottom: clamp(80px, 12vw, 152px);
+}
+
+.contactTitle {
+  margin: 24px 0 0;
+  font-size: clamp(36px, 5.4vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.04;
+  color: var(--paper);
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.contactLead {
+  margin: 24px 0 0;
+  font-size: clamp(17px, 1.8vw, 21px);
+  line-height: 1.5;
+  color: var(--line);
+  max-width: 40ch;
+}
+
+.btnRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+}
+
+.contactLinks {
+  display: flex;
+  gap: 12px 32px;
+  flex-wrap: wrap;
+  margin-top: clamp(48px, 7vw, 72px);
+  padding-top: 24px;
+  border-top: 1px solid var(--ink-2);
+  font-size: 14px;
+}
+
+.contactLinks a {
+  color: var(--line);
+}
+
+.contactLinks a:hover {
+  color: var(--paper);
+}
+
+.footer {
+  background: var(--ink);
+  border-top: 1px solid var(--ink-2);
+}
+
+.footerInner {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-4);
+}
+
+/* Captura o placeholder */
+
+.shot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.shot img {
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.shotPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, rgba(96, 93, 102, 0.06) 14px 15px),
+    var(--surface);
+  color: var(--ink-3);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.shotPlaceholder .logo {
+  width: 28px;
+  height: 28px;
+  opacity: 0.6;
+}

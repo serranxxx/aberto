@@ -1,26 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1D1D1B;
+  --ink: #19161E;
+  --ink-2: #37333C;
+  --ink-3: #605D66;
+  --ink-4: #C2C0C7;
+  --line: #ECEAEE;
+  --surface: #F6F5F7;
+  --surface-2: #F3F2F5;
+  --paper: #FCFCFD;
+  --ink-raised: #211D27;
+  --coral: #FF6B5B;
+  --lilac: #AF86F7;
+  --grad: linear-gradient(135deg, #FF6B5B, #AF86F7);
+  --grad-h: linear-gradient(90deg, #FF6B5B, #AF86F7);
+  --gutter: clamp(20px, 5vw, 64px);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@supports (background: linear-gradient(135deg in oklch, red, blue)) {
   :root {
-    --background: #FFF;
-    --foreground: #1D1D1B;
+    --grad: linear-gradient(135deg in oklch, #FF6B5B, #AF86F7);
+    --grad-h: linear-gradient(90deg in oklch, #FF6B5B, #AF86F7);
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-2);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--ink);
 }
