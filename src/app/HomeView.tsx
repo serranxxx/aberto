@@ -11,6 +11,7 @@ import {
   ContactSection, Shot, SiteFooter, SiteHeader, ctaHref, featureHref, siteStyles as s,
 } from '@/components/site/Site'
 import { IdCard } from './IdCard'
+import { WhyStories } from './WhyStories'
 import h from './home.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
@@ -27,6 +28,7 @@ export default function HomeView() {
   const { lang } = useLang()
   const t = COPY[lang]
   const [themeId, setThemeId] = useState('all')
+  const [openService, setOpenService] = useState<number | null>(0)
   const rail = useRef<HTMLDivElement>(null)
 
   const theme = THEMES.find(x => x.id === themeId) ?? THEMES[0]
@@ -90,19 +92,33 @@ export default function HomeView() {
         <p className={s.lead} style={{ maxWidth: '48ch' }}>{t.servicesLead}</p>
         <div className={h.services}>
           {t.services.map((sv, i) => (
-            <div key={sv.k} className={h.service}>
-              <div className={h.col}>
-                <span className={s.label}>{pad(i)}</span>
+            <div key={sv.k} className={`${h.service} ${openService === i ? h.serviceOpen : ''}`}>
+              <div className={h.serviceHead}>
+                <span className={`${s.label} ${h.serviceN}`}>{pad(i)}</span>
                 <span className={h.serviceName}>{sv.k}</span>
+                {/* Solo visible en móvil, donde los servicios son un acordeón */}
+                <button
+                  className={h.serviceToggle}
+                  onClick={() => setOpenService(openService === i ? null : i)}
+                  aria-expanded={openService === i}
+                  aria-controls={`servicio-${i}`}
+                  aria-label={sv.k}
+                >
+                  <span aria-hidden>+</span>
+                </button>
               </div>
-              <div className={h.col}>
-                <span className={s.label}>{t.forYou}</span>
-                <span className={h.serviceText}>{sv.who}</span>
-              </div>
-              <div className={h.col}>
-                <span className={s.label}>{t.youGet}</span>
-                <span className={h.serviceText}>{sv.get}</span>
-                <Link href={featureHref(sv.ex)} className={h.inlineLink}>{sv.exLabel} →</Link>
+              <div id={`servicio-${i}`} className={h.serviceBody}>
+                <div className={h.serviceBodyInner}>
+                  <div className={h.col}>
+                    <span className={s.label}>{t.forYou}</span>
+                    <span className={h.serviceText}>{sv.who}</span>
+                  </div>
+                  <div className={h.col}>
+                    <span className={s.label}>{t.youGet}</span>
+                    <span className={h.serviceText}>{sv.get}</span>
+                    <Link href={featureHref(sv.ex)} className={h.inlineLink}>{sv.exLabel} →</Link>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -114,16 +130,7 @@ export default function HomeView() {
         <div className={`${s.container} ${h.block}`}>
           <div className={`${s.label} ${h.sectionLabel} ${h.labelOnDark}`}>{t.whyLabel}</div>
           <h2 className={`${s.h2} ${h.h2OnDark}`} style={{ maxWidth: '22ch' }}>{t.whyTitle}</h2>
-          <div className={h.why}>
-            {t.why.map(w => (
-              <div key={w.n} className={h.whyItem}>
-                <span className={`${s.label} ${h.labelOnDark}`}>{w.n}</span>
-                <h3 className={h.whyTitle}>{w.k}</h3>
-                <p className={h.whyText}>{w.v}</p>
-                <span className={`${s.label} ${h.labelOnDark}`} style={{ marginTop: 4 }}>{w.proof}</span>
-              </div>
-            ))}
-          </div>
+          <WhyStories reasons={t.why} />
 
           <div className={h.statsCard}>
             <div className={h.statsIntro}>

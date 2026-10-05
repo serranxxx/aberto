@@ -145,8 +145,24 @@
   align-items: start;
 }
 
-.service .col:not(:first-child) {
+.serviceBody .col {
   gap: 6px;
+}
+
+/* En escritorio el encabezado y las dos columnas son celdas directas del grid */
+.serviceHead {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.serviceBody,
+.serviceBodyInner {
+  display: contents;
+}
+
+.serviceToggle {
+  display: none;
 }
 
 .serviceName {
@@ -164,30 +180,6 @@
 }
 
 /* Por qué yo */
-
-.why {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: clamp(32px, 5vw, 56px) clamp(32px, 5vw, 64px);
-  margin-top: clamp(48px, 7vw, 80px);
-}
-
-.whyItem {
-  border-top: 1px solid var(--ink-2);
-  padding-top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.whyTitle {
-  margin: 0;
-  font-size: clamp(20px, 2.2vw, 26px);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  color: var(--paper);
-}
 
 .whyText {
   margin: 0;
@@ -548,5 +540,127 @@
 @media (max-width: 640px) {
   .notForText {
     grid-column: auto;
+  }
+}
+
+/* En móvil las cards de "¿Te suena?" y del proceso se desplazan en horizontal en vez de apilarse */
+@media (max-width: 640px) {
+  .pains,
+  .steps {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-left: calc(-1 * var(--gutter));
+    margin-right: calc(-1 * var(--gutter));
+    padding: 0 var(--gutter);
+    scroll-padding: 0 var(--gutter);
+  }
+
+  .pains::-webkit-scrollbar,
+  .steps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pain,
+  .step {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+    min-height: 200px;
+  }
+}
+
+/* En móvil los servicios son un acordeón */
+@media (max-width: 640px) {
+  .service {
+    display: block;
+    padding: 0;
+  }
+
+  .serviceHead {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 0;
+  }
+
+  .serviceN {
+    flex: none;
+    width: 22px;
+  }
+
+  .serviceName {
+    flex: 1;
+    font-size: 22px;
+  }
+
+  .serviceToggle {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--ink-2);
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* Toda la fila es área de toque */
+  .serviceToggle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .serviceToggle span {
+    line-height: 1;
+    transition: rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .serviceOpen .serviceToggle {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .serviceOpen .serviceToggle span {
+    rotate: 45deg;
+  }
+
+  .serviceOpen .serviceName {
+    color: var(--ink);
+  }
+
+  .serviceBody {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .serviceOpen .serviceBody {
+    grid-template-rows: 1fr;
+  }
+
+  .serviceBodyInner {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 0;
+    overflow: hidden;
+    padding-left: 38px;
+    opacity: 0;
+    transition: opacity 0.3s ease, padding-bottom 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .serviceOpen .serviceBodyInner {
+    opacity: 1;
+    padding-bottom: 28px;
   }
 }
