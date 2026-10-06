@@ -10,7 +10,7 @@ export type Product = {
   en: string
   roleEs: string
   roleEn: string
-  stats?: { v: string; es: string; en: string }[]
+  stats?: { v: string; es: string; en: string; noteEs?: string; noteEn?: string }[]
 }
 
 export type FeatureCopy = {

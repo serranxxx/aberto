@@ -116,9 +116,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(252, 252, 253, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
 
@@ -146,6 +144,7 @@
 
 .nav {
   flex: 1;
+  min-width: 0;
   display: flex;
   justify-content: center;
   gap: 28px;
@@ -210,13 +209,22 @@
   color: var(--paper);
 }
 
-@media (max-width: 860px) {
-  .nav {
+.ctaCompact {
+  display: none;
+}
+
+@media (max-width: 759px) {
+  .nav,
+  .ctaLong {
     display: none;
+  }
+
+  .ctaCompact {
+    display: inline;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 399px) {
   .brandName {
     display: none;
   }

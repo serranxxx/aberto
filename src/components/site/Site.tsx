@@ -54,7 +54,10 @@ export function SiteHeader() {
               </button>
             ))}
           </div>
-          <a href="/#contacto" className={s.headerCta}>{t.ctaShort}</a>
+          <a href="/#contacto" className={s.headerCta}>
+            <span className={s.ctaLong}>{t.ctaShort}</span>
+            <span className={s.ctaCompact}>{lang === 'es' ? 'Agendar' : 'Book'}</span>
+          </a>
         </div>
       </div>
     </header>
