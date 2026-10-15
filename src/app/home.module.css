@@ -66,12 +66,26 @@
 
 .heroTitle {
   margin: 0;
-  font-size: clamp(36px, 5.2vw, 62px);
+  font-size: clamp(30px, 5.2vw, 62px);
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1.04;
   color: var(--ink-2);
   white-space: pre-line;
+}
+
+/* En pantallas angostas el titular fluye sin saltos forzados */
+@media (max-width: 699px) {
+  .heroTitle {
+    white-space: normal;
+  }
+}
+
+/* Teléfonos muy angostos (< 380px): el acento baja un poco para no salirse */
+@media (max-width: 379px) {
+  .heroAccentText {
+    font-size: 22px;
+  }
 }
 
 /* Acento apilado bajo el titular, empalmado con la última línea */
@@ -94,7 +108,7 @@
 .heroAccentText {
   display: inline-block;
   white-space: nowrap;
-  font-size: clamp(30px, 6.4vw, 48px);
+  font-size: clamp(26px, 4vw, 48px);
   font-weight: 500;
   line-height: 1.5;
   padding: 0.12em 0.15em 0.3em;
@@ -105,15 +119,15 @@
   flex: none;
   width: 0.78em;
   height: 0.78em;
-  margin-left: 0.18em;
+  margin-left: 0.3em;
   vertical-align: -0.02em;
-  transform: translate(-28px, -3px) rotate(-15deg);
+  transform: rotate(-15deg);
   pointer-events: none;
 }
 
 .heroLead {
   margin: 0;
-  font-size: clamp(17px, 1.8vw, 21px);
+  font-size: clamp(15px, 1.8vw, 21px);
   letter-spacing: -0.012em;
   line-height: 1.5;
   color: var(--ink-3);
@@ -313,14 +327,37 @@
 
 .whyTitle {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
 }
 
-.whyTitle > span:first-child {
+.whyText {
   max-width: 15ch;
   text-wrap: balance;
+}
+
+.whyLabelIn {
+  display: none;
+  flex-basis: 100%;
+  margin-bottom: -4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--ink-4);
+}
+
+/* Móvil: bifurcación → etiqueta → H2 */
+@media (max-width: 559px) {
+  .whyLabelOut {
+    display: none;
+  }
+
+  .whyLabelIn {
+    display: block;
+  }
 }
 
 .whyBlock {
@@ -535,6 +572,7 @@
 
 .workHead {
   position: relative;
+  display: block;
   border-top: 1px solid var(--line);
   padding-top: clamp(56px, 8vw, 96px);
 }
@@ -620,7 +658,15 @@
 
 /* Móvil */
 
-@media (max-width: 759px) {
+/* Móvil: los stickers de Trabajo van arriba de la etiqueta */
+@media (max-width: 559px) {
+  .workHead {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 859px) {
   /* Proceso como línea de tiempo vertical */
   .timeline {
     display: flex;

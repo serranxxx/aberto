@@ -122,9 +122,11 @@ export default function HomeView() {
       {/* Por qué yo */}
       <section id="por-que" className={h.dark}>
         <div className={`${s.container} ${h.whyBlock}`}>
-          <div className={`${s.label} ${h.sectionLabel} ${h.labelOnDark}`}>{t.whyLabel}</div>
+          <div className={`${s.label} ${h.sectionLabel} ${h.labelOnDark} ${h.whyLabelOut}`}>{t.whyLabel}</div>
           <h2 className={`${s.h2} ${h.h2OnDark} ${h.whyTitle}`}>
-            <span>{t.whyTitle}</span>
+            {/* En móvil la etiqueta va dentro del H2 para quedar debajo de la bifurcación */}
+            <span className={h.whyLabelIn}>{t.whyLabel}</span>
+            <span className={h.whyText}>{t.whyTitle}</span>
             <ForkSticker yes={t.forkYes} no={t.forkNo} />
           </h2>
           <WhyStories reasons={t.why} />

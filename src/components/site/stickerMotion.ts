@@ -38,31 +38,41 @@ const float = (c: Ctx, el: Element, delay: number, amp = 6, duration = 3000) =>
   }, delay)
 
 const MOTIONS: Record<string, (el: HTMLElement, i: number, c: Ctx) => void> = {
-  /** Cursor del hero: entra en diagonal y luego da vueltas alrededor de la frase acento. */
+  /** Cursor del hero: entra y luego hace "clic" en la última n de la frase acento. */
   cursor: (el, _i, c) => {
-    el.animate([{ opacity: 0, translate: '-40px 40px' }, { opacity: 1, translate: '0 0' }], {
-      duration: 900, delay: 300, easing: 'cubic-bezier(.3,0,.1,1)', fill: 'backwards',
+    el.animate([{ opacity: 0, translate: '-12px 12px' }, { opacity: 1, translate: '0 0' }], {
+      duration: 700, delay: 300, easing: 'cubic-bezier(.3,0,.1,1)', fill: 'backwards',
     })
-    const loop = () => {
-      const text = el.previousElementSibling
-      const box = text?.getBoundingClientRect()
-      const tw = box?.width ?? 500
-      const th = box?.height ?? 60
-      // Óvalo alrededor del texto; arranca hacia abajo → izquierda → arriba → derecha
-      const rx = tw / 2 + 24, ry = th / 2 + 14, cx = -tw / 2 - 6, cy = -6
-      const a0 = Math.atan2(-cy / ry, -cx / rx)
-      const N = 48
-      const kf: Keyframe[] = []
-      for (let k = 0; k <= N; k++) {
-        const t = k / N, ang = a0 + t * Math.PI * 2
-        kf.push({ translate: `${(cx + rx * Math.cos(ang)).toFixed(1)}px ${(cy + ry * Math.sin(ang)).toFixed(1)}px`, offset: t })
-      }
-      kf[0].translate = '0px 0px'
-      kf[N].translate = '0px 0px'
-      el.animate(kf, { duration: 4000, easing: 'cubic-bezier(.45,0,.55,1)' })
-      c.later(loop, 6000)
+    // Distancia desde el cursor hasta el centro de la letra (la punta queda ~20% dentro de su caja)
+    const target = (): [number, number] => {
+      const node = el.previousElementSibling?.firstChild
+      if (!node || node.nodeType !== Node.TEXT_NODE) return [-30, 0]
+      const i = (node.nodeValue ?? '').lastIndexOf('n')
+      if (i < 0) return [-30, 0]
+      const range = document.createRange()
+      range.setStart(node, i)
+      range.setEnd(node, i + 1)
+      const bb = range.getBoundingClientRect()
+      const er = el.getBoundingClientRect()
+      return [bb.left + bb.width * 0.5 - (er.left + er.width * 0.2), bb.top + bb.height * 0.5 - (er.top + er.height * 0.2)]
     }
-    c.later(loop, 1500)
+    const loop = () => {
+      const [dx, dy] = target()
+      const T = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`
+      el.animate(
+        [
+          { translate: '0px 0px', scale: '1', easing: 'cubic-bezier(.45,0,.25,1)' },
+          { translate: T, scale: '1', offset: 0.38, easing: 'cubic-bezier(.4,0,.6,1)' },
+          { translate: T, scale: '.86', offset: 0.46, easing: 'cubic-bezier(.4,0,.6,1)' },
+          { translate: T, scale: '1', offset: 0.56, easing: 'cubic-bezier(.4,0,.2,1)' },
+          { translate: T, scale: '1', offset: 0.64, easing: 'cubic-bezier(.45,0,.25,1)' },
+          { translate: '0px 0px', scale: '1' },
+        ],
+        { duration: 3400, easing: 'linear' },
+      )
+      c.later(loop, 5200)
+    }
+    c.later(loop, 1200)
   },
 
   pop: (el, i, c) => {

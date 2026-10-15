@@ -89,7 +89,7 @@ export const COPY = {
       { k: 'Design and delivery', v: 'Figma for design work; the working interface for development.' }
     ],
     notForTitle: 'Who it’s for',
-    notFor: 'For anyone who already has a working product and sees their users getting stuck.\nA SaaS in production, an internal tool nobody uses the way it was meant to.\nWith a dev team or without one: what matters is that you’ve already seen the problem.',
+    notFor: 'For anyone who already has a working product and notices their users getting stuck.\nA SaaS in production, an internal tool nobody uses the way it was meant to be used.\nWith a dev team or without one: what matters is that you’ve already seen the problem.',
     ctaTitle: 'Are your users getting lost in your product?', ctaTitleAccent: 'Let’s talk.',
     ctaLead: 'Tell me what’s happening. In a short call we’ll know if I can help.'
   }

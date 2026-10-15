@@ -1,18 +1,24 @@
 /*
- * Visibilidad responsive de las decoraciones:
- * - .deco / .decoInline / .decoFlex: ocultas < 860px, reducidas a 0.78 < 1100px
+ * Responsive de las decoraciones:
+ * - >= 1100px: stickers absolutos a la derecha de cada H2, escala 1
+ * - 860–1099px: escala .78
+ * - 560–859px (iPad): absolutos arriba a la derecha con zoom .55 (bifurcación .6)
+ * - < 560px (móvil): en flujo y centrados, zoom .58–.62 (Trabajo .87)
+ * - .decoDesk (menú de fuentes): solo >= 860px
  * - .decoWide: solo >= 1280px
  */
 
 .deco,
 .decoInline,
 .decoFlex,
+.decoDesk,
 .decoWide {
   --deco-s: 1;
   pointer-events: none;
 }
 
 .deco,
+.decoDesk,
 .decoWide {
   display: block;
 }
@@ -25,18 +31,17 @@
   display: flex;
 }
 
-@media (max-width: 1099px) {
+@media (min-width: 860px) and (max-width: 1099px) {
   .deco,
   .decoInline,
-  .decoFlex {
+  .decoFlex,
+  .decoDesk {
     --deco-s: 0.78;
   }
 }
 
 @media (max-width: 859px) {
-  .deco,
-  .decoInline,
-  .decoFlex {
+  .decoDesk {
     display: none;
   }
 }
@@ -362,4 +367,51 @@
 
 .fmRow[data-on='true'] svg {
   display: block;
+}
+
+/* iPad */
+@media (min-width: 560px) and (max-width: 859px) {
+  .services {
+    top: calc(clamp(56px, 8vw, 96px) + 40px);
+    zoom: 0.55;
+  }
+
+  .fork {
+    zoom: 0.6;
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  .work {
+    right: var(--gutter);
+    top: calc(clamp(96px, 14vw, 130px) + 40px);
+    zoom: 0.55;
+  }
+}
+
+/* Móvil: en flujo y centrados */
+@media (max-width: 559px) {
+  .services {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 0 auto 24px;
+    zoom: 0.58;
+  }
+
+  .fork {
+    order: -1;
+    zoom: 0.62;
+    margin: 0 auto;
+  }
+
+  .work {
+    position: relative;
+    right: auto;
+    top: auto;
+    order: -1;
+    width: fit-content;
+    margin: 0 auto 48px;
+    zoom: 0.87;
+  }
 }

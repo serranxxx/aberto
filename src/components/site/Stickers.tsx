@@ -162,7 +162,7 @@ export function WorkStickers({ code }: { code: string }) {
 /** Proceso: menú de fuentes que alterna la selección Inter ↔ Geist. */
 export function FontMenuSticker() {
   return (
-    <div data-anim="fontmenu" className={`${st.deco} ${st.sticker} ${st.fontMenu}`} aria-hidden>
+    <div data-anim="fontmenu" className={`${st.decoDesk} ${st.sticker} ${st.fontMenu}`} aria-hidden>
       <div className={st.fmBox}>
         <div className={st.fmHead}>
           <Icon name="text" size={18} stroke="#19161E" width={1.75} />

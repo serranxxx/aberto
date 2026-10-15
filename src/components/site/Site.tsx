@@ -102,7 +102,9 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
           <span className={s.logoTile}>
             <Image src="/logo-cursor.svg" alt="" width={20} height={20} unoptimized />
           </span>
-          <span className={s.brandName}>Alberto Serrano</span>
+          <span className={s.brandName}>
+            Alberto<span className={s.brandLast}> Serrano</span>
+          </span>
         </Link>
         <nav className={s.nav}>
           {nav.map(n => (

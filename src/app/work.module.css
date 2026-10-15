@@ -407,7 +407,7 @@
   color: var(--ink);
 }
 
-@media (max-width: 759px) {
+@media (max-width: 859px) {
   .wheel {
     display: none;
   }
@@ -437,5 +437,12 @@
   .mediaInner,
   .cardBody {
     transition: none !important;
+  }
+}
+
+/* iPad: dos tarjetas por vista en la tira */
+@media (min-width: 560px) and (max-width: 859px) {
+  .stripItem {
+    flex-basis: calc(50% - 4px);
   }
 }

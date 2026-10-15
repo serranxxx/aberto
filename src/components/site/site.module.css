@@ -293,7 +293,15 @@
   }
 }
 
-@media (max-width: 399px) {
+/* En móvil el header solo muestra "Alberto" */
+@media (max-width: 559px) {
+  .brandLast {
+    display: none;
+  }
+}
+
+/* Teléfonos muy angostos (< 380px): solo el logo para que quepan idioma y CTA */
+@media (max-width: 379px) {
   .brandName {
     display: none;
   }
