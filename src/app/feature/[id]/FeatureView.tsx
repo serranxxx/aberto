@@ -2,12 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { COPY, FEATURE_COPY } from '@/data/copy'
-import { FEATURE_ORDER, FEATURES, PRODUCTS } from '@/data/features'
+import { useState } from 'react'
+import { FEATURE_COPY } from '@/data/copy'
+import { FEATURES, PRODUCTS } from '@/data/features'
 import { useLang } from '@/components/site/LangProvider'
-import {
-  ContactSection, Shot, SiteFooter, SiteHeader, featureHref, siteStyles as s,
-} from '@/components/site/Site'
+import { Shot, SiteFooter, SiteHeader, featureHref, siteStyles as s } from '@/components/site/Site'
 import f from './feature.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(x => [x.id, x]))
@@ -15,125 +14,130 @@ const pad = (i: number) => String(i + 1).padStart(2, '0')
 
 export default function FeatureView({ id }: { id: string }) {
   const { lang } = useLang()
-  const t = COPY[lang]
-  const l = FEATURE_COPY[lang]
+  const t = FEATURE_COPY[lang]
+  const es = lang === 'es'
   const feat = byId[id]
   const c = feat[lang]
   const product = PRODUCTS[feat.product]
+  // Pin resaltado: se sincroniza entre los números sobre la imagen y la lista de anatomía
+  const [pin, setPin] = useState<number | null>(null)
 
-  const facts = c.facts?.length
-    ? c.facts
-    : [{ k: l.role, v: lang === 'es' ? product.roleEs : product.roleEn }, { k: product.name, v: lang === 'es' ? product.badgeEs : product.badgeEn }]
+  const anatomy = c.anatomy ?? []
+  const pins = (feat.pins ?? []).slice(0, anatomy.length)
+  const hover = (i: number) => ({ onMouseEnter: () => setPin(i), onMouseLeave: () => setPin(null) })
 
-  const story = [
-    { k: l.origin, v: c.origin },
-    { k: l.what, v: c.what },
-    { k: l.solves, v: c.solves },
-  ].filter(x => x.v)
-
-  const showPins = !!feat.img && !!feat.pins && !!c.anatomy?.length
-
-  const idx = FEATURE_ORDER.indexOf(id)
-  const next = byId[FEATURE_ORDER[(idx + 1) % FEATURE_ORDER.length]]
-  const prev = byId[FEATURE_ORDER[(idx - 1 + FEATURE_ORDER.length) % FEATURE_ORDER.length]]
-  const siblings = FEATURE_ORDER.map(x => byId[x]).filter(x => x.product === feat.product && x.id !== id)
+  const siblings = FEATURES.filter(x => x.product === feat.product && x.id !== id)
+  const related = siblings.length ? siblings : FEATURES.filter(x => x.id !== id).slice(0, 3)
 
   return (
     <div className={f.page}>
-      <SiteHeader />
+      <SiteHeader variant="feature" />
 
       {/* Encabezado */}
       <section className={`${s.container} ${f.hero}`}>
-        <Link href="/#trabajo" className={f.back}>← {l.back}</Link>
         <div className={s.bar} />
-        <div className={`${s.label} ${f.heroLabel}`}>{product.name} · {c.tag}</div>
+        <div className={`${s.label} ${f.meta}`}>{t.feature} · {product.name} · {c.tag}</div>
         <h1 className={f.title}>
-          {c.titleA} <span className={s.accent}>{c.accent}</span>
+          {c.titleA} <span className={`${s.accent} ${f.nowrap}`}>{c.accent}</span>
         </h1>
         <p className={f.lead}>{c.lead}</p>
-        <div className={f.facts}>
-          {facts.map(x => (
-            <div key={x.k} className={f.fact}>
-              <span className={s.label}>{x.k}</span>
-              <span className={f.factValue}>{x.v}</span>
-            </div>
-          ))}
-        </div>
+        {!!c.facts?.length && (
+          <div className={f.facts}>
+            {c.facts.map(x => (
+              <div key={x.k} className={f.fact}>
+                <span className={s.label}>{x.k}</span>
+                <span className={f.factValue}>{x.v}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* Captura principal */}
+      {/* Captura principal con anatomía */}
       <section className={s.container}>
         <figure className={f.figure}>
           <div className={f.mainShot}>
             <Shot src={feat.img} alt={c.caption} placeholder={t.noImg} sizes="(max-width: 1200px) 100vw, 1072px" priority />
-            {showPins && feat.pins!.map(([x, y], i) => (
-              <span key={i} className={f.pin} style={{ left: `${x}%`, top: `${y}%` }}>{i + 1}</span>
+            {pins.map(([x, y], i) => (
+              <span
+                key={i}
+                className={`${f.pin} ${pin === i ? f.pinOn : ''}`}
+                style={{ left: `${x}%`, top: `${y}%` }}
+                {...hover(i)}
+              >
+                {i + 1}
+              </span>
             ))}
           </div>
-          <figcaption className={s.label}>{c.caption}</figcaption>
-        </figure>
-      </section>
-
-      {/* Historia */}
-      {story.length > 0 && (
-        <section className={`${s.container} ${f.block}`}>
-          <div className={f.story}>
-            {story.map(x => (
-              <div key={x.k} className={f.storyItem}>
-                <span className={s.label}>{x.k}</span>
-                <p className={f.storyText}>{x.v}</p>
-              </div>
-            ))}
-          </div>
-          {c.stat && (
-            <div className={f.statRow}>
-              <span className={`${s.accent} ${f.statValue}`}>{c.stat}</span>
-              <span className={f.statLabel}>{c.statLabel}</span>
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* Anatomía */}
-      {!!c.anatomy?.length && (
-        <section className={f.tinted}>
-          <div className={`${s.container} ${f.block}`}>
-            <div className={`${s.label} ${f.sectionLabel}`}>{l.anatomy}</div>
+          {anatomy.length > 0 ? (
             <div className={f.anatomy}>
-              {c.anatomy.map((a, i) => (
-                <div key={a.k} className={f.anatomyItem}>
-                  <span className={f.num}>{i + 1}</span>
-                  <div className={f.col}>
-                    <span className={f.itemTitle}>{a.k}</span>
-                    <span className={f.itemText}>{a.v}</span>
+              {anatomy.map((a, i) => (
+                <div
+                  key={a.k}
+                  className={f.anatomyItem}
+                  style={{ opacity: pin === null || pin === i ? 1 : 0.4 }}
+                  {...hover(i)}
+                >
+                  <span className={`${f.num} ${pin === i ? f.numOn : ''}`}>{i + 1}</span>
+                  <div className={f.col} style={{ gap: 4 }}>
+                    <span className={f.anatomyTitle}>{a.k}</span>
+                    <span className={f.anatomyText}>{a.v}</span>
                   </div>
                 </div>
               ))}
             </div>
+          ) : (
+            <figcaption className={s.label}>{c.caption}</figcaption>
+          )}
+        </figure>
+      </section>
+
+      {/* El problema */}
+      <section className={`${s.container} ${f.section}`}>
+        <div className={`${s.label} ${f.sectionLabel}`}>{t.problem}</div>
+        <h2 className={`${f.problem} ${c.origin ? '' : f.pending}`}>{c.origin || t.pending}</h2>
+        <div className={f.story}>
+          <div className={f.storyItem}>
+            <span className={s.label}>{t.what}</span>
+            <p className={`${f.storyText} ${c.what ? '' : f.pending}`}>{c.what || t.pending}</p>
+          </div>
+          <div className={`${f.storyItem} ${f.storyAccent}`}>
+            <span className={s.label}>{t.solves}</span>
+            <p className={`${f.storyText} ${c.solves ? '' : f.pending}`}>{c.solves || t.pending}</p>
+          </div>
+        </div>
+      </section>
+
+      {c.stat && (
+        <section className={`${s.container} ${f.statSection}`}>
+          <div className={f.statRow}>
+            <span className={`${s.accent} ${f.statValue}`}>{c.stat}</span>
+            <span className={f.statLabel}>{c.statLabel}</span>
           </div>
         </section>
       )}
 
-      {/* Módulos */}
+      {/* Estructura */}
       {!!c.modules?.length && (
-        <section className={`${s.container} ${f.block}`}>
-          <h2 className={s.h2}>{c.modulesLabel}</h2>
+        <section className={`${s.container} ${f.section}`}>
+          <div className={`${s.label} ${f.sectionLabel}`}>{t.structure}</div>
+          <h2 className={f.h2}>{c.modulesLabel}</h2>
           <div className={f.modules}>
             {c.modules.map((m, i) => (
               <div key={m.name} className={f.module}>
                 <span className={s.label}>{pad(i)}</span>
-                <span className={f.itemTitle}>{m.name}</span>
-                <span className={f.itemText}>{m.desc}</span>
+                <span className={f.moduleName}>{m.name}</span>
+                <span className={f.moduleDesc}>{m.desc}</span>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* Flujos */}
+      {/* Flujos clave */}
       {!!c.flows?.length && (
-        <section className={`${s.container} ${f.block} ${f.topLine}`}>
-          <h2 className={s.h2}>{l.flows}</h2>
+        <section className={`${s.container} ${f.section}`}>
+          <div className={`${s.label} ${f.sectionLabel}`}>{t.flows}</div>
           <div className={f.flows}>
             {c.flows.map(fl => (
               <div key={fl.title} className={f.flow}>
@@ -141,7 +145,7 @@ export default function FeatureView({ id }: { id: string }) {
                 <ol className={f.flowSteps}>
                   {fl.steps.map((st, i) => (
                     <li key={st} className={f.flowStep}>
-                      <span className={f.flowN}>{i + 1}</span>
+                      <span className={f.flowN}>{pad(i)}</span>
                       <span>{st}</span>
                     </li>
                   ))}
@@ -152,88 +156,97 @@ export default function FeatureView({ id }: { id: string }) {
         </section>
       )}
 
-      {/* Detalles */}
-      {!!c.specs?.length && (
-        <section className={`${s.container} ${f.block} ${f.topLine}`}>
-          <div className={f.specsWrap}>
-            <h2 className={s.h2}>{l.specs}</h2>
-            <div className={f.specs}>
-              {c.specs.map(x => (
-                <div key={x.k} className={f.spec}>
-                  <span className={s.label}>{x.k}</span>
-                  <span>{x.v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Decisiones */}
       {c.decisions.length > 0 && (
         <section className={f.dark}>
-          <div className={`${s.container} ${f.block}`}>
-            <div className={`${s.label} ${f.sectionLabel} ${f.labelOnDark}`}>{l.decisions}</div>
-            <div className={f.decisions}>
-              {c.decisions.map((d, i) => (
-                <div key={d.k} className={f.decision}>
+          <div className={`${s.container} ${f.darkInner}`}>
+            <div className={`${s.label} ${f.sectionLabel} ${f.labelOnDark}`}>{t.decisions}</div>
+            <h2 className={`${f.h2} ${f.h2OnDark}`}>{t.decisionsTitle}</h2>
+            {c.decisions.map((d, i) => (
+              <div key={d.k} className={`${f.decision} ${i % 2 ? f.reverse : ''}`}>
+                <div className={f.decisionText}>
                   <span className={`${s.label} ${f.labelOnDark}`}>{pad(i)}</span>
-                  <h3 className={f.decisionTitle}>{d.k}</h3>
-                  <p className={f.decisionText}>{d.v}</p>
+                  <span className={f.decisionTitle}>{d.k}</span>
+                  <span className={f.decisionBody}>{d.v}</span>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Más capturas */}
-      {feat.extra.length > 0 && (
-        <section className={`${s.container} ${f.block}`}>
-          <div className={`${s.label} ${f.sectionLabel}`}>{l.gallery}</div>
-          <div className={f.gallery}>
-            {feat.extra.map(src => (
-              <div key={src} className={f.galleryItem}>
-                <Image src={src} alt={c.caption} width={1600} height={1000} sizes="(max-width: 800px) 100vw, 540px" />
+                {d.shot && (
+                  <div className={f.decisionShot}>
+                    <Shot src={null} alt={d.k} placeholder={d.k} sizes="600px" className={f.darkShot} />
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* Navegación */}
-      <section className={`${s.container} ${f.block} ${f.topLine}`}>
-        <div className={f.pager}>
-          <Link href={featureHref(prev.id)} className={f.pagerLink}>
-            <span className={s.label}>← {l.prev}</span>
-            <span className={f.pagerTitle}>{prev[lang].titleA} {prev[lang].accent}</span>
-          </Link>
-          <Link href={featureHref(next.id)} className={`${f.pagerLink} ${f.pagerNext}`}>
-            <span className={s.label}>{l.next} →</span>
-            <span className={f.pagerTitle}>{next[lang].titleA} <span className={s.accent}>{next[lang].accent}</span></span>
-          </Link>
-        </div>
+      {/* Detalles */}
+      {!!c.specs?.length && (
+        <section className={`${s.container} ${f.section}`}>
+          <div className={`${s.label} ${f.sectionLabel}`}>{t.specs}</div>
+          <div className={f.specs}>
+            {c.specs.map(x => (
+              <div key={x.k} className={f.spec}>
+                <span className={f.specKey}>{x.k}</span>
+                <span className={f.specValue}>{x.v}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
-        {siblings.length > 0 && (
-          <>
-            <h3 className={f.moreTitle}>{l.more} {product.name}</h3>
-            <div className={f.more}>
-              {siblings.map(x => (
-                <Link key={x.id} href={featureHref(x.id)} className={f.moreItem}>
-                  <div className={f.moreShot}>
-                    <Shot src={x.img} alt={x[lang].caption} placeholder={t.noImg} sizes="260px" />
-                  </div>
-                  <span className={s.label}>{x[lang].tag}</span>
-                  <span className={f.moreName}>{x[lang].titleA} {x[lang].accent}</span>
-                </Link>
+      {/* Capturas extra */}
+      {feat.extra.length > 0 && (
+        <section className={`${s.container} ${f.extraSection}`}>
+          <div className={f.extra}>
+            {feat.extra.map(src => (
+              <div key={src} className={f.extraItem}>
+                <Image src={src} alt={c.caption} width={1600} height={1000} sizes="(max-width: 800px) 100vw, 560px" />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Sobre el producto + más features */}
+      <section className={`${s.container} ${f.closing}`}>
+        <div className={f.about}>
+          <div className={f.col} style={{ gap: 12 }}>
+            <span className={s.label}>{t.about}</span>
+            <div className={f.productRow}>
+              <span className={f.productName}>{product.name}</span>
+              <span className={f.badge}>{es ? product.badgeEs : product.badgeEn}</span>
+            </div>
+            <p className={f.productDesc}>{product[lang]}</p>
+            <span className={s.label}>{es ? product.roleEs : product.roleEn}</span>
+          </div>
+          {!!product.stats?.length && (
+            <div className={f.pStats}>
+              {product.stats.map(x => (
+                <div key={x.v} className={f.col} style={{ gap: 4 }}>
+                  <span className={`${s.accent} ${f.pStatValue}`}>{x.v}</span>
+                  <span className={f.pStatLabel}>{x[lang]}</span>
+                </div>
               ))}
             </div>
-          </>
-        )}
+          )}
+        </div>
+
+        <div className={f.relatedTitle}>{t.related} {product.name}</div>
+        <div className={f.related}>
+          {related.map(x => (
+            <Link key={x.id} href={featureHref(x.id)} className={f.relatedItem}>
+              <div className={f.relatedShot}>
+                <Shot src={x.img} alt={x[lang].caption} placeholder={t.noImg} sizes="300px" />
+              </div>
+              <span className={s.label}>{x[lang].tag}</span>
+              <span className={f.relatedName}>{x[lang].titleA} {x[lang].accent}</span>
+            </Link>
+          ))}
+        </div>
       </section>
 
-      <ContactSection />
-      <SiteFooter />
+      <SiteFooter variant="feature" />
     </div>
   )
 }

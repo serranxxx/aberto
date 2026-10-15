@@ -23,7 +23,7 @@ export const THEMES: Theme[] = [
 
 export const FEATURES: Feature[] = [
   // ── I attend ──
-  { id: 'editor', product: 'iattend', img: null, extra: [], source: 'BuildPage.jsx',
+  { id: 'editor', product: 'iattend', img: '/iattend/editor.png', extra: [], source: 'BuildPage.jsx',
     // Posición de cada número sobre la imagen principal (x %, y %). Ajusta al soltar la captura real.
     pins: [[50, 4], [4, 45], [20, 40], [56, 55], [95, 35]],
     es: { titleA: 'Editor de', accent: 'invitaciones', tag: 'Diseño', lead: 'Once módulos y la invitación en vivo dentro de un teléfono. Cualquier pareja la arma sin saber diseño.',

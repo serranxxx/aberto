@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { COPY } from '@/data/copy'
 import { PRODUCTS } from '@/data/features'
 import type { Lang } from '@/data/types'
@@ -11,6 +11,8 @@ import { formatCount, parseStat, useCountProgress } from '@/components/site/Coun
 import {
   ContactSection, SiteFooter, SiteHeader, ctaHref, featureHref, siteStyles as s,
 } from '@/components/site/Site'
+import { FontMenuSticker, ForkSticker, IconSprite, ServicesStickers, StickerIcon, WorkStickers } from '@/components/site/Stickers'
+import { startStickerMotion } from '@/components/site/stickerMotion'
 import { WhyStories } from './WhyStories'
 import { WorkExplorer } from './WorkExplorer'
 import h from './home.module.css'
@@ -21,9 +23,17 @@ export default function HomeView() {
   const { lang } = useLang()
   const t = COPY[lang]
   const [openService, setOpenService] = useState<number | null>(0)
+  const pageRef = useRef<HTMLDivElement>(null)
+
+  // Motion de los stickers: se dispara una vez al entrar cada uno en viewport
+  useEffect(() => {
+    if (!pageRef.current) return
+    return startStickerMotion(pageRef.current)
+  }, [])
 
   return (
-    <div className={h.page}>
+    <div ref={pageRef} className={h.page}>
+      <IconSprite />
       <SiteHeader />
 
       {/* Hero */}
@@ -31,7 +41,12 @@ export default function HomeView() {
         <div className={s.bar} />
         <div className={`${s.label} ${h.heroLabel}`}>{t.heroLabel}</div>
         <h1 className={h.heroTitle}>
-          {t.heroA} <span className={s.accent}>{t.heroAccent}</span>
+          {t.heroA}
+          {/* Acento manuscrito apilado, empalmado con la última línea */}
+          <span className={h.heroAccent}>
+            <span className={`${s.script} ${h.heroAccentText}`}>{t.heroAccent}</span>
+            <StickerIcon name="cursor" inner={1.6} outer={5} anim="cursor" className={h.heroCursor} />
+          </span>
         </h1>
         <p className={h.heroLead}>{t.heroLead}</p>
         <div className={s.btnRow}>
@@ -54,13 +69,14 @@ export default function HomeView() {
             ))}
           </div>
           <p className={h.painClose}>
-            {t.painClose} <span className={s.accent}>{t.painCloseAccent}</span>
+            {t.painClose} <span className={`${s.script} ${h.painAccent}`}>{t.painCloseAccent}</span>
           </p>
         </div>
       </section>
 
       {/* Servicios */}
-      <section id="servicios" className={`${s.container} ${h.block}`}>
+      <section id="servicios" className={`${s.container} ${h.block} ${h.relative}`}>
+        <ServicesStickers />
         <div className={`${s.label} ${h.sectionLabel}`}>{t.servicesLabel}</div>
         <h2 className={s.h2} style={{ maxWidth: '20ch' }}>{t.servicesTitle}</h2>
         <p className={s.lead} style={{ maxWidth: '48ch' }}>{t.servicesLead}</p>
@@ -107,25 +123,29 @@ export default function HomeView() {
       <section id="por-que" className={h.dark}>
         <div className={`${s.container} ${h.whyBlock}`}>
           <div className={`${s.label} ${h.sectionLabel} ${h.labelOnDark}`}>{t.whyLabel}</div>
-          <h2 className={`${s.h2} ${h.h2OnDark}`} style={{ maxWidth: '22ch' }}>{t.whyTitle}</h2>
+          <h2 className={`${s.h2} ${h.h2OnDark} ${h.whyTitle}`}>
+            <span>{t.whyTitle}</span>
+            <ForkSticker yes={t.forkYes} no={t.forkNo} />
+          </h2>
           <WhyStories reasons={t.why} />
           <ProofStats lang={lang} />
         </div>
       </section>
 
       {/* Quién soy */}
-      <section className={`${s.container} ${h.block}`}>
+      <section className={`${s.container} ${h.block} ${h.relative}`}>
         <div className={h.about}>
           <div className={h.aboutHead}>
             <div className={h.avatar}>
               <div className={h.avatarDisc} />
-              <Image src="/avatar.png" alt={lang === 'es' ? 'Memoji de Alberto Serrano' : 'Alberto Serrano’s memoji'} width={470} height={701} sizes="170px" className={h.avatarImg} />
+              <Image src="/memoji-clean.png" alt={lang === 'es' ? 'Memoji de Alberto Serrano' : 'Alberto Serrano’s memoji'} width={470} height={701} sizes="170px" className={h.avatarImg} />
             </div>
             <div className={h.aboutTitleWrap}>
               <span className={s.label}>{t.aboutLabel}</span>
               <h2 className={h.aboutTitle}>
-                {t.aboutTitle}
-                <span className={`${s.accent} ${h.aboutAccent}`}>{t.aboutAccent}</span>
+                {/* Invertido: el nombre manuscrito va arriba y se empalma con la línea en Inter */}
+                <span className={`${s.script} ${h.aboutName}`}>{t.aboutTitle}</span>
+                <span>{t.aboutAccent}</span>
               </h2>
             </div>
           </div>
@@ -142,12 +162,14 @@ export default function HomeView() {
           <div className={`${s.label} ${h.sectionLabel}`}>{t.workLabel}</div>
           <h2 className={s.h2} style={{ maxWidth: '22ch' }}>{t.workTitle}</h2>
           <p className={s.lead} style={{ maxWidth: '50ch' }}>{t.workLead}</p>
+          <WorkStickers code={t.decoCode} />
         </div>
         <WorkExplorer lang={lang} />
       </section>
 
       {/* Proceso */}
-      <section id="proceso" className={`${s.container} ${h.block}`}>
+      <section id="proceso" className={`${s.container} ${h.block} ${h.relative}`}>
+        <FontMenuSticker />
         <div className={`${s.label} ${h.sectionLabel}`}>{t.processLabel}</div>
         <h2 className={s.h2} style={{ maxWidth: '20ch' }}>{t.processTitle}</h2>
         <ol className={h.timeline}>

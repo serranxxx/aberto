@@ -36,6 +36,10 @@
   color: var(--paper);
 }
 
+.relative {
+  position: relative;
+}
+
 .inlineLink {
   font-size: 14px;
   font-weight: 500;
@@ -62,22 +66,58 @@
 
 .heroTitle {
   margin: 0;
-  font-size: clamp(40px, 6.2vw, 72px);
+  font-size: clamp(36px, 5.2vw, 62px);
   font-weight: 700;
   letter-spacing: -0.05em;
-  line-height: 1.02;
+  line-height: 1.04;
   color: var(--ink-2);
-  max-width: 18ch;
-  text-wrap: balance;
+  white-space: pre-line;
+}
+
+/* Acento apilado bajo el titular, empalmado con la última línea */
+.heroAccent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  width: fit-content;
+  margin-top: -0.42em;
+  padding: 0.05em 0.2em 0.2em 0.1em;
+  font-family: var(--font-script);
+  font-size: 0.72em;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.heroAccentText {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: clamp(30px, 6.4vw, 48px);
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 0.12em 0.15em 0.3em;
+  margin: -0.12em -0.15em -0.3em;
+}
+
+.heroCursor {
+  flex: none;
+  width: 0.78em;
+  height: 0.78em;
+  margin-left: 0.18em;
+  vertical-align: -0.02em;
+  transform: translate(-28px, -3px) rotate(-15deg);
+  pointer-events: none;
 }
 
 .heroLead {
-  margin: 28px 0 0;
+  margin: 0;
   font-size: clamp(17px, 1.8vw, 21px);
   letter-spacing: -0.012em;
   line-height: 1.5;
   color: var(--ink-3);
-  max-width: 40ch;
+  max-width: 50ch;
   text-wrap: pretty;
 }
 
@@ -136,11 +176,19 @@
 .painClose {
   margin: clamp(40px, 6vw, 56px) 0 0;
   font-size: clamp(20px, 2.4vw, 28px);
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.3;
   color: var(--ink-2);
-  max-width: 34ch;
+}
+
+/* Cierre en línea, un poco más grande que el texto */
+.painAccent {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: -0.18em;
+  margin-left: 0.05em;
+  font-size: 1.05em;
 }
 
 /* Servicios (acordeón) */
@@ -263,6 +311,18 @@
 
 /* Por qué yo */
 
+.whyTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.whyTitle > span:first-child {
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
 .whyBlock {
   padding-top: clamp(64px, 8vw, 104px);
   padding-bottom: clamp(64px, 8vw, 104px);
@@ -326,7 +386,7 @@
 }
 
 .heroValue {
-  font-size: calc(clamp(88px, 12vw, 152px) - 20px);
+  font-size: calc(clamp(88px, 12vw, 152px) - 36px);
   font-weight: 800;
   letter-spacing: -0.06em;
   line-height: 0.85;
@@ -447,9 +507,11 @@
   color: var(--ink-2);
 }
 
-.aboutAccent {
-  align-self: flex-start;
-  padding-bottom: 0.12em;
+/* Nombre manuscrito arriba, empalmado con la línea en Inter */
+.aboutName {
+  display: block;
+  margin-bottom: -0.42em;
+  font-size: 0.72em;
 }
 
 .aboutText {
@@ -472,6 +534,7 @@
 /* Trabajo */
 
 .workHead {
+  position: relative;
   border-top: 1px solid var(--line);
   padding-top: clamp(56px, 8vw, 96px);
 }
@@ -552,7 +615,7 @@
   line-height: 1.6;
   color: var(--ink-3);
   grid-column: span 2;
-  max-width: 60ch;
+  white-space: pre-line;
 }
 
 /* Móvil */

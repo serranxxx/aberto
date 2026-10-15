@@ -1,0 +1,365 @@
+/*
+ * Visibilidad responsive de las decoraciones:
+ * - .deco / .decoInline / .decoFlex: ocultas < 860px, reducidas a 0.78 < 1100px
+ * - .decoWide: solo >= 1280px
+ */
+
+.deco,
+.decoInline,
+.decoFlex,
+.decoWide {
+  --deco-s: 1;
+  pointer-events: none;
+}
+
+.deco,
+.decoWide {
+  display: block;
+}
+
+.decoInline {
+  display: inline-block;
+}
+
+.decoFlex {
+  display: flex;
+}
+
+@media (max-width: 1099px) {
+  .deco,
+  .decoInline,
+  .decoFlex {
+    --deco-s: 0.78;
+  }
+}
+
+@media (max-width: 859px) {
+  .deco,
+  .decoInline,
+  .decoFlex {
+    display: none;
+  }
+}
+
+@media (max-width: 1279px) {
+  .decoWide {
+    display: none;
+  }
+}
+
+/* Base de sticker: borde blanco de 6px y sombra */
+.sticker {
+  padding: 6px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(25, 22, 30, 0.12), 0 16px 32px -12px rgba(25, 22, 30, 0.35);
+}
+
+.stickerIcon {
+  overflow: visible;
+  filter: drop-shadow(0 6px 10px rgba(25, 22, 30, 0.28));
+}
+
+/* Servicios */
+
+.services {
+  position: absolute;
+  right: var(--gutter);
+  top: clamp(64px, 9vw, 112px);
+  width: 380px;
+  height: 190px;
+  z-index: 2;
+  scale: var(--deco-s);
+  transform-origin: right top;
+}
+
+.toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 16px;
+  background: var(--ink);
+}
+
+.tool,
+.toolOn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolOn {
+  border-radius: 12px;
+  background: var(--grad);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+  height: 52px;
+  padding: 0 10px 0 16px;
+  border-radius: 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+}
+
+.searchText {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.caret {
+  width: 2px;
+  height: 18px;
+  margin-left: 2px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+
+.kbd {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #F3F1F5;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+/* Por qué yo: bifurcación (sin borde blanco) */
+
+.fork {
+  position: relative;
+  flex: none;
+  margin-right: clamp(0px, 3vw, 48px);
+  transform: rotate(-6deg) scale(var(--deco-s));
+  transform-origin: right center;
+}
+
+.forkSvg {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+.forkPill {
+  position: absolute;
+  left: 96px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(25, 22, 30, 0.2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+/* Quién soy */
+
+.about {
+  position: absolute;
+  right: var(--gutter);
+  top: clamp(24px, 4vw, 56px);
+  width: 290px;
+  height: 150px;
+  z-index: 2;
+}
+
+.stepCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px 12px 12px;
+  border-radius: 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.stepIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stepSmall {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.stepBig {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.typing {
+  display: flex;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px 18px 18px 5px;
+  background: #F3F1F5;
+}
+
+.typing span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+/* Trabajo */
+
+.work {
+  position: absolute;
+  right: clamp(0px, 4vw, 64px);
+  top: clamp(110px, 12vw, 150px);
+  flex-direction: column;
+  align-items: center;
+  transform: scale(var(--deco-s));
+  transform-origin: top right;
+}
+
+.slider {
+  position: relative;
+  width: 140px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--grad-h);
+  box-shadow: inset 0 0 0 1px rgba(25, 22, 30, 0.08);
+}
+
+.knob {
+  position: absolute;
+  left: 62%;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(25, 22, 30, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.knob div {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #D577D9;
+}
+
+.codeBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 8px 0 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.codeIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Proceso: menú de fuentes */
+
+.fontMenu {
+  position: absolute;
+  right: var(--gutter);
+  top: clamp(56px, 8vw, 104px);
+  z-index: 2;
+  border-radius: 22px;
+  scale: var(--deco-s);
+  transform-origin: right top;
+  transform: translate(0, 35px) rotate(7deg) scaleX(1.12);
+}
+
+.fmBox {
+  width: 220px;
+  border-radius: 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.fmHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.fmLabel {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.fmList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.fmRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+.fmRow svg {
+  display: none;
+}
+
+.fmRow[data-on='true'] {
+  background: #F3F1F5;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.fmRow[data-on='true'] svg {
+  display: block;
+}

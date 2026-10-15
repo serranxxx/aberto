@@ -15,6 +15,7 @@
   --grad: linear-gradient(135deg, #FF6B5B, #AF86F7);
   --grad-h: linear-gradient(90deg, #FF6B5B, #AF86F7);
   --gutter: clamp(20px, 5vw, 64px);
+  --font-script: 'Momo Signature', cursive;
 }
 
 @supports (background: linear-gradient(135deg in oklch, red, blue)) {
@@ -35,6 +36,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink-2);
   font-optical-sizing: auto;

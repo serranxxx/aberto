@@ -14,6 +14,22 @@
   color: transparent;
 }
 
+/* Acento manuscrito: siempre con el degradado de relleno y por encima del Inter */
+.script {
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  font-family: var(--font-script);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.35;
+  padding: 0.05em 0.2em 0.2em 0.1em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .bar {
   width: 48px;
   height: 3px;
@@ -47,8 +63,8 @@
   display: inline-block;
   flex: none;
   background: var(--grad);
-  -webkit-mask: url('/logo.svg') center / contain no-repeat;
-  mask: url('/logo.svg') center / contain no-repeat;
+  -webkit-mask: url('/logo-cursor-mask.svg') center / contain no-repeat;
+  mask: url('/logo-cursor-mask.svg') center / contain no-repeat;
 }
 
 /* Botones */
@@ -137,27 +153,80 @@
 
 .brandName {
   font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.brandFeature {
+  font-size: 14px;
   font-weight: 500;
   color: var(--ink);
   white-space: nowrap;
 }
 
+/* Tile del logo, ligeramente inclinado */
+.logoTile {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #FFFFFF, #F3F1F5);
+  box-shadow:
+    inset 0 1px 0 #FFFFFF,
+    0 0 0 1px rgba(25, 22, 30, 0.06),
+    0 1px 2px rgba(25, 22, 30, 0.08),
+    0 6px 14px -6px rgba(25, 22, 30, 0.28);
+  transform: rotate(-6deg);
+}
+
+.logoTile img {
+  display: block;
+  filter: drop-shadow(0 2px 3px rgba(240, 108, 171, 0.35));
+}
+
+.backLink {
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
 .nav {
   flex: 1;
   min-width: 0;
+  height: 20px;
+  overflow: hidden;
+  flex-wrap: wrap;
   display: flex;
   justify-content: center;
   gap: 28px;
   font-size: 14px;
 }
 
+/* Scroll-spy: el link activo se oscurece y crece un subrayado con el degradado */
 .nav a {
   color: var(--ink-3);
-  transition: color 0.2s;
+  font-weight: 400;
+  line-height: 18px;
+  padding-bottom: 2px;
+  background-image: var(--grad-h);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 2px;
+  transition: color 0.2s, background-size 0.3s;
 }
 
 .nav a:hover {
   color: var(--ink);
+}
+
+.nav a.navOn {
+  color: var(--ink);
+  font-weight: 500;
+  background-size: 100% 2px;
 }
 
 .headerActions {
@@ -248,8 +317,17 @@
   letter-spacing: -0.05em;
   line-height: 1.04;
   color: var(--paper);
-  max-width: 18ch;
+  max-width: 22ch;
   text-wrap: balance;
+}
+
+/* "Hablemos." en línea, a 80% del titular */
+.contactAccent {
+  display: inline-block;
+  vertical-align: -0.22em;
+  margin-left: 0.05em;
+  white-space: nowrap;
+  font-size: 0.8em;
 }
 
 .contactLead {
@@ -288,6 +366,20 @@
 .footer {
   background: var(--ink);
   border-top: 1px solid var(--ink-2);
+}
+
+.footerLight {
+  border-top: 1px solid var(--line);
+}
+
+.footerLight .footerInner {
+  padding-top: 28px;
+  padding-bottom: 28px;
+  color: var(--ink-3);
+}
+
+.footerLight a {
+  color: var(--ink-3);
 }
 
 .footerInner {
