@@ -14,6 +14,7 @@ import {
 import { FontMenuSticker, ForkSticker, IconSprite, ServicesStickers, StickerIcon, WorkStickers } from '@/components/site/Stickers'
 import { startStickerMotion } from '@/components/site/stickerMotion'
 import { WhyStories } from './WhyStories'
+import { SoftwareBeautiful } from './SoftwareBeautiful'
 import { WorkExplorer } from './WorkExplorer'
 import h from './home.module.css'
 
@@ -157,6 +158,8 @@ export default function HomeView() {
           </div>
         </div>
       </section>
+
+      <SoftwareBeautiful lang={lang} />
 
       {/* Trabajo */}
       <section id="trabajo" className={s.container}>

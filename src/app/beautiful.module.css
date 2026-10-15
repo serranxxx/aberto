@@ -1,0 +1,108 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.inner {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  min-height: clamp(300px, 56vw, 760px);
+  padding: clamp(72px, 16vw, 220px) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Los cursores se posicionan en % de este bloque */
+.block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(38px, 8.4vw, 112px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Empalma con la línea de arriba; el padding evita recortar el swash y los descendentes */
+.script {
+  position: relative;
+  z-index: 3;
+  margin: -0.22em 0 -0.3em -0.3em;
+  padding: 0 0.2em 0.5em 0.3em;
+  font-family: var(--font-script);
+  font-size: clamp(32px, 6.2vw, 84px);
+  font-weight: 400;
+  line-height: 1.1;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #FB6986, #AF86F7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@supports (background: linear-gradient(90deg in oklch, red, blue)) {
+  .script {
+    background: linear-gradient(90deg in oklch, #FB6986, #AF86F7);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+/* Cursor tipo Figma con etiqueta */
+.cursor {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  pointer-events: none;
+  zoom: 1;
+}
+
+.arrow {
+  flex: none;
+  overflow: visible;
+  filter: drop-shadow(0 6px 10px rgba(25, 22, 30, 0.28));
+}
+
+.tag {
+  margin: 30px 0 0 -6px;
+  padding: 7px 14px 8px;
+  border-radius: 4px 14px 14px 14px;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: 0 0 0 3px #FFFFFF, 0 10px 20px -8px rgba(25, 22, 30, 0.35);
+}
+
+@media (max-width: 1099px) {
+  .cursor {
+    zoom: 0.82;
+  }
+}
+
+@media (max-width: 859px) {
+  .cursor {
+    zoom: 0.66;
+  }
+}
+
+@media (max-width: 559px) {
+  .cursor {
+    zoom: 0.62;
+  }
+}
