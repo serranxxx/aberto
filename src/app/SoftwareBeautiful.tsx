@@ -14,20 +14,20 @@ const CURSORS = [
   {
     color: '#FF6B5B',
     es: 'Diseñando flujos', en: 'Designing flows',
-    path: '-17.5% -30%|10% -42.5%|35% -2.5%|17.5% 35%|-5% 27.5%|-22.5% -5%',
-    mpath: '-2% -66%|3% -72%|6% -63%|1% -60%',
+    path: '-17.5% -30%|10% -42.5%|35% -2.5%|11.5% 8%|-5% 27.5%|-22.5% -5%',
+    mpath: '-6% -70%|6% -80%|16% -72%|8% -66%|-2% -76%|-8% -68%',
   },
   {
     color: '#D577D9',
     es: 'Escribiendo código', en: 'Writing code',
     path: '70% 100%|42.5% 117.5%|10% 107.5%|-10% 82.5%|25% 72.5%|55% 85%',
-    mpath: '46% 128%|51% 134%|55% 127%|50% 124%',
+    mpath: '44% 126%|22% 140%|6% 128%|20% 122%|38% 138%|54% 130%',
   },
   {
     color: '#AF86F7',
     es: 'Probando con usuarios', en: 'Testing with users',
-    path: '65% -37.5%|87.5% -22.5%|95% 22.5%|75% 10%|55% -7.5%|70% -47.5%',
-    mpath: '50% -90%|55% -86%|52% -81%|47% -85%',
+    path: '65% -37.5%|87.5% -22.5%|95% 22.5%|78.5% -6%|55% -7.5%|70% -47.5%',
+    mpath: '52% -110%|62% -122%|58% -104%|48% -114%|44% -106%|50% -100%',
   },
 ]
 
@@ -46,7 +46,7 @@ export function SoftwareBeautiful({ lang }: { lang: Lang }) {
       if (!el) return
       const pts = parse(mobile ? CURSORS[i].mpath : CURSORS[i].path)
       const kf = [...pts, pts[0]].map(([left, top]) => ({ left, top, easing: 'cubic-bezier(.45,0,.25,1)' }))
-      anims.push(el.animate(kf, { duration: 16000 + i * 3000, delay: -i * 2500, iterations: Infinity, easing: 'linear' }))
+      anims.push(el.animate(kf, { duration: mobile ? 10000 + i * 1500 : 16000 + i * 3000, delay: -i * 2500, iterations: Infinity, easing: 'linear' }))
       // Vaivén vertical encima del recorrido
       anims.push(el.animate([{ translate: '0 0' }, { translate: '0 -6px' }, { translate: '0 0' }], {
         duration: 2600 + i * 400, iterations: Infinity, easing: 'ease-in-out',

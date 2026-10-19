@@ -66,9 +66,11 @@ const Arrow = ({ dir }: { dir: 'left' | 'right' }) => (
   </svg>
 )
 
-/** Carril horizontal de pantallas con flechas. */
-function Gallery({ labels, title, prev, next, scale, className }: {
-  labels: string[]; title: string; prev: string; next: string; scale: number; className: string
+type Shot = { src: string; label: string; w?: number; h?: number }
+
+/** Carril horizontal de pantallas con flechas. Con w/h la imagen va a tamaño fijo; sin ellos, llena el tile. */
+function Gallery({ items, title, prev, next, wide, className }: {
+  items: Shot[]; title: string; prev: string; next: string; wide: boolean; className: string
 }) {
   const rail = useRef<HTMLDivElement>(null)
   const go = (d: number) => {
@@ -86,16 +88,18 @@ function Gallery({ labels, title, prev, next, scale, className }: {
         </div>
       </div>
       <div ref={rail} className={p.rail}>
-        {SCREENS.map(([file, w, h], i) => {
-          const f = Math.min(0.62, 268 / h) * scale
-          return (
-            <div key={file} className={p.tile}>
-              <span className={p.tileLabel}>{pad(i)} · {labels[i]}</span>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`${D}crop/${file}.png`} alt={labels[i]} width={Math.round(w * f)} height={Math.round(h * f)} loading="lazy" />
-            </div>
-          )
-        })}
+        {items.map((g, i) => (
+          <div key={g.src} className={`${p.tile} ${wide ? p.tileWide : ''}`}>
+            <span className={p.tileLabel}>{pad(i)} · {g.label}</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={g.src}
+              alt={g.label}
+              loading="lazy"
+              {...(g.w && g.h ? { width: g.w, height: g.h } : { className: p.tileFill })}
+            />
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -110,6 +114,21 @@ export default function ProjectView({ id }: { id: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
 
   const [d1, d2, d3] = c.decisions.map((d, i) => ({ ...d, n: pad(i) }))
+  // Dynamic RSVP tiene su propio montaje (mockup recortado al celular, recortes a tamaño real)
+  const isRsvp = id === 'dynamicrsvp'
+  const caption = `${c.caption || c.tag} / Demo`
+  const problemTitle = c.problemTitle || t.problemTitle
+  const solutionTitle = c.solutionTitle || t.solutionTitle
+  // El título siempre va en dos renglones: se encoge según su longitud (cqi del contenedor)
+  const fit = { '--tfit': `${(185 / Math.max(1, c.titleA.length)).toFixed(2)}cqi` } as React.CSSProperties
+
+  const galleryFor = (scale: number): Shot[] => isRsvp
+    ? SCREENS.map(([file, w, h], i) => {
+      const f = Math.min(0.62, 268 / h) * scale
+      return { src: `${D}crop/${file}.png`, label: t.gallery[i], w: Math.round(w * f), h: Math.round(h * f) }
+    })
+    : (feat.gallery ?? [])
+  const hasGallery = isRsvp || !!feat.gallery?.length
   const nextId = FEATURE_ORDER[FEATURE_ORDER.indexOf(id) + 1]
   const nextHref = nextId ? workHref(nextId) : '/#trabajo'
 
@@ -172,7 +191,7 @@ export default function ProjectView({ id }: { id: string }) {
   )
 
   const title = (
-    <div className={p.titleWrap}>
+    <div className={p.titleWrap} style={fit}>
       <h1 className={p.h1}>{c.titleA}</h1>
       <span className={`${s.script} ${p.accent}`}>{c.accent}</span>
     </div>
@@ -213,9 +232,13 @@ export default function ProjectView({ id }: { id: string }) {
                 {facts}
               </div>
               <div className={p.frameCol}>
-                <span className={p.frameLabel}><FrameIcon size={12} />{t.demo}</span>
+                <span className={p.frameLabel}><FrameIcon size={12} />{caption}</span>
                 <div className={p.frame}>
-                  <video src={`${D}mockup-animado-v2.mp4`} muted loop playsInline preload="none" className={p.frameVideo} />
+                  {isRsvp || feat.heroVideo ? (
+                    <video src={isRsvp ? `${D}mockup-animado-v2.mp4` : feat.heroVideo} muted loop playsInline preload="none" className={p.frameVideo} />
+                  ) : (
+                    <div className={p.placeholderBottom}>Video / GIF</div>
+                  )}
                 </div>
                 <Cursor className={`${p.cursor} ${p.cursorA}`} color="#FF6B5B" label={t.cursorDesign} path={0} />
                 <Cursor className={`${p.cursor} ${p.cursorB}`} color="#AF86F7" label={t.cursorTest} path={1} />
@@ -228,7 +251,7 @@ export default function ProjectView({ id }: { id: string }) {
               <div className={p.storyHead}>
                 <span className={p.label}>{t.problem}</span>
                 <ProblemIcon size={56} />
-                <h2 className={p.h3}>{t.problemTitle}</h2>
+                <h2 className={p.h3}>{problemTitle}</h2>
               </div>
               <p className={p.storyText}>{c.origin}</p>
             </section>
@@ -237,7 +260,7 @@ export default function ProjectView({ id }: { id: string }) {
               <div className={p.storyHead}>
                 <span className={p.label}>{t.solution}</span>
                 <SolutionIcon size={56} />
-                <h2 className={p.h3}>{t.solutionTitle}</h2>
+                <h2 className={p.h3}>{solutionTitle}</h2>
               </div>
               <p className={p.storyText}>{c.what}</p>
             </section>
@@ -252,10 +275,18 @@ export default function ProjectView({ id }: { id: string }) {
 
             <div className={p.flowCard}>
               <span className={p.flowLabel}>{t.flow}</span>
-              <video src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.flowVideo} />
+              {isRsvp ? (
+                <video src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.flowVideo} />
+              ) : feat.flowVideo ? (
+                <video src={feat.flowVideo} muted loop playsInline preload="none" className={p.flowVideoContain} />
+              ) : (
+                <div className={p.placeholderCenter}>{lang === 'es' ? 'Captura después' : 'Screenshot coming'}</div>
+              )}
             </div>
 
-            <Gallery className={p.galleryDesk} labels={t.gallery} title={t.screens} prev={t.prev} next={t.next} scale={1} />
+            {hasGallery && (
+              <Gallery className={p.galleryDesk} items={galleryFor(1)} wide={!isRsvp} title={t.screens} prev={t.prev} next={t.next} />
+            )}
 
             <section className={p.result}>
               <div className={p.resultHead}>
@@ -265,7 +296,7 @@ export default function ProjectView({ id }: { id: string }) {
                 </div>
                 <Link href={nextHref} className={p.nextLink}>{t.nextProject}</Link>
               </div>
-              {resultStats}
+              {isRsvp && resultStats}
             </section>
           </div>
         </div>
@@ -287,12 +318,20 @@ export default function ProjectView({ id }: { id: string }) {
 
         <div className={p.mHero}>
           <div className={p.mHeroInner}>
-            <span className={`${p.frameLabel} ${p.mFrameLabel}`}><FrameIcon size={11} />{t.demo}</span>
+            <span className={`${p.frameLabel} ${p.mFrameLabel} ${isRsvp ? '' : p.mFull}`}><FrameIcon size={11} />{caption}</span>
             <Cursor className={`${p.cursor} ${p.mCursor}`} color="#AF86F7" label={t.cursorTest} path={1} scale={0.4} />
             {/* La máscara recorta el video al celular del mockup */}
-            <div className={p.mFrame}>
-              <video src={`${D}mockup-animado-v2.mp4`} muted loop playsInline preload="none" className={p.mFrameVideo} />
-            </div>
+            {isRsvp ? (
+              <div className={p.mFrame}>
+                <video src={`${D}mockup-animado-v2.mp4`} muted loop playsInline preload="none" className={p.mFrameVideo} />
+              </div>
+            ) : (
+              <div className={`${p.mFrame} ${p.mFrameWide}`}>
+                {feat.heroVideo
+                  ? <video src={feat.heroVideo} muted loop playsInline preload="none" className={p.frameVideo} />
+                  : <div className={p.placeholderBottom}>Video / GIF</div>}
+              </div>
+            )}
           </div>
         </div>
 
@@ -300,19 +339,25 @@ export default function ProjectView({ id }: { id: string }) {
           <div className={p.mStory}>
             <span className={p.label}>{t.problem}</span>
             <ProblemIcon size={44} />
-            <h2 className={p.mH3}>{t.problemTitle}</h2>
+            <h2 className={p.mH3}>{problemTitle}</h2>
             <p className={p.mText}>{c.origin}</p>
           </div>
           <div className={`${p.mStory} ${p.mStoryLine}`}>
             <span className={p.label}>{t.solution}</span>
             <SolutionIcon size={44} />
-            <h2 className={p.mH3}>{t.solutionTitle}</h2>
+            <h2 className={p.mH3}>{solutionTitle}</h2>
             <p className={p.mText}>{c.what}</p>
           </div>
 
           <div className={p.mFlow}>
             <span className={p.mFlowLabel}>{t.flow}</span>
-            <video src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.mFlowVideo} />
+            {isRsvp ? (
+              <video src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.mFlowVideo} />
+            ) : feat.flowVideo ? (
+              <video src={feat.flowVideo} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
+            ) : (
+              <div className={`${p.placeholderCenter} ${p.mPlaceholder}`}>{lang === 'es' ? 'Captura después' : 'Screenshot coming'}</div>
+            )}
           </div>
 
           <div className={p.mPrinciples}>
@@ -326,14 +371,16 @@ export default function ProjectView({ id }: { id: string }) {
           </div>
         </div>
 
-        <Gallery className={p.galleryMob} labels={t.gallery} title={t.screens} prev={t.prev} next={t.next} scale={0.9} />
+        {hasGallery && (
+          <Gallery className={p.galleryMob} items={galleryFor(0.9)} wide={!isRsvp} title={t.screens} prev={t.prev} next={t.next} />
+        )}
 
         <section className={p.mResult}>
           <div className={p.resultIntro} style={{ gap: 16 }}>
             <span className={p.labelDark}>{t.result}</span>
             <span className={p.mResultLine}>{c.stat} <span className={p.resultMuted}>{c.statLabel}</span></span>
           </div>
-          {resultStats}
+          {isRsvp && resultStats}
           <Link href={nextHref} className={p.mNext}>{t.nextProject}</Link>
         </section>
       </div>

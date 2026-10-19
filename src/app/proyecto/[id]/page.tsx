@@ -20,5 +20,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   if (!PROJECT_IDS.includes(id) || !FEATURES.some(f => f.id === id)) notFound()
-  return <ProjectView id={id} />
+  // key: al pasar de un proyecto a otro se remonta y reinician cursores y videos
+  return <ProjectView key={id} id={id} />
 }

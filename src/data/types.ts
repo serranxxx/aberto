@@ -31,6 +31,9 @@ export type FeatureCopy = {
   stat?: string
   statLabel?: string
   caption: string
+  problemTitle?: string
+  solutionTitle?: string
+  keyIdea?: string
 }
 
 export type Feature = {
@@ -38,6 +41,9 @@ export type Feature = {
   product: string
   img: string | null
   video?: string
+  heroVideo?: string
+  flowVideo?: string
+  gallery?: { src: string; label: string }[]
   extra: string[]
   source?: string
   pins?: [number, number][]

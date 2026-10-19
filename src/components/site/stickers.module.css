@@ -237,6 +237,11 @@
 
 /* Trabajo */
 
+/* Oculto en todos los tamaños por ahora (handoff 19 oct) */
+.decoFlex.work {
+  display: none;
+}
+
 .work {
   position: absolute;
   right: clamp(0px, 4vw, 64px);

@@ -256,7 +256,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   padding: 28px clamp(24px, 3vw, 36px) clamp(24px, 3vw, 32px);
 }
 
@@ -450,5 +450,20 @@
 @media (min-width: 560px) and (max-width: 859px) {
   .stripItem {
     flex-basis: calc(50% - 4px);
+  }
+}
+
+/* Card en iPad vertical (a ancho completo): media 2:1 y título sin altura mínima */
+@media (min-width: 560px) and (max-width: 859px) {
+  .media {
+    aspect-ratio: 2 / 1;
+  }
+
+  .cardBody {
+    padding: 22px 28px;
+  }
+
+  .cardTitle {
+    min-height: 0;
   }
 }

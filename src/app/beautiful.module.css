@@ -8,8 +8,8 @@
   position: relative;
   max-width: 1080px;
   margin: 0 auto;
-  min-height: clamp(300px, 56vw, 760px);
-  padding: clamp(72px, 16vw, 220px) var(--gutter);
+  min-height: clamp(210px, 39vw, 532px);
+  padding: clamp(50px, 11.2vw, 154px) var(--gutter);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,7 +28,7 @@
 .title {
   position: relative;
   z-index: 2;
-  font-size: clamp(38px, 8.4vw, 112px);
+  font-size: clamp(34px, 7.56vw, 101px);
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 0.95;
@@ -43,7 +43,7 @@
   margin: -0.22em 0 -0.3em -0.3em;
   padding: 0 0.2em 0.5em 0.3em;
   font-family: var(--font-script);
-  font-size: clamp(32px, 6.2vw, 84px);
+  font-size: clamp(29px, 5.58vw, 76px);
   font-weight: 400;
   line-height: 1.1;
   white-space: nowrap;
@@ -68,7 +68,7 @@
   display: flex;
   align-items: flex-start;
   pointer-events: none;
-  zoom: 1;
+  zoom: 0.9;
 }
 
 .arrow {
@@ -91,18 +91,18 @@
 
 @media (max-width: 1099px) {
   .cursor {
-    zoom: 0.82;
+    zoom: 0.74;
   }
 }
 
 @media (max-width: 859px) {
   .cursor {
-    zoom: 0.66;
+    zoom: 0.59;
   }
 }
 
 @media (max-width: 559px) {
   .cursor {
-    zoom: 0.62;
+    zoom: 0.56;
   }
 }

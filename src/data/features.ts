@@ -14,12 +14,12 @@ export const PRODUCTS: Record<string, Product> = {
 };
 
 // Orden en el Home. Los ids dentro de un sub-arreglo se muestran juntos como un flujo.
-export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'editor', 'confirmacion', 'whatsapp', 'spotlight', 'mesas', 'consola', 'invitados', 'render', 'certificados', 'lia', 'dashboard', 'ds', 'notas', 'ecommerce', 'modales', 'side', 'cobros', 'savethedate', 'flujos'];
+export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'editor', 'confirmacion', 'whatsapp', 'spotlight', 'mesas', 'consola', 'invitados', 'render', 'certificados', 'lia', 'dashboardp', 'dashboard', 'ds', 'notas', 'ecommerce', 'modales', 'side', 'cobros', 'savethedate', 'flujos'];
 export const FEATURED: string[] = ['dynamicrsvp', 'confirmacion', 'whatsapp', 'spotlight'];
 export const THEMES: Theme[] = [
   { id: 'all', es: 'Todas', en: 'All', ids: null },
   { id: 'ux', es: 'Flujos y experiencia', en: 'Flows and experience', ids: ['dynamicrsvp', 'editor', 'confirmacion', 'mesas', 'savethedate', 'side', 'flujos', 'certificados'] },
-  { id: 'ops', es: 'Herramientas internas', en: 'Internal tools', ids: ['whatsapp', 'invitados', 'cobros', 'dashboard', 'notas', 'modales'] },
+  { id: 'ops', es: 'Herramientas internas', en: 'Internal tools', ids: ['whatsapp', 'invitados', 'cobros', 'dashboardp', 'dashboard', 'notas', 'modales'] },
   { id: 'sys', es: 'Navegación y sistemas', en: 'Navigation and systems', ids: ['consola', 'spotlight', 'ds'] },
   { id: 'com', es: 'Comercio e IA', en: 'Commerce and AI', ids: ['ecommerce', 'render', 'lia'] }
 ];
@@ -275,6 +275,37 @@ export const FEATURES: Feature[] = [
       what: 'Light and dark themes with solid harmony, fast and friendly navigation, all centered on the user.',
       solves: '', decisions: [{ k: 'Red is scarce', v: 'Primary action only. Never decoration, never error.' }],
       caption: 'Console' } },
+
+  { id: 'dashboardp', product: 'canplast', img: null, extra: [], video: '/dashboard/sales-dashboard-v2.mp4', flowVideo: '/dashboard/sales-dashboard-v2.mp4', heroVideo: '/dashboard/dashboard-mockup-v2.mp4',
+    gallery: [{ src: '/dashboard/gallery/01-tablero.png', label: 'El tablero' }, { src: '/dashboard/gallery/02-redimensionar-grafica.png', label: 'Cada gráfica cambia de tamaño' }, { src: '/dashboard/gallery/03-grafica-2x2.png', label: 'Una gráfica ocupa 2×2' }, { src: '/dashboard/gallery/04-ajustar-tablero.png', label: 'El tablero se ajusta' }, { src: '/dashboard/gallery/05-densidad-4x3.png', label: 'Doce gráficas por página' }, { src: '/dashboard/gallery/06-densidad-6x3.png', label: 'Más gráficas por página' }, { src: '/dashboard/gallery/07-tema-oscuro.png', label: 'El tablero en tema oscuro' }, { src: '/dashboard/gallery/08-oscuro-3x2.png', label: 'Tema oscuro, 3×2' }, { src: '/dashboard/gallery/09-grafica-expandida.png', label: 'Una gráfica a pantalla completa' }],
+    es: { titleA: 'Un tablero que se adapta', accent: 'a quien lo lee', tag: 'Tablero de ventas', caption: 'Tablero de ventas', lead: 'El tablero de ventas: 15 gráficas que se reorganizan según quién lo usa, en qué pantalla y para qué.',
+      facts: [{ k: 'Proyecto', v: 'Plataforma de ventas' }, { k: 'Rol', v: 'Diseño UX y de interfaz' }, { k: 'Plataforma', v: 'Tableta, escritorio, TV y proyector' }],
+      problemTitle: 'Cuatro pantallas. Distintas personas. Un solo tablero.',
+      origin: 'Dirección de Ventas necesitaba analizar las ventas del año y presentarlas en juntas. El reto no eran las gráficas, sino el contexto: el mismo tablero tenía que leerse en una tableta, en una computadora, en una TV o proyectado en una junta. Y a cada persona le importaba un dato distinto.',
+      solutionTitle: 'El orden lo pone cada persona. El acomodo, el tablero.',
+      what: 'Le di el orden al usuario y el acomodo al tablero. Cada persona decide qué gráficas ve y en qué orden; el tablero decide cómo caben en cada pantalla sin perder lo que va primero.',
+      keyIdea: 'Le di el orden al usuario y el acomodo al tablero.',
+      solves: 'Que cada persona lea su dato a la primera, en cualquier pantalla.',
+      decisions: [
+        { k: 'Cada quien arma el suyo', v: 'No hay un tablero para todos. Cada persona elige las gráficas que le sirven y en qué orden.' },
+        { k: 'Lo primero nunca se cae', v: 'Al cambiar de pantalla, el tablero se reacomoda en el orden que eligió cada persona. Lo que va primero siempre cabe.' },
+        { k: 'Hecho para presentar', v: 'En TV o proyector, el tablero se lee a distancia: menos ruido y cifras más grandes.' }
+      ],
+      stat: 'Interfaces que se adaptan al usuario,', statLabel: 'no usuarios que se adaptan a la interfaz.' },
+    en: { titleA: 'A board that adapts', accent: 'to whoever reads it', tag: 'Sales board', caption: 'Sales board', lead: 'The sales board: 15 charts that rearrange around who’s using it, on which screen, and why.',
+      facts: [{ k: 'Project', v: 'Sales platform' }, { k: 'Role', v: 'UX and interface design' }, { k: 'Platform', v: 'Tablet, desktop, TV and projector' }],
+      problemTitle: 'Four screens. Different people. One board.',
+      origin: 'Sales leadership needed to analyze the year’s sales and present them in meetings. The challenge wasn’t the charts but the context: the same board had to read on a tablet, a computer, a TV or projected in a meeting. And each person cared about a different number.',
+      solutionTitle: 'Each person sets the order. The board sets the layout.',
+      what: 'I gave the order to the user and the layout to the board. Each person decides which charts they see and in what order; the board decides how they fit on each screen without losing what comes first.',
+      keyIdea: 'I gave the order to the user and the layout to the board.',
+      solves: 'Each person reads their number at first glance, on any screen.',
+      decisions: [
+        { k: 'Everyone builds their own', v: 'There’s no one board for everyone. Each person picks the charts they need and their order.' },
+        { k: 'What comes first never drops', v: 'When the screen changes, the board rearranges in the order each person chose. What comes first always fits.' },
+        { k: 'Made to present', v: 'On a TV or projector, the board reads from across the room: less noise, bigger numbers.' }
+      ],
+      stat: 'Interfaces that adapt to users,', statLabel: 'not users who adapt to the interface.' } },
 
   { id: 'dashboard', product: 'canplast', img: null, extra: [],
     es: { titleA: 'Dashboard de', accent: 'ventas', tag: 'Datos', lead: 'Hecho para iPad, en un entorno touch, con todo lo que necesitas a la mano.',
