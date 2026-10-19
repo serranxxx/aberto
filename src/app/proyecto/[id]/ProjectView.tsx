@@ -3,9 +3,9 @@
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { PROJECT_COPY } from '@/data/copy'
-import { FEATURE_ORDER, FEATURES, PRODUCTS } from '@/data/features'
+import { FEATURES } from '@/data/features'
 import { useLang } from '@/components/site/LangProvider'
-import { SiteHeader, workHref, siteStyles as s } from '@/components/site/Site'
+import { SiteHeader, siteStyles as s } from '@/components/site/Site'
 import p from './project.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
@@ -110,7 +110,6 @@ export default function ProjectView({ id }: { id: string }) {
   const t = PROJECT_COPY[lang]
   const feat = byId[id]
   const c = feat[lang]
-  const product = PRODUCTS[feat.product]
   const rootRef = useRef<HTMLDivElement>(null)
 
   const [d1, d2, d3] = c.decisions.map((d, i) => ({ ...d, n: pad(i) }))
@@ -129,8 +128,6 @@ export default function ProjectView({ id }: { id: string }) {
     })
     : (feat.gallery ?? [])
   const hasGallery = isRsvp || !!feat.gallery?.length
-  const nextId = FEATURE_ORDER[FEATURE_ORDER.indexOf(id) + 1]
-  const nextHref = nextId ? workHref(nextId) : '/#trabajo'
 
   // Cursores animados (recorrido por keyframes, en loop)
   useEffect(() => {
@@ -182,6 +179,52 @@ export default function ProjectView({ id }: { id: string }) {
     return () => { io.disconnect(); clearTimeout(timer) }
   }, [])
 
+  // "Flujo completo": el contenedor toma el color de la esquina del video en cada frame,
+  // para empatar con escenas claras y oscuras. Con fondo claro lleva puntos; oscuro, liso.
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+    const canvas = document.createElement('canvas')
+    canvas.width = 4
+    canvas.height = 4
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    if (!ctx) return
+    let alive = true
+
+    const sync = (v: HTMLVideoElement) => {
+      const box = v.parentElement
+      if (!box || !v.videoWidth || v.readyState < 2) return
+      try {
+        ctx.drawImage(v, 2, 2, 4, 4, 0, 0, 4, 4)
+        const d = ctx.getImageData(0, 0, 4, 4).data
+        let r = 0, g = 0, b = 0
+        for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2] }
+        const n = d.length / 4
+        r = Math.round(r / n); g = Math.round(g / n); b = Math.round(b / n)
+        const light = r * 0.299 + g * 0.587 + b * 0.114 > 128
+        box.style.backgroundColor = `rgb(${r},${g},${b})`
+        box.style.backgroundImage = light ? 'radial-gradient(#D9D8DD 1.1px, transparent 1.3px)' : 'none'
+        box.style.borderColor = light ? '#ECEAEE' : 'transparent'
+        const label = box.querySelector('span')
+        if (label) label.style.color = light ? '#605D66' : '#C2C0C7'
+      } catch { /* canvas no disponible */ }
+    }
+
+    const videos = [...root.querySelectorAll<HTMLVideoElement>('video[data-bgsync]')]
+    const handles: (() => void)[] = []
+    videos.forEach(v => {
+      // Cada frame cuando el navegador lo soporta; timeupdate (~4 por segundo) como respaldo
+      if ('requestVideoFrameCallback' in v) {
+        const tick = () => { if (!alive) return; sync(v); v.requestVideoFrameCallback(tick) }
+        v.requestVideoFrameCallback(tick)
+      }
+      const onTime = () => sync(v)
+      v.addEventListener('timeupdate', onTime)
+      handles.push(() => v.removeEventListener('timeupdate', onTime))
+    })
+    return () => { alive = false; handles.forEach(h => h()) }
+  }, [])
+
   const facts = (
     <div className={p.facts}>
       {(c.facts ?? []).map(x => (
@@ -194,18 +237,6 @@ export default function ProjectView({ id }: { id: string }) {
     <div className={p.titleWrap} style={fit}>
       <h1 className={p.h1}>{c.titleA}</h1>
       <span className={`${s.script} ${p.accent}`}>{c.accent}</span>
-    </div>
-  )
-
-  const resultStats = (
-    <div className={p.resultStats}>
-      {[t.photos, t.liaAnswers].map(label => (
-        <div key={label} className={p.resultStat}>
-          {/* Pendiente: se llenan cuando haya datos reales */}
-          <span className={p.resultValue}><span className={s.accent}>+</span>—</span>
-          <span className={p.resultLabel}>{label}</span>
-        </div>
-      ))}
     </div>
   )
 
@@ -276,9 +307,9 @@ export default function ProjectView({ id }: { id: string }) {
             <div className={p.flowCard}>
               <span className={p.flowLabel}>{t.flow}</span>
               {isRsvp ? (
-                <video src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.flowVideo} />
+                <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.flowVideo} />
               ) : feat.flowVideo ? (
-                <video src={feat.flowVideo} muted loop playsInline preload="none" className={p.flowVideoContain} />
+                <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={p.flowVideoContain} />
               ) : (
                 <div className={p.placeholderCenter}>{lang === 'es' ? 'Captura después' : 'Screenshot coming'}</div>
               )}
@@ -294,9 +325,7 @@ export default function ProjectView({ id }: { id: string }) {
                   <span className={p.labelDark}>{t.result}</span>
                   <span className={p.resultLine}>{c.stat} <span className={p.resultMuted}>{c.statLabel}</span></span>
                 </div>
-                <Link href={nextHref} className={p.nextLink}>{t.nextProject}</Link>
               </div>
-              {isRsvp && resultStats}
             </section>
           </div>
         </div>
@@ -306,7 +335,6 @@ export default function ProjectView({ id }: { id: string }) {
       <div className={p.mobile}>
         <div className={p.mBar}>
           <Link href="/#trabajo" className={p.mBack}>{t.back}</Link>
-          <span className={p.label}>{product.name}</span>
         </div>
 
         <div className={p.mIntro}>
@@ -352,9 +380,9 @@ export default function ProjectView({ id }: { id: string }) {
           <div className={p.mFlow}>
             <span className={p.mFlowLabel}>{t.flow}</span>
             {isRsvp ? (
-              <video src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.mFlowVideo} />
+              <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.mFlowVideo} />
             ) : feat.flowVideo ? (
-              <video src={feat.flowVideo} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
+              <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
             ) : (
               <div className={`${p.placeholderCenter} ${p.mPlaceholder}`}>{lang === 'es' ? 'Captura después' : 'Screenshot coming'}</div>
             )}
@@ -380,8 +408,6 @@ export default function ProjectView({ id }: { id: string }) {
             <span className={p.labelDark}>{t.result}</span>
             <span className={p.mResultLine}>{c.stat} <span className={p.resultMuted}>{c.statLabel}</span></span>
           </div>
-          {isRsvp && resultStats}
-          <Link href={nextHref} className={p.mNext}>{t.nextProject}</Link>
         </section>
       </div>
     </div>

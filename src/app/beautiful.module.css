@@ -1,15 +1,21 @@
 .section {
   position: relative;
   overflow: hidden;
-  background: var(--paper);
+  border-top: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  /* Puntos de lienzo, centrados */
+  background-color: #FBFBFC;
+  background-image: radial-gradient(#DCDBDF 1.3px, transparent 1.5px);
+  background-size: 25px 25px;
+  background-position: center;
 }
 
 .inner {
   position: relative;
   max-width: 1080px;
   margin: 0 auto;
-  min-height: clamp(210px, 39vw, 532px);
-  padding: clamp(50px, 11.2vw, 154px) var(--gutter);
+  min-height: clamp(189px, 35.1vw, 479px);
+  padding: clamp(45px, 10.08vw, 139px) var(--gutter);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,5 +110,21 @@
 @media (max-width: 559px) {
   .cursor {
     zoom: 0.56;
+  }
+}
+
+@media (max-width: 1099px) {
+  .inner {
+    min-height: 504px;
+    padding-top: 144px;
+    padding-bottom: 144px;
+  }
+}
+
+@media (max-width: 559px) {
+  .inner {
+    min-height: 360px;
+    padding-top: 108px;
+    padding-bottom: 108px;
   }
 }

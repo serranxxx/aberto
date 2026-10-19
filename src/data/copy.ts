@@ -97,37 +97,21 @@ export const COPY = {
 
 export type Copy = (typeof COPY)['es']
 
-// Etiquetas de la página de detalle de cada feature.
-export const FEATURE_COPY = {
-  es: {
-    back: 'Features', feature: 'Feature', problem: 'El problema', what: 'Qué hace', solves: 'Qué resuelve',
-    structure: 'Estructura', flows: 'Flujos clave', specs: 'Detalles', decisions: 'Decisiones', decisionsTitle: 'Por qué está así.',
-    pending: 'Por desarrollar.', about: 'Sobre el producto', related: 'Más de', noImg: 'Captura pendiente'
-  },
-  en: {
-    back: 'Features', feature: 'Feature', problem: 'The problem', what: 'What it does', solves: 'What it solves',
-    structure: 'Structure', flows: 'Key flows', specs: 'Details', decisions: 'Decisions', decisionsTitle: 'Why it’s built this way.',
-    pending: 'To be written.', about: 'About the product', related: 'More from', noImg: 'Screenshot pending'
-  }
-}
-
 // Textos fijos de la página de proyecto (por ahora, solo Dynamic RSVP).
 export const PROJECT_COPY = {
   es: {
-    back: '← Proyectos', demo: 'Dynamic RSVP / Demo', problem: 'El problema', solution: 'La solución',
+    back: '← Proyectos', problem: 'El problema', solution: 'La solución',
     problemTitle: 'Cuatro herramientas que casi nadie encontraba.', solutionTitle: 'Usé la confirmación como puerta.',
     flow: 'Flujo completo', screens: 'Pantallas', prev: 'Anterior', next: 'Siguiente',
-    result: 'El resultado', nextProject: 'Siguiente proyecto →',
-    photos: 'Fotos subidas por invitados', liaAnswers: 'Preguntas que respondió Lia',
+    result: 'El resultado',
     cursorDesign: 'Diseñando flujos', cursorTest: 'Probando con usuarios',
     gallery: ['Aparece sola', 'Se confirma en un toque', 'Agradece y agenda', 'Se queda como menú', 'Lleva a los pases', 'Responde con Lia', 'Muestra las fotos'],
   },
   en: {
-    back: '← Projects', demo: 'Dynamic RSVP / Demo', problem: 'The problem', solution: 'The solution',
+    back: '← Projects', problem: 'The problem', solution: 'The solution',
     problemTitle: 'Four tools almost nobody found.', solutionTitle: 'I used the RSVP as the door.',
     flow: 'Full flow', screens: 'Screens', prev: 'Previous', next: 'Next',
-    result: 'The result', nextProject: 'Next project →',
-    photos: 'Photos uploaded by guests', liaAnswers: 'Questions Lia answered',
+    result: 'The result',
     cursorDesign: 'Designing flows', cursorTest: 'Testing with users',
     gallery: ['Shows up on its own', 'Confirm in one tap', 'Thanks and schedules', 'Stays as a menu', 'Leads to the passes', 'Answers with Lia', 'Shows the photos'],
   },

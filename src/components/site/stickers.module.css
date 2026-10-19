@@ -5,21 +5,18 @@
  * - 560–859px (iPad): absolutos arriba a la derecha con zoom .55 (bifurcación .6)
  * - < 560px (móvil): en flujo y centrados, zoom .58–.62 (Trabajo .87)
  * - .decoDesk (menú de fuentes): solo >= 860px
- * - .decoWide: solo >= 1280px
  */
 
 .deco,
 .decoInline,
 .decoFlex,
-.decoDesk,
-.decoWide {
+.decoDesk {
   --deco-s: 1;
   pointer-events: none;
 }
 
 .deco,
-.decoDesk,
-.decoWide {
+.decoDesk {
   display: block;
 }
 
@@ -46,11 +43,6 @@
   }
 }
 
-@media (max-width: 1279px) {
-  .decoWide {
-    display: none;
-  }
-}
 
 /* Base de sticker: borde blanco de 6px y sombra */
 .sticker {
@@ -170,69 +162,6 @@
   letter-spacing: 0;
   line-height: 1.2;
   color: var(--ink);
-}
-
-/* Quién soy */
-
-.about {
-  position: absolute;
-  right: var(--gutter);
-  top: clamp(24px, 4vw, 56px);
-  width: 290px;
-  height: 150px;
-  z-index: 2;
-}
-
-.stepCard {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 18px 12px 12px;
-  border-radius: 14px;
-  background: #FFFFFF;
-  border: 1px solid var(--line);
-  white-space: nowrap;
-}
-
-.stepIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--grad);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stepText {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.stepSmall {
-  font-size: 12px;
-  color: var(--ink-3);
-}
-
-.stepBig {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink);
-}
-
-.typing {
-  display: flex;
-  gap: 6px;
-  padding: 14px 16px;
-  border-radius: 18px 18px 18px 5px;
-  background: #F3F1F5;
-}
-
-.typing span {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
 }
 
 /* Trabajo */
@@ -407,10 +336,9 @@
     zoom: 0.58;
   }
 
+  /* Bifurcación oculta en móvil */
   .fork {
-    order: -1;
-    zoom: 0.62;
-    margin: 0 auto;
+    display: none;
   }
 
   /* En móvil los stickers de Trabajo se ocultan */

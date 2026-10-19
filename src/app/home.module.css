@@ -40,17 +40,7 @@
   position: relative;
 }
 
-.inlineLink {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink-2);
-  margin-top: 10px;
-  transition: color 0.2s;
-}
 
-.inlineLink:hover {
-  color: var(--lilac);
-}
 
 /* Hero */
 
@@ -397,17 +387,7 @@
   color: var(--paper);
 }
 
-.proofLink {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--paper);
-  white-space: nowrap;
-  transition: color 0.2s;
-}
 
-.proofLink:hover {
-  color: var(--lilac);
-}
 
 .proofStats {
   display: grid;
@@ -536,10 +516,16 @@
 }
 
 .aboutTitleWrap {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
+  container-type: inline-size;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 .aboutTitle {
@@ -738,5 +724,22 @@
 
   .notForText {
     grid-column: auto;
+  }
+}
+
+/* Quién soy: "Ingeniero y diseñador UX" siempre en un renglón; bajo 1100px el H2 se ajusta al ancho */
+@media (max-width: 1099px) {
+  .aboutTitle {
+    font-size: max(22px, min(clamp(27px, 5vw, 65px), var(--afit)));
+  }
+}
+
+@media (max-width: 559px) {
+  .aboutHead {
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 52px;
   }
 }

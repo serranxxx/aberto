@@ -89,7 +89,7 @@
 /* Acento apilado, empalmado con la última línea del H1 */
 .accent {
   margin-top: -0.42em;
-  font-size: min(32px, calc(var(--tfit) * 0.571));
+  font-size: min(50px, calc(var(--tfit) * 0.9));
   white-space: nowrap;
 }
 
@@ -194,6 +194,9 @@
   display: flex;
   align-items: flex-start;
   pointer-events: none;
+  /* 64% del tamaño original; se escala desde la punta para no moverlos de su lugar */
+  scale: 0.64;
+  transform-origin: top left;
 }
 
 .cursorA {
@@ -508,45 +511,6 @@
   color: var(--ink-4);
 }
 
-.nextLink {
-  flex: none;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--paper);
-  transition: color 0.2s;
-}
-
-.nextLink:hover {
-  color: var(--ink-4);
-}
-
-.resultStats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 48px;
-}
-
-.resultStat {
-  padding-top: 24px;
-  border-top: 1px solid var(--ink-2);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.resultValue {
-  font-size: 64px;
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 0.9;
-  color: var(--paper);
-}
-
-.resultLabel {
-  font-size: 15px;
-  color: var(--ink-4);
-}
-
 /* --------------------------------------------------------------- Móvil --- */
 
 .mBar {
@@ -575,9 +539,9 @@
   font-size: min(38px, var(--tfit));
 }
 
-/* En móvil el acento va al mismo tamaño que el H1 */
+/* El acento va al 90% del H1 */
 .mIntro .accent {
-  font-size: min(38px, var(--tfit));
+  font-size: min(34px, calc(var(--tfit) * 0.9));
 }
 
 .mIntro .lead {
@@ -830,33 +794,3 @@
   text-wrap: balance;
 }
 
-.mResult .resultStats {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 20px;
-}
-
-.mResult .resultStat {
-  padding-top: 20px;
-  gap: 6px;
-}
-
-.mResult .resultValue {
-  font-size: 48px;
-}
-
-.mNext {
-  height: 52px;
-  border-radius: 999px;
-  background: var(--paper);
-  color: var(--ink);
-  font-size: 15px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.mNext:hover {
-  color: var(--ink);
-}

@@ -4,17 +4,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { COPY } from '@/data/copy'
-import type { Lang } from '@/data/types'
 import { useLang } from './LangProvider'
 import s from './site.module.css'
 
 export const EMAIL = 'albserrano8@gmail.com'
 export const PHONE = '+526145394836'
 
-export const ctaHref = (lang: Lang) =>
-  `mailto:${EMAIL}?subject=${encodeURIComponent(lang === 'es' ? 'Quiero agendar una llamada' : 'I’d like to book a call')}`
+// Agenda de Google Calendar para las llamadas
+export const BOOKING_URL = 'https://calendar.app.google/NF63TfpyQXEpVgFH7'
 
-export { featureHref, projectHref, workHref } from '@/data/routes'
+export { projectHref } from '@/data/routes'
 
 export function Logo({ size }: { size: number }) {
   return <span className={s.logo} style={{ width: size, height: size }} aria-hidden />
@@ -136,7 +135,7 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
         </nav>
         <div className={s.headerActions}>
           <LangSwitch />
-          <a href="/#contacto" className={s.headerCta}>
+          <a href={BOOKING_URL} target="_blank" rel="noreferrer" className={s.headerCta}>
             <span className={s.ctaLong}>{t.ctaShort}</span>
             <span className={s.ctaCompact}>{lang === 'es' ? 'Agendar' : 'Book'}</span>
           </a>
@@ -159,7 +158,7 @@ export function ContactSection() {
         </h2>
         <p className={s.contactLead}>{t.ctaLead}</p>
         <div className={s.btnRow}>
-          <a href={ctaHref(lang)} className={`${s.btn} ${s.btnLight}`}>{t.ctaMain} <span>→</span></a>
+          <a href={BOOKING_URL} target="_blank" rel="noreferrer" className={`${s.btn} ${s.btnLight}`}>{t.ctaMain} <span>→</span></a>
           <a href={`https://wa.me/${PHONE.slice(1)}`} target="_blank" rel="noreferrer" className={`${s.btn} ${s.btnGhostDark}`}>WhatsApp</a>
         </div>
         <div className={s.contactLinks}>

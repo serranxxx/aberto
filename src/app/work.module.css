@@ -280,22 +280,31 @@
 .card[data-phase='pre'] .cardBody { transform: translateY(18px); }
 
 .cardTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
   min-height: 2.24em;
+  container-type: inline-size;
   font-size: clamp(28px, 3.2vw, 38px);
+  line-height: 1.12;
+}
+
+.cardTitleA {
+  font-size: min(38px, var(--tfit));
   font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 1.12;
   color: var(--paper);
-  text-wrap: balance;
+  white-space: nowrap;
 }
 
-/* Acento manuscrito en línea, a 80% del título */
+/* Acento manuscrito en su propio renglón, al 90% del título */
 .cardAccent {
-  display: inline-block;
-  vertical-align: baseline;
-  margin-left: 0.05em;
+  display: block;
+  margin-top: -0.28em;
   white-space: nowrap;
-  font-size: 0.8em;
+  font-size: min(34px, calc(var(--tfit) * 0.9));
 }
 
 .cardLead {

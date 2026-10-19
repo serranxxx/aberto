@@ -114,32 +114,6 @@ export function ForkSticker({ yes, no }: { yes: string; no: string }) {
   )
 }
 
-/** Quién soy: tarjeta de paso, ícono de código y burbuja escribiendo. Solo en pantallas anchas.
- * Oculto por ahora según el handoff; no se monta en el home. */
-export function AboutStickers({ step, stepLabel }: { step: string; stepLabel: string }) {
-  return (
-    <div className={`${st.decoWide} ${st.about}`} aria-hidden>
-      <div className={st.sticker} style={{ position: 'absolute', left: 30, top: 34, zIndex: 1, transform: 'rotate(-4deg)', borderRadius: 20 }}>
-        <div className={st.stepCard}>
-          <span className={st.stepIcon}><Icon name="frame" size={20} stroke="#FFFFFF" /></span>
-          <div className={st.stepText}>
-            <span className={st.stepSmall}>{step}</span>
-            <span className={st.stepBig}>{stepLabel}</span>
-          </div>
-        </div>
-      </div>
-      <StickerIcon name="code" size={62} style={{ position: 'absolute', left: 195, top: 44, zIndex: 3, transform: 'rotate(14deg)' }} />
-      <div className={st.sticker} style={{ position: 'absolute', right: 0, top: 92, zIndex: 2, transform: 'rotate(6deg)', borderRadius: '24px 24px 24px 10px' }}>
-        <div className={st.typing}>
-          <span style={{ background: '#FF6B5B' }} />
-          <span style={{ background: '#D577D9' }} />
-          <span style={{ background: '#AF86F7' }} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
 /** Trabajo: slider de degradado sobre el botón "Ver código". */
 export function WorkStickers({ code }: { code: string }) {
   return (

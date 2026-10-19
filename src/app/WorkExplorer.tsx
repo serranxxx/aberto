@@ -3,9 +3,9 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { COPY } from '@/data/copy'
-import { FEATURED, FEATURE_ORDER, FEATURES, PRODUCTS, THEMES } from '@/data/features'
+import { FEATURED, FEATURE_ORDER, FEATURES, THEMES } from '@/data/features'
 import type { Feature, Lang } from '@/data/types'
-import { Shot, siteStyles as s, workHref } from '@/components/site/Site'
+import { Shot, projectHref, siteStyles as s } from '@/components/site/Site'
 import w from './work.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
@@ -24,7 +24,6 @@ const view = (f: Feature, lang: Lang) => ({
   id: f.id,
   img: f.img,
   video: f.video,
-  productName: PRODUCTS[f.product].name,
   isTop: FEATURED.includes(f.id),
   ...f[lang],
 })
@@ -163,7 +162,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
               >
                 <span className={w.wheelContent} style={{ opacity: on ? 1 : far ? 0 : Math.max(0.35, 1 - a * 0.22) }}>
                   <span className={w.meta}>
-                    {c.productName} · {c.tag}
+                    {c.tag}
                     {c.isTop && <span className={w.dot} />}
                   </span>
                   <span className={w.wheelTitle}>{c.titleA} {c.accent}</span>
@@ -176,7 +175,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
 
         {/* Tarjeta de la feature elegida */}
         {sel && (
-          <Link href={workHref(sel.id)} className={w.card} data-phase={phase}>
+          <Link href={projectHref(sel.id)} className={w.card} data-phase={phase}>
             <div className={w.media}>
               <div className={w.mediaInner}>
                 {sel.video ? (
@@ -185,11 +184,13 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
                   <Shot src={sel.img} alt={sel.caption} placeholder={t.noImg} sizes="(max-width: 760px) 100vw, 560px" className={w.shot} />
                 )}
               </div>
-              <span className={w.badge}>{sel.productName} · {sel.tag}</span>
+              <span className={w.badge}>{sel.tag}</span>
             </div>
             <div className={w.cardBody}>
-              <span className={w.cardTitle}>
-                {sel.titleA} <span className={`${s.script} ${w.cardAccent}`}>{sel.accent}</span>
+              {/* Siempre dos renglones: el título se encoge según su longitud (cqi del contenedor) */}
+              <span className={w.cardTitle} style={{ '--tfit': `${(175 / Math.max(1, sel.titleA.length)).toFixed(2)}cqi` } as React.CSSProperties}>
+                <span className={w.cardTitleA}>{sel.titleA}</span>
+                <span className={`${s.script} ${w.cardAccent}`}>{sel.accent}</span>
               </span>
               <span className={w.cardLead}>{sel.lead}</span>
               <div className={w.cardFoot}>
@@ -211,7 +212,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
             return (
               <button key={f.id} onClick={() => go(i)} className={`${w.stripItem} ${on ? w.stripOn : ''}`} aria-pressed={on}>
                 <span className={w.meta}>
-                  {c.productName} · {c.tag}
+                  {c.tag}
                   {c.isTop && <span className={w.dot} />}
                 </span>
                 <span className={w.stripTitle}>{c.titleA} {c.accent}</span>

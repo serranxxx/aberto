@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { COPY } from '@/data/copy'
 import { PRODUCTS } from '@/data/features'
@@ -9,7 +8,7 @@ import type { Lang } from '@/data/types'
 import { useLang } from '@/components/site/LangProvider'
 import { formatCount, parseStat, useCountProgress } from '@/components/site/CountUp'
 import {
-  ContactSection, SiteFooter, SiteHeader, ctaHref, featureHref, siteStyles as s,
+  BOOKING_URL, ContactSection, SiteFooter, SiteHeader, siteStyles as s,
 } from '@/components/site/Site'
 import { FontMenuSticker, ForkSticker, IconSprite, ServicesStickers, StickerIcon, WorkStickers } from '@/components/site/Stickers'
 import { startStickerMotion } from '@/components/site/stickerMotion'
@@ -51,7 +50,7 @@ export default function HomeView() {
         </h1>
         <p className={h.heroLead}>{t.heroLead}</p>
         <div className={s.btnRow}>
-          <a href={ctaHref(lang)} className={`${s.btn} ${s.btnDark}`}>{t.ctaMain} <span>→</span></a>
+          <a href={BOOKING_URL} target="_blank" rel="noreferrer" className={`${s.btn} ${s.btnDark}`}>{t.ctaMain} <span>→</span></a>
           <a href="#servicios" className={`${s.btn} ${s.btnOutline}`}>{t.ctaSecondary}</a>
         </div>
       </section>
@@ -109,7 +108,6 @@ export default function HomeView() {
                       <div className={h.col}>
                         <span className={s.label}>{t.youGet}</span>
                         <span className={h.serviceText}>{sv.get}</span>
-                        <Link href={featureHref(sv.ex)} className={h.inlineLink} tabIndex={open ? 0 : -1}>{sv.exLabel} →</Link>
                       </div>
                     </div>
                   </div>
@@ -143,12 +141,12 @@ export default function HomeView() {
               <div className={h.avatarDisc} />
               <Image src="/memoji-clean.png" alt={lang === 'es' ? 'Memoji de Alberto Serrano' : 'Alberto Serrano’s memoji'} width={470} height={701} sizes="170px" className={h.avatarImg} />
             </div>
-            <div className={h.aboutTitleWrap}>
+            <div className={h.aboutTitleWrap} style={{ '--afit': `${(178 / Math.max(1, t.aboutAccent.length)).toFixed(2)}cqi` } as React.CSSProperties}>
               <span className={s.label}>{t.aboutLabel}</span>
               <h2 className={h.aboutTitle}>
                 {/* Invertido: el nombre manuscrito va arriba y se empalma con la línea en Inter */}
                 <span className={`${s.script} ${h.aboutName}`}>{t.aboutTitle}</span>
-                <span>{t.aboutAccent}</span>
+                <span className={h.nowrap}>{t.aboutAccent}</span>
               </h2>
             </div>
           </div>
@@ -221,7 +219,6 @@ function ProofStats({ lang }: { lang: Lang }) {
         <p className={h.proofLine}>
           <span className={h.proofLead}>{t.proofLead}</span> {t.proofRest}
         </p>
-        <Link href={featureHref('editor')} className={h.proofLink}>{t.statsLink} →</Link>
       </div>
       <div ref={ref} className={h.proofStats}>
         {hero && (
