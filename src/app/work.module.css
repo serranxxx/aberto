@@ -78,6 +78,41 @@
   align-items: center;
 }
 
+/* Columna de la rueda: la rueda y debajo los botones para moverse */
+.wheelCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.wheelNav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.navBtn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.navBtn:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
 .wheel {
   position: relative;
   width: calc(100% + 80px);
@@ -423,7 +458,7 @@
 }
 
 @media (max-width: 859px) {
-  .wheel {
+  .wheelCol {
     display: none;
   }
 

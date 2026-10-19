@@ -11,11 +11,10 @@ import w from './work.module.css'
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
 // Destacadas primero, luego el resto en el orden del home
 // Por ahora el home solo muestra los casos con página de proyecto; con ONLY vacío vuelven todos y los filtros.
-const ONLY: string[] = ['dynamicrsvp', 'dashboardp']
+const ONLY: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar']
 const ALL = (ONLY.length ? ONLY : [...FEATURED, ...FEATURE_ORDER.filter(id => !FEATURED.includes(id))])
   .map(id => byId[id]).filter(Boolean)
 
-const WHEEL_THROTTLE = 260
 const OUT_MS = 180
 
 type Phase = 'in' | 'out' | 'pre'
@@ -28,6 +27,12 @@ const view = (f: Feature, lang: Lang) => ({
   ...f[lang],
 })
 
+const NavArrow = ({ dir }: { dir: 'up' | 'down' }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d={dir === 'up' ? 'M12 19V5M6 11l6-6 6 6' : 'M12 5v14M6 13l6 6 6-6'} />
+  </svg>
+)
+
 /**
  * Explorador de trabajo: filtros por tema, una rueda vertical para elegir
  * (escritorio) o una tira horizontal (móvil), y una tarjeta con la feature elegida.
@@ -38,7 +43,6 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
   const [selId, setSelId] = useState<string | null>(null)
   const [shownId, setShownId] = useState<string | null>(null)
   const [phase, setPhase] = useState<Phase>('in')
-  const wheelRef = useRef<HTMLDivElement>(null)
   const timers = useRef<{ out?: ReturnType<typeof setTimeout>; raf?: number }>({})
 
   const theme = THEMES.find(x => x.id === themeId) ?? THEMES[0]
@@ -66,11 +70,6 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
     }, OUT_MS)
   }
 
-  const goRef = useRef(go)
-  goRef.current = go
-  const idxRef = useRef(idx)
-  idxRef.current = idx
-
   const pickTheme = (id: string) => {
     clearTimeout(timers.current.out)
     setThemeId(id)
@@ -79,22 +78,6 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
     setPhase('in')
   }
 
-  // La rueda del mouse mueve la selección (el listener debe ser no pasivo para frenar el scroll)
-  useEffect(() => {
-    const el = wheelRef.current
-    if (!el) return
-    let last = 0
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault()
-      const now = Date.now()
-      if (now - last < WHEEL_THROTTLE || Math.abs(e.deltaY) < 4) return
-      last = now
-      goRef.current(idxRef.current + (e.deltaY > 0 ? 1 : -1))
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    return () => el.removeEventListener('wheel', onWheel)
-  }, [])
-
   useEffect(() => {
     const t = timers.current
     return () => {
@@ -102,8 +85,6 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
       cancelAnimationFrame(t.raf ?? 0)
     }
   }, [])
-
-  const touchY = useRef(0)
 
   return (
     <>
@@ -121,20 +102,15 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
       </div>
 
       <div className={w.layout}>
-        {/* Rueda (escritorio) */}
+        {/* Rueda (escritorio): se navega con los botones o tocando una tarjeta, sin scroll */}
+        <div className={w.wheelCol}>
         <div
-          ref={wheelRef}
           className={w.wheel}
           tabIndex={0}
           aria-label={t.exploreTitle}
           onKeyDown={e => {
             if (e.key === 'ArrowDown') { e.preventDefault(); go(idx + 1) }
             if (e.key === 'ArrowUp') { e.preventDefault(); go(idx - 1) }
-          }}
-          onTouchStart={e => { touchY.current = e.touches[0].clientY }}
-          onTouchEnd={e => {
-            const dy = e.changedTouches[0].clientY - touchY.current
-            if (Math.abs(dy) > 30) go(idx + (dy < 0 ? 1 : -1))
           }}
         >
           {list.map((f, i) => {
@@ -171,6 +147,17 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
               </button>
             )
           })}
+        </div>
+          {n > 1 && (
+            <div className={w.wheelNav}>
+              <button className={w.navBtn} onClick={() => go(idx - 1)} aria-label={lang === 'es' ? 'Proyecto anterior' : 'Previous project'}>
+                <NavArrow dir="up" />
+              </button>
+              <button className={w.navBtn} onClick={() => go(idx + 1)} aria-label={lang === 'es' ? 'Siguiente proyecto' : 'Next project'}>
+                <NavArrow dir="down" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Tarjeta de la feature elegida */}

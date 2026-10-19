@@ -14,8 +14,8 @@ export const PRODUCTS: Record<string, Product> = {
 };
 
 // Orden en el Home. Los ids dentro de un sub-arreglo se muestran juntos como un flujo.
-export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'dashboardp'];
-export const FEATURED: string[] = ['dynamicrsvp', 'dashboardp'];
+export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar'];
+export const FEATURED: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar'];
 export const THEMES: Theme[] = [
   { id: 'all', es: 'Todas', en: 'All', ids: null }
 ];
@@ -74,5 +74,42 @@ export const FEATURES: Feature[] = [
         { k: 'What comes first never drops', v: 'When the screen changes, the board rearranges in the order each person chose. What comes first always fits.' },
         { k: 'Made to present', v: 'On a TV or projector, the board reads from across the room: less noise, bigger numbers.' }
       ],
-      stat: 'Interfaces that adapt to users,', statLabel: 'not users who adapt to the interface.' } }
+      stat: 'Interfaces that adapt to users,', statLabel: 'not users who adapt to the interface.' } },
+
+  // Caso anónimo: no se nombra la empresa ni la app. Los [corchetes] son datos por llenar antes de publicar.
+  { id: 'commandbar', img: null, extra: [], video: '/commandbar/navbar-demo.mp4', heroVideo: '/commandbar/hero.mp4', flowVideo: '/commandbar/navbar-demo.mp4', flowFit: 'cover',
+    gallery: [{ src: '/commandbar/gallery/01-barra.png', label: 'La barra' }, { src: '/commandbar/gallery/02-buscar.png', label: 'Busca un registro' }, { src: '/commandbar/gallery/03-modulos.png', label: 'Todos los módulos a un clic' }, { src: '/commandbar/gallery/04-asistente.png', label: 'El asistente' }, { src: '/commandbar/gallery/05-respuesta.png', label: 'Responde con datos' }],
+    galleryWide: false,
+    es: { titleA: 'Todo el día cabe en', accent: 'una sola barra', tag: 'Barra de comando', caption: 'Barra de comando',
+      lead: 'Navegación, búsquedas, consultas y un asistente vivían en lugares distintos de la aplicación. Los reuní en una sola barra, siempre a la mano.',
+      facts: [{ k: 'Producto', v: '[Aplicación interna de operación / gestión]' }, { k: 'Rol', v: 'Diseño UX [e implementación]' }, { k: 'Plataforma', v: 'Escritorio' }, { k: 'Estado', v: '[En producción desde…]' }],
+      cursors: ['[Ventas]', '[Almacén]'],
+      problemTitle: 'Cuatro caminos para lo mismo.',
+      origin: 'La aplicación fue creciendo por funciones: navegación entre páginas, búsquedas, consultas a [la base de datos / el sistema de gestión] y un asistente con IA. Cada una vivía en su propio lugar. Quien la usaba todos los días tenía que saber dónde estaba cada cosa antes de poder hacerla: [ej. para consultar un pedido había que entrar a una pantalla, filtrar y abrir otra]. Eso se notaba en [N] llamadas a soporte [por semana], en lo que tardaba alguien nuevo en aprender la aplicación y en [qué no encontraba la gente].',
+      solutionTitle: 'No hay que saber dónde vive cada cosa.',
+      what: 'Todo empieza en la misma barra. El usuario escribe lo que busca y la barra resuelve si es una página, un registro, una consulta o una pregunta para el asistente. La navegación va primero porque es lo que más se hace en el día.',
+      keyIdea: 'El usuario ya no elige el camino: la barra lo resuelve.',
+      solves: 'Que nadie tenga que recordar en qué pantalla vive cada función.',
+      decisions: [
+        { k: 'Un solo punto de partida', v: 'No hay que recordar en qué pantalla está cada función. Todo se busca desde el mismo lugar.' },
+        { k: 'Navegar primero', v: 'Moverse entre páginas es lo más frecuente, así que es lo más rápido: [atajo de teclado, resultados recientes, lo que aplique].' },
+        { k: 'El asistente, sin salir', v: 'Preguntar no obliga a dejar lo que el usuario está haciendo. La respuesta llega en la misma barra.' }
+      ],
+      stat: '[Las llamadas a soporte bajaron de X a Y].', statLabel: '[Alguien nuevo aprende la aplicación en N días en lugar de M].' },
+    en: { titleA: 'The whole day fits in', accent: 'a single bar', tag: 'Command bar', caption: 'Command bar',
+      lead: 'Navigation, search, lookups and an assistant lived in different places across the app. I brought them together in a single bar, always at hand.',
+      facts: [{ k: 'Product', v: '[Internal operations / management app]' }, { k: 'Role', v: 'UX design [and implementation]' }, { k: 'Platform', v: 'Desktop' }, { k: 'Status', v: '[Live since…]' }],
+      cursors: ['[Sales]', '[Warehouse]'],
+      problemTitle: 'Four paths to the same thing.',
+      origin: 'The app grew one feature at a time: page navigation, search, lookups in [the database / management system] and an AI assistant. Each lived in its own place. People who used it every day had to know where each thing was before they could do it: [e.g. checking an order meant opening one screen, filtering and opening another]. It showed in [N] support calls [per week], in how long it took someone new to learn the app and in [what people couldn’t find].',
+      solutionTitle: 'No need to know where each thing lives.',
+      what: 'Everything starts in the same bar. The user types what they’re looking for and the bar works out whether it’s a page, a record, a lookup or a question for the assistant. Navigation comes first because it’s what people do most during the day.',
+      keyIdea: 'Users no longer pick the path: the bar works it out.',
+      solves: 'Nobody has to remember which screen each feature lives on.',
+      decisions: [
+        { k: 'One starting point', v: 'No need to remember which screen holds each feature. Everything is searched from the same place.' },
+        { k: 'Navigate first', v: 'Moving between pages is the most frequent task, so it’s the fastest: [keyboard shortcut, recent results, whatever applies].' },
+        { k: 'The assistant, without leaving', v: 'Asking a question doesn’t mean leaving what the user is doing. The answer arrives in the same bar.' }
+      ],
+      stat: '[Support calls dropped from X to Y].', statLabel: '[Someone new learns the app in N days instead of M].' } }
 ];

@@ -69,8 +69,8 @@ const Arrow = ({ dir }: { dir: 'left' | 'right' }) => (
 type Shot = { src: string; label: string; w?: number; h?: number }
 
 /** Carril horizontal de pantallas con flechas. Con w/h la imagen va a tamaño fijo; sin ellos, llena el tile. */
-function Gallery({ items, title, prev, next, wide, className }: {
-  items: Shot[]; title: string; prev: string; next: string; wide: boolean; className: string
+function Gallery({ items, title, prev, next, wide, pending, className }: {
+  items: Shot[]; title: string; prev: string; next: string; wide: boolean; pending: string; className: string
 }) {
   const rail = useRef<HTMLDivElement>(null)
   const go = (d: number) => {
@@ -89,15 +89,19 @@ function Gallery({ items, title, prev, next, wide, className }: {
       </div>
       <div ref={rail} className={p.rail}>
         {items.map((g, i) => (
-          <div key={g.src} className={`${p.tile} ${wide ? p.tileWide : ''}`}>
+          <div key={`${i}-${g.label}`} className={`${p.tile} ${wide ? p.tileWide : ''}`}>
             <span className={p.tileLabel}>{pad(i)} · {g.label}</span>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={g.src}
-              alt={g.label}
-              loading="lazy"
-              {...(g.w && g.h ? { width: g.w, height: g.h } : { className: p.tileFill })}
-            />
+            {g.src ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={g.src}
+                alt={g.label}
+                loading="lazy"
+                {...(g.w && g.h ? { width: g.w, height: g.h } : { className: p.tileFill })}
+              />
+            ) : (
+              <span className={p.tilePending}>{pending}</span>
+            )}
           </div>
         ))}
       </div>
@@ -128,6 +132,9 @@ export default function ProjectView({ id }: { id: string }) {
     })
     : (feat.gallery ?? [])
   const hasGallery = isRsvp || !!feat.gallery?.length
+  const screenshotPending = lang === 'es' ? 'Captura después' : 'Screenshot coming'
+  // Etiquetas de los cursores: roles de quien usa la pieza, si el proyecto las define
+  const [cursorA, cursorB] = c.cursors ?? [t.cursorDesign, t.cursorTest]
 
   // Cursores animados (recorrido por keyframes, en loop)
   useEffect(() => {
@@ -271,8 +278,8 @@ export default function ProjectView({ id }: { id: string }) {
                     <div className={p.placeholderBottom}>Video / GIF</div>
                   )}
                 </div>
-                <Cursor className={`${p.cursor} ${p.cursorA}`} color="#FF6B5B" label={t.cursorDesign} path={0} />
-                <Cursor className={`${p.cursor} ${p.cursorB}`} color="#AF86F7" label={t.cursorTest} path={1} />
+                <Cursor className={`${p.cursor} ${p.cursorA}`} color="#FF6B5B" label={cursorA} path={0} />
+                <Cursor className={`${p.cursor} ${p.cursorB}`} color="#AF86F7" label={cursorB} path={1} />
               </div>
             </div>
           </div>
@@ -309,14 +316,14 @@ export default function ProjectView({ id }: { id: string }) {
               {isRsvp ? (
                 <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.flowVideo} />
               ) : feat.flowVideo ? (
-                <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={p.flowVideoContain} />
+                <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={feat.flowFit === 'cover' ? p.flowVideoFill : p.flowVideoContain} />
               ) : (
-                <div className={p.placeholderCenter}>{lang === 'es' ? 'Captura después' : 'Screenshot coming'}</div>
+                <div className={p.placeholderCenter}>{screenshotPending}</div>
               )}
             </div>
 
             {hasGallery && (
-              <Gallery className={p.galleryDesk} items={galleryFor(1)} wide={!isRsvp} title={t.screens} prev={t.prev} next={t.next} />
+              <Gallery className={p.galleryDesk} items={galleryFor(1)} wide={!isRsvp && feat.galleryWide !== false} title={t.screens} prev={t.prev} next={t.next} pending={screenshotPending} />
             )}
 
             <section className={p.result}>
@@ -347,7 +354,7 @@ export default function ProjectView({ id }: { id: string }) {
         <div className={p.mHero}>
           <div className={p.mHeroInner}>
             <span className={`${p.frameLabel} ${p.mFrameLabel} ${isRsvp ? '' : p.mFull}`}><FrameIcon size={11} />{caption}</span>
-            <Cursor className={`${p.cursor} ${p.mCursor}`} color="#AF86F7" label={t.cursorTest} path={1} scale={0.4} />
+            <Cursor className={`${p.cursor} ${p.mCursor}`} color="#AF86F7" label={cursorB} path={1} scale={0.4} />
             {/* La máscara recorta el video al celular del mockup */}
             {isRsvp ? (
               <div className={p.mFrame}>
@@ -384,7 +391,7 @@ export default function ProjectView({ id }: { id: string }) {
             ) : feat.flowVideo ? (
               <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
             ) : (
-              <div className={`${p.placeholderCenter} ${p.mPlaceholder}`}>{lang === 'es' ? 'Captura después' : 'Screenshot coming'}</div>
+              <div className={`${p.placeholderCenter} ${p.mPlaceholder}`}>{screenshotPending}</div>
             )}
           </div>
 
@@ -400,7 +407,7 @@ export default function ProjectView({ id }: { id: string }) {
         </div>
 
         {hasGallery && (
-          <Gallery className={p.galleryMob} items={galleryFor(0.9)} wide={!isRsvp} title={t.screens} prev={t.prev} next={t.next} />
+          <Gallery className={p.galleryMob} items={galleryFor(0.9)} wide={!isRsvp && feat.galleryWide !== false} title={t.screens} prev={t.prev} next={t.next} pending={screenshotPending} />
         )}
 
         <section className={p.mResult}>

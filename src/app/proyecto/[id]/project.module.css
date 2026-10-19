@@ -363,6 +363,27 @@
   object-fit: cover;
 }
 
+/*
+ * Video que llena el contenedor: crece hasta ocupar todo el alto (recorta los lados),
+ * pero con tope para que siempre se vea al menos ~72% de su ancho (4:3).
+ */
+.flowCard:has(.flowVideoFill) {
+  container-type: size;
+}
+
+.flowVideoFill {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: block;
+  height: min(100cqh, 104cqw);
+  width: auto;
+  max-width: none;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
 /* Video completo bajo la etiqueta */
 .flowVideoContain {
   position: absolute;
@@ -459,6 +480,26 @@
   min-width: 0;
   min-height: 0;
   object-fit: contain;
+}
+
+/* Capturas recortadas: tres por vista, más bajas, a tamaño natural sin pasar del tile */
+.tile:has(> .tileFill):not(.tileWide) {
+  flex-basis: calc((100% - 24px) / 3);
+  height: 280px;
+}
+
+.tile:not(.tileWide) .tileFill {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Tile sin captura todavía */
+.tilePending {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
 }
 
 .tileLabel {
@@ -764,6 +805,10 @@
   height: 300px;
   min-width: 200px;
   padding: 44px 20px 20px;
+}
+
+.galleryMob .tile:not(.tileWide):has(.tileFill) {
+  flex: 0 0 72%;
 }
 
 .galleryMob .tileWide {

@@ -34,16 +34,23 @@ export type FeatureCopy = {
   problemTitle?: string
   solutionTitle?: string
   keyIdea?: string
+  // Etiquetas de los cursores del hero (roles de quien usa la pieza)
+  cursors?: [string, string]
 }
 
 export type Feature = {
   id: string
-  product: string
+  // Empresa/producto interno; no se muestra en la UI (los casos pueden ser anónimos)
+  product?: string
   img: string | null
   video?: string
   heroVideo?: string
   flowVideo?: string
+  // 'cover' llena el contenedor de "Flujo completo" (recorta los lados); por defecto se ve completo
+  flowFit?: 'cover' | 'contain'
   gallery?: { src: string; label: string }[]
+  /** false: cuatro capturas por vista en vez de dos (capturas recortadas al contenido) */
+  galleryWide?: boolean
   extra: string[]
   source?: string
   pins?: [number, number][]
