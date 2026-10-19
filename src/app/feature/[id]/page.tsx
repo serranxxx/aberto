@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { PROJECT_IDS, projectHref } from '@/data/routes'
 import { FEATURES, PRODUCTS } from '@/data/features'
 import FeatureView from './FeatureView'
 
@@ -22,5 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function FeaturePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   if (!FEATURES.some(f => f.id === id)) notFound()
+  // Los proyectos con caso de estudio propio viven en /proyecto
+  if (PROJECT_IDS.includes(id)) redirect(projectHref(id))
   return <FeatureView id={id} />
 }

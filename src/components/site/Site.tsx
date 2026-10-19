@@ -14,7 +14,7 @@ export const PHONE = '+526145394836'
 export const ctaHref = (lang: Lang) =>
   `mailto:${EMAIL}?subject=${encodeURIComponent(lang === 'es' ? 'Quiero agendar una llamada' : 'I’d like to book a call')}`
 
-export const featureHref = (id: string) => `/feature/${id}`
+export { featureHref, projectHref, workHref } from '@/data/routes'
 
 export function Logo({ size }: { size: number }) {
   return <span className={s.logo} style={{ width: size, height: size }} aria-hidden />
@@ -67,7 +67,7 @@ function LangSwitch() {
   )
 }
 
-export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' }) {
+export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' | 'project' }) {
   const { lang } = useLang()
   const t = COPY[lang]
   const active = useScrollSpy(variant === 'home')
@@ -77,6 +77,22 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
     { id: 'trabajo', label: t.navWork },
     { id: 'proceso', label: t.navProcess },
   ]
+
+  if (variant === 'project') {
+    return (
+      <header className={s.header}>
+        <div className={`${s.container} ${s.headerInner} ${s.headerWide}`}>
+          <Link href="/" className={s.brand}>
+            <span className={s.logoTile}>
+              <Image src="/logo-cursor.svg" alt="" width={20} height={20} unoptimized />
+            </span>
+            <span className={s.brandName}>Alberto Serrano</span>
+          </Link>
+          <Link href="/#trabajo" className={s.projectBack}>{lang === 'es' ? '← Proyectos' : '← Projects'}</Link>
+        </div>
+      </header>
+    )
+  }
 
   if (variant === 'feature') {
     return (

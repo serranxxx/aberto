@@ -27,7 +27,7 @@ export type FeatureCopy = {
   modules?: { name: string; desc: string }[]
   flows?: { title: string; steps: string[] }[]
   specs?: KV[]
-  decisions: (KV & { shot?: boolean })[]
+  decisions: (KV & { shot?: boolean | string })[]
   stat?: string
   statLabel?: string
   caption: string
@@ -37,6 +37,7 @@ export type Feature = {
   id: string
   product: string
   img: string | null
+  video?: string
   extra: string[]
   source?: string
   pins?: [number, number][]

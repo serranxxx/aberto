@@ -1,5 +1,9 @@
 /* Filtros */
 
+.chips[hidden] {
+  display: none;
+}
+
 .chips {
   --fade: var(--gutter);
   display: flex;
@@ -193,9 +197,19 @@
 
 .media {
   position: relative;
+  margin: 10px 10px 0;
+  border-radius: 20px;
   aspect-ratio: 16 / 10;
-  background: #29262D;
+  background: var(--paper);
   overflow: hidden;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--paper);
 }
 
 .mediaInner,
@@ -221,31 +235,19 @@
   transform: scale(1.03);
 }
 
-.fade {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 45%;
-  background: linear-gradient(to bottom, rgba(25, 22, 30, 0), var(--ink));
-  pointer-events: none;
-}
 
 .badge {
   position: absolute;
-  top: 18px;
-  left: 18px;
-  max-width: calc(100% - 36px);
+  top: 14px;
+  left: 14px;
+  max-width: calc(100% - 28px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 12px;
   font-weight: 500;
   color: var(--paper);
-  background: rgba(25, 22, 30, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(252, 252, 253, 0.12);
+  background: var(--ink);
   border-radius: 999px;
   padding: 6px 12px;
 }
@@ -255,8 +257,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: -28px;
-  padding: 4px clamp(24px, 3vw, 36px) clamp(24px, 3vw, 32px);
+  padding: 28px clamp(24px, 3vw, 36px) clamp(24px, 3vw, 32px);
 }
 
 /* Fases del cambio de feature */
@@ -279,17 +280,22 @@
 .card[data-phase='pre'] .cardBody { transform: translateY(18px); }
 
 .cardTitle {
-  height: 2.16em;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  min-height: 2.24em;
   font-size: clamp(28px, 3.2vw, 38px);
   font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
   color: var(--paper);
   text-wrap: balance;
+}
+
+/* Acento manuscrito en línea, a 80% del título */
+.cardAccent {
+  display: inline-block;
+  vertical-align: baseline;
+  margin-left: 0.05em;
+  white-space: nowrap;
+  font-size: 0.8em;
 }
 
 .cardLead {

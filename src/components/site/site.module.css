@@ -189,6 +189,21 @@
   filter: drop-shadow(0 2px 3px rgba(240, 108, 171, 0.35));
 }
 
+.headerWide {
+  max-width: 1280px;
+}
+
+.projectBack {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  transition: color 0.2s;
+}
+
+.projectBack:hover {
+  color: var(--ink);
+}
+
 .backLink {
   font-size: 14px;
   color: var(--ink-3);

@@ -5,12 +5,15 @@ import { useEffect, useRef, useState } from 'react'
 import { COPY } from '@/data/copy'
 import { FEATURED, FEATURE_ORDER, FEATURES, PRODUCTS, THEMES } from '@/data/features'
 import type { Feature, Lang } from '@/data/types'
-import { Shot, featureHref, siteStyles as s } from '@/components/site/Site'
+import { Shot, siteStyles as s, workHref } from '@/components/site/Site'
 import w from './work.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
 // Destacadas primero, luego el resto en el orden del home
-const ALL = [...FEATURED, ...FEATURE_ORDER.filter(id => !FEATURED.includes(id))].map(id => byId[id]).filter(Boolean)
+// Por ahora el home solo muestra Dynamic RSVP; con ONLY vacío vuelven todos los casos y los filtros.
+const ONLY: string[] = ['dynamicrsvp']
+const ALL = (ONLY.length ? ONLY : [...FEATURED, ...FEATURE_ORDER.filter(id => !FEATURED.includes(id))])
+  .map(id => byId[id]).filter(Boolean)
 
 const WHEEL_THROTTLE = 260
 const OUT_MS = 180
@@ -20,6 +23,7 @@ type Phase = 'in' | 'out' | 'pre'
 const view = (f: Feature, lang: Lang) => ({
   id: f.id,
   img: f.img,
+  video: f.video,
   productName: PRODUCTS[f.product].name,
   isTop: FEATURED.includes(f.id),
   ...f[lang],
@@ -104,7 +108,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
 
   return (
     <>
-      <div className={w.chips}>
+      <div className={w.chips} hidden={ONLY.length > 0}>
         {THEMES.map(x => {
           const on = x.id === theme.id
           const count = x.ids ? x.ids.filter(id => byId[id]).length : FEATURES.length
@@ -172,17 +176,20 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
 
         {/* Tarjeta de la feature elegida */}
         {sel && (
-          <Link href={featureHref(sel.id)} className={w.card} data-phase={phase}>
+          <Link href={workHref(sel.id)} className={w.card} data-phase={phase}>
             <div className={w.media}>
               <div className={w.mediaInner}>
-                <Shot src={sel.img} alt={sel.caption} placeholder={t.noImg} sizes="(max-width: 760px) 100vw, 560px" className={w.shot} />
+                {sel.video ? (
+                  <video key={sel.video} src={`${sel.video}#t=2`} poster={sel.img ?? undefined} autoPlay muted loop playsInline className={w.video} />
+                ) : (
+                  <Shot src={sel.img} alt={sel.caption} placeholder={t.noImg} sizes="(max-width: 760px) 100vw, 560px" className={w.shot} />
+                )}
               </div>
-              <div className={w.fade} />
               <span className={w.badge}>{sel.productName} · {sel.tag}</span>
             </div>
             <div className={w.cardBody}>
               <span className={w.cardTitle}>
-                {sel.titleA} <span className={s.accent}>{sel.accent}</span>
+                {sel.titleA} <span className={`${s.script} ${w.cardAccent}`}>{sel.accent}</span>
               </span>
               <span className={w.cardLead}>{sel.lead}</span>
               <div className={w.cardFoot}>

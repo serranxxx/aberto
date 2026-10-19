@@ -4,30 +4,57 @@ import type { Feature, Product, Theme } from './types'
 
 export const PRODUCTS: Record<string, Product> = {
   iattend: { name: 'I attend', badgeEs: 'Proyecto propio · SaaS', badgeEn: 'My own project · SaaS', es: 'SaaS para la gestión de eventos: invitaciones, invitados, confirmaciones y acomodo. La fundé, la diseñé y la desarrollé; hoy está en producción con usuarios reales que pagan.', en: 'A SaaS for event management: invitations, guests, RSVPs and seating. I founded, designed and built it; it’s live today with real, paying users.', roleEs: 'Fundador · diseño y desarrollo', roleEn: 'Founder · design and development',
-    stats: [{ v: '+176', es: 'Eventos creados', en: 'Events created' }, { v: '+9,019', es: 'Invitaciones enviadas', en: 'Invitations sent' }, { v: '+6,343', es: 'Invitados confirmados', en: 'Guests confirmed' }, { v: '86%', es: 'de las asistencias resueltas', en: 'of attendance resolved', noteEs: 'Del 86% de los invitados ya sabemos si viene o no.', noteEn: 'For 86% of guests, we already know whether they’re coming.' }, { v: '+2,000', es: 'Seguidores en Instagram', en: 'Instagram followers' }] },
+    // Datos reales de I attend (Admin → Analítica de iattend-vite), consultados el 15 oct 2026.
+    // Eventos, envíos y confirmados incluyen invitaciones + side events + flash, también los de prueba.
+    // Respuesta: 88.4% de los invitados que recibieron su invitación respondieron (sin pruebas), redondeado a 90%.
+    stats: [{ v: '+172', es: 'Eventos creados', en: 'Events created' }, { v: '+8,791', es: 'Invitaciones enviadas', en: 'Invitations sent' }, { v: '+6,231', es: 'Invitados confirmados', en: 'Guests confirmed' }, { v: '90%', es: 'de eficiencia en confirmaciones', en: 'RSVP efficiency', noteEs: 'Con I attend, mis usuarios saben quién viene y quién no en el 90% de sus invitados.', noteEn: 'With I attend, my users know who’s coming and who isn’t for 90% of their guests.' }, { v: '+2,050', es: 'Seguidores en Instagram', en: 'Instagram followers' }] },
   canplast: { name: 'Canplast', badgeEs: 'Empresa · herramientas internas y e-commerce', badgeEn: 'Company · internal tools and e-commerce', es: 'El máximo especialista en cubrecanto de México, con centros de distribución en todo el país. Diseño las herramientas que usa su equipo todos los días, usuarios que no eligieron el software, y la experiencia de compra de fabricantes, distribuidores y carpinteros.', en: 'Mexico’s leading edge banding specialist, with distribution centers nationwide. I design the tools its team uses every day, for users who didn’t choose the software, and the buying experience for manufacturers, distributors and carpenters.', roleEs: 'Diseño de producto y desarrollo', roleEn: 'Product design and development',
     stats: [{ v: '30+', es: 'Años especializados en cubrecanto', en: 'Years specialized in edge banding' }, { v: 'Millones', es: 'De metros en inventario', en: 'Of meters in stock' }] },
   findiur: { name: 'Findiur', badgeEs: 'Cliente · SaaS', badgeEn: 'Client · SaaS', es: 'SaaS basada en España.', en: 'A SaaS based in Spain.', roleEs: 'Diseño UX y sistema de diseño', roleEn: 'UX design and design system' }
 };
 
 // Orden en el Home. Los ids dentro de un sub-arreglo se muestran juntos como un flujo.
-export const FEATURE_ORDER: string[] = ['editor', 'confirmacion', 'whatsapp', 'spotlight', 'mesas', 'consola', 'invitados', 'render', 'certificados', 'lia', 'dashboard', 'ds', 'notas', 'ecommerce', 'modales', 'side', 'cobros', 'savethedate', 'flujos'];
-export const FEATURED: string[] = ['confirmacion', 'whatsapp', 'spotlight'];
+export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'editor', 'confirmacion', 'whatsapp', 'spotlight', 'mesas', 'consola', 'invitados', 'render', 'certificados', 'lia', 'dashboard', 'ds', 'notas', 'ecommerce', 'modales', 'side', 'cobros', 'savethedate', 'flujos'];
+export const FEATURED: string[] = ['dynamicrsvp', 'confirmacion', 'whatsapp', 'spotlight'];
 export const THEMES: Theme[] = [
   { id: 'all', es: 'Todas', en: 'All', ids: null },
-  { id: 'ux', es: 'Flujos y experiencia', en: 'Flows and experience', ids: ['editor', 'confirmacion', 'mesas', 'savethedate', 'side', 'flujos', 'certificados'] },
+  { id: 'ux', es: 'Flujos y experiencia', en: 'Flows and experience', ids: ['dynamicrsvp', 'editor', 'confirmacion', 'mesas', 'savethedate', 'side', 'flujos', 'certificados'] },
   { id: 'ops', es: 'Herramientas internas', en: 'Internal tools', ids: ['whatsapp', 'invitados', 'cobros', 'dashboard', 'notas', 'modales'] },
   { id: 'sys', es: 'Navegación y sistemas', en: 'Navigation and systems', ids: ['consola', 'spotlight', 'ds'] },
   { id: 'com', es: 'Comercio e IA', en: 'Commerce and AI', ids: ['ecommerce', 'render', 'lia'] }
 ];
 
 export const FEATURES: Feature[] = [
+  { id: 'dynamicrsvp', product: 'iattend', img: '/iattend/dynamic/02-formulario.png', video: '/iattend/dynamic/rsvp-figma.mp4', extra: ['/iattend/dynamic/crop/06-pases.png', '/iattend/dynamic/crop/07-lia.png', '/iattend/dynamic/crop/08-photo-wall.png'],
+    es: { titleA: 'Herramientas que se', accent: 'presentan solas', tag: 'Dynamic RSVP', lead: 'La invitación de I attend tenía cuatro herramientas que casi nadie encontraba. Las reuní en una sola pieza que aparece cuando el invitado confirma.',
+      facts: [{ k: 'Proyecto', v: 'I attend' }, { k: 'Rol', v: 'Diseño UX e implementación' }, { k: 'Plataforma', v: 'Invitación digital · móvil' }, { k: 'Inspiración', v: 'Dynamic Island de Apple' }, { k: 'Estado', v: 'En producción' }],
+      origin: 'Fui sumando funciones a la invitación de I attend: confirmación, pases digitales, fotos en vivo y un asistente para resolver dudas. Cada una tenía sentido desde el lado de quien la construyó. Desde el lado del invitado, eran cuatro cosas sueltas sin un lugar claro. No llegaba a ellas: era desarrollo sin uso, y los problemas que las originaron seguían ahí.',
+      what: 'Lo único que todo invitado hace es confirmar. Usé ese momento como puerta: la isla aparece sola, se confirma en un toque y, al terminar, se queda como la barra que lleva a pases, fotos y Lia. El invitado no tiene que buscar nada. Las herramientas llegan cuando ya le sirven.',
+      solves: 'Que el invitado descubra herramientas que no sabía que existían, sin tener que explorar.',
+      decisions: [
+        { k: 'Un solo toque', v: 'El invitado no va a explorar la invitación. Todo tiene que estar a un toque.', shot: '/iattend/dynamic/crop/01-pildora.png' },
+        { k: 'El movimiento como guía', v: 'Las animaciones avisan que algo cambió y que hay más por abrir.', shot: '/iattend/dynamic/crop/04-gracias.png' },
+        { k: 'Presente, sin estorbar', v: 'Aparece sola, pero no interrumpe ni se siente como publicidad.', shot: '/iattend/dynamic/crop/05-barra.png' }
+      ],
+      stat: 'Desde el primer evento, los invitados empezaron a usar', statLabel: 'la galería y Lia.', caption: 'Dynamic RSVP' },
+    en: { titleA: 'Tools that', accent: 'introduce themselves', tag: 'Dynamic RSVP', lead: 'An animated RSVP, inspired by Apple’s Dynamic Island, that reveals every tool in the invitation with a single tap.',
+      facts: [{ k: 'Role', v: 'Design and development' }, { k: 'Platform', v: 'Digital invitation · mobile' }, { k: 'Inspiration', v: 'Apple’s Dynamic Island' }, { k: 'Status', v: 'Live' }],
+      origin: 'The I attend invitation kept gaining features: smart RSVP, AI answers, live photos and digital passes. Each was useful, but together they were hard to understand. Guests never reached them: it was development nobody used, and the original problems were still there.',
+      what: 'An RSVP that introduces itself. It expands, animates and shows each tool at the right moment, without feeling like spam. With one tap, guests understand what’s in front of them.',
+      solves: 'Guests discover tools they didn’t know existed, without having to explore.',
+      decisions: [
+        { k: 'One tap', v: 'Guests don’t have time to explore the invitation. Everything had to be a tap away.', shot: '/iattend/dynamic/crop/01-pildora.png' },
+        { k: 'Motion as a guide', v: 'Animation makes it obvious something is happening and there’s more to find.', shot: '/iattend/dynamic/crop/04-gracias.png' },
+        { k: 'Present, not pushy', v: 'It shows up on its own, without interrupting or feeling like an ad.', shot: '/iattend/dynamic/crop/05-barra.png' }
+      ],
+      stat: 'From the first event', statLabel: 'the gallery and AI answers started being used.', caption: 'Dynamic RSVP' } },
+
   // ── I attend ──
   { id: 'editor', product: 'iattend', img: '/iattend/editor.png', extra: [], source: 'BuildPage.jsx',
     // Posición de cada número sobre la imagen principal (x %, y %). Ajusta al soltar la captura real.
     pins: [[50, 4], [4, 45], [20, 40], [56, 55], [95, 35]],
     es: { titleA: 'Editor de', accent: 'invitaciones', tag: 'Diseño', lead: 'Once módulos y la invitación en vivo dentro de un teléfono. Cualquier pareja la arma sin saber diseño.',
-      facts: [{ k: 'Rol', v: 'Diseño y desarrollo' }, { k: 'Plataforma', v: 'Web · escritorio y móvil' }, { k: 'Stack', v: 'React, Vite, Ant Design' }, { k: 'Estado', v: 'En producción' }],
+      facts: [{ k: 'Proyecto', v: 'I attend' }, { k: 'Rol', v: 'Diseño UX e implementación' }, { k: 'Plataforma', v: 'Web · escritorio y móvil' }, { k: 'Stack', v: 'React, Vite, Ant Design' }, { k: 'Estado', v: 'En producción' }],
       origin: 'Una amiga me pidió ayuda con su invitación de boda. Los servicios que existían dependían de plantillas rígidas: se veían bien, pero no se podían hacer propias.',
       what: 'Un editor por módulos con la invitación real corriendo a un lado. Cada cambio aparece al instante, se puede deshacer y se puede traducir a otros idiomas.',
       solves: 'Personalizar una invitación sin conocimientos técnicos y sin depender de un diseñador.',
@@ -113,18 +140,18 @@ export const FEATURES: Feature[] = [
       what: 'Resumen de novedades, grupos y clasificación de invitados, envío automático de invitaciones y recordatorios, todo desde un solo lugar.',
       solves: 'Saber quién viene sin perseguir a nadie.',
       decisions: [{ k: 'El canal que ya usan', v: 'El invitado confirma desde WhatsApp. No tiene que crear cuenta ni instalar nada.' }],
-      stat: '6,343', statLabel: 'invitados confirmados en 176 eventos.', caption: 'Gestión de invitados' },
+      stat: '6,231', statLabel: 'invitados confirmados en 172 eventos.', caption: 'Gestión de invitados' },
     en: { titleA: 'Guest', accent: 'manager', tag: 'Management', lead: 'Planned as an RSVP table; now it’s the event’s control center.',
       origin: 'Planned as a simple RSVP table.',
       what: 'Activity summary, guest groups and categories, automatic invitations and reminders, all from one place.',
       solves: 'Knowing who’s coming without chasing anyone.',
       decisions: [{ k: 'The channel they already use', v: 'Guests confirm from WhatsApp. No account, nothing to install.' }],
-      stat: '6,343', statLabel: 'guests confirmed across 176 events.', caption: 'Guest management' } },
+      stat: '6,231', statLabel: 'guests confirmed across 172 events.', caption: 'Guest management' } },
 
   { id: 'mesas', product: 'iattend', img: null, extra: [], source: 'TablesPage.jsx',
     pins: [[30, 8], [88, 4], [38, 50], [24, 34], [80, 55], [60, 22]],
     es: { titleA: 'Acomodo de', accent: 'mesas', tag: 'Planeación', lead: 'Un plano del salón donde se sienta a los confirmados, con las mismas herramientas que un diseñador usa en Figma.',
-      facts: [{ k: 'Rol', v: 'Diseño y desarrollo' }, { k: 'Plataforma', v: 'Web · escritorio y móvil' }, { k: 'Stack', v: 'React, Vite, Supabase' }, { k: 'Estado', v: 'En producción · v2' }],
+      facts: [{ k: 'Proyecto', v: 'I attend' }, { k: 'Rol', v: 'Diseño UX e implementación' }, { k: 'Plataforma', v: 'Web · escritorio y móvil' }, { k: 'Stack', v: 'React, Vite, Supabase' }, { k: 'Estado', v: 'En producción · v2' }],
       origin: 'El acomodo se hacía fuera de la plataforma, en hojas de cálculo o a mano. La primera versión del mapa tenía un bug real: las mesas podían salirse del plano y el contador seguía sumando lugares que nadie veía.',
       what: 'Un plano con mesas redondas, cuadradas y rectangulares, pista de baile y elementos del salón. A un lado, los confirmados agrupados por quién viene con quién. Arrastras, asignas y la franja de arriba te dice cuánto falta.',
       solves: 'Que la planeación use los mismos datos que las confirmaciones: nadie copia listas, y si alguien cancela, su lugar se libera solo.',

@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { FEATURE_COPY } from '@/data/copy'
 import { FEATURES, PRODUCTS } from '@/data/features'
 import { useLang } from '@/components/site/LangProvider'
-import { Shot, SiteFooter, SiteHeader, featureHref, siteStyles as s } from '@/components/site/Site'
+import { Shot, SiteFooter, SiteHeader, siteStyles as s, workHref } from '@/components/site/Site'
 import f from './feature.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(x => [x.id, x]))
@@ -171,7 +171,7 @@ export default function FeatureView({ id }: { id: string }) {
                 </div>
                 {d.shot && (
                   <div className={f.decisionShot}>
-                    <Shot src={null} alt={d.k} placeholder={d.k} sizes="600px" className={f.darkShot} />
+                    <Shot src={typeof d.shot === 'string' ? d.shot : null} alt={d.k} placeholder={d.k} sizes="600px" className={f.darkShot} />
                   </div>
                 )}
               </div>
@@ -235,7 +235,7 @@ export default function FeatureView({ id }: { id: string }) {
         <div className={f.relatedTitle}>{t.related} {product.name}</div>
         <div className={f.related}>
           {related.map(x => (
-            <Link key={x.id} href={featureHref(x.id)} className={f.relatedItem}>
+            <Link key={x.id} href={workHref(x.id)} className={f.relatedItem}>
               <div className={f.relatedShot}>
                 <Shot src={x.img} alt={x[lang].caption} placeholder={t.noImg} sizes="300px" />
               </div>

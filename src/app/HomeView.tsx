@@ -229,7 +229,8 @@ function ProofStats({ lang }: { lang: Lang }) {
             <span className={h.heroValue} aria-label={`${hero.prefix}${hero.target}${hero.suffix}`}>
               {hero.prefix}{formatCount(hero.target, progress)}<span className={s.accent}>{hero.suffix}</span>
             </span>
-            <span className={h.heroNote}>{hero.note || hero.label}</span>
+            <span className={h.heroLabel2}>{hero.label}</span>
+            {hero.note && <span className={h.heroNote}>{hero.note}</span>}
             <span className={h.heroTrack}>
               <span className={h.heroFill} style={{ width: `${progress * 100}%` }} />
             </span>
