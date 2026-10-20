@@ -100,18 +100,20 @@ export type Copy = (typeof COPY)['es']
 // Textos fijos de la página de proyecto (por ahora, solo Dynamic RSVP).
 export const PROJECT_COPY = {
   es: {
-    back: '← Proyectos', problem: 'El problema', solution: 'La solución',
+    back: '← Proyectos', problem: 'El problema', solution: 'La solución', business: 'La decisión de negocio',
     problemTitle: 'Cuatro herramientas que casi nadie encontraba.', solutionTitle: 'Usé la confirmación como puerta.',
     flow: 'Flujo completo', screens: 'Pantallas', prev: 'Anterior', next: 'Siguiente',
     result: 'El resultado',
+    more: 'Proyectos que te pueden interesar',
     cursorDesign: 'Diseñando flujos', cursorTest: 'Probando con usuarios',
     gallery: ['Aparece sola', 'Se confirma en un toque', 'Agradece y agenda', 'Se queda como menú', 'Lleva a los pases', 'Responde con Lia', 'Muestra las fotos'],
   },
   en: {
-    back: '← Projects', problem: 'The problem', solution: 'The solution',
+    back: '← Projects', problem: 'The problem', solution: 'The solution', business: 'The business decision',
     problemTitle: 'Four tools almost nobody found.', solutionTitle: 'I used the RSVP as the door.',
     flow: 'Full flow', screens: 'Screens', prev: 'Previous', next: 'Next',
     result: 'The result',
+    more: 'Projects you might like',
     cursorDesign: 'Designing flows', cursorTest: 'Testing with users',
     gallery: ['Shows up on its own', 'Confirm in one tap', 'Thanks and schedules', 'Stays as a menu', 'Leads to the passes', 'Answers with Lia', 'Shows the photos'],
   },

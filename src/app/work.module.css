@@ -331,7 +331,7 @@
   letter-spacing: -0.035em;
   line-height: 1.12;
   color: var(--paper);
-  white-space: nowrap;
+  white-space: pre;
 }
 
 /* Acento manuscrito en su propio renglón, al 90% del título */

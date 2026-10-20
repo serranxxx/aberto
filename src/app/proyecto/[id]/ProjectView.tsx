@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { PROJECT_COPY } from '@/data/copy'
 import { FEATURES } from '@/data/features'
+import { PROJECT_IDS, projectHref } from '@/data/routes'
 import { useLang } from '@/components/site/LangProvider'
 import { SiteHeader, siteStyles as s } from '@/components/site/Site'
 import p from './project.module.css'
@@ -60,11 +61,21 @@ const SolutionIcon = ({ size }: { size: number }) => (
   </svg>
 )
 
+const BusinessIcon = ({ size }: { size: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="url(#pg-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={p.icon} aria-hidden>
+    <rect x="3" y="8.5" width="18" height="12.5" rx="3" />
+    <path d="M2.5 8.5h19M12 8.5V21M12 8.5c-1.5-3.5-5.5-4.5-5.5-2s3.5 2 5.5 2c2 0 5.5.5 5.5-2s-4-1.5-5.5 2" />
+  </svg>
+)
+
 const Arrow = ({ dir }: { dir: 'left' | 'right' }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
     <path d={dir === 'left' ? 'M19 12H5M11 6l-6 6 6 6' : 'M5 12h14M13 6l6 6-6 6'} />
   </svg>
 )
+
+/** Cada video tiene una portada .webp con el mismo nombre (primer cuadro), visible mientras carga */
+const posterOf = (src?: string) => src?.replace(/#.*$/, '').replace(/\.mp4$/, '.webp')
 
 type Shot = { src: string; label: string; w?: number; h?: number }
 
@@ -109,6 +120,51 @@ function Gallery({ items, title, prev, next, wide, pending, className }: {
   )
 }
 
+/** Carrusel con los demás proyectos, empezando por el siguiente al actual. */
+function MoreProjects({ id, title, prev, next }: { id: string; title: string; prev: string; next: string }) {
+  const { lang } = useLang()
+  const rail = useRef<HTMLDivElement>(null)
+  const i = PROJECT_IDS.indexOf(id)
+  const others = [...PROJECT_IDS.slice(i + 1), ...PROJECT_IDS.slice(0, Math.max(0, i))].map(x => byId[x]).filter(Boolean)
+  const go = (d: number) => {
+    const el = rail.current
+    if (el) el.scrollBy({ left: d * Math.round(el.clientWidth * 0.8), behavior: 'smooth' })
+  }
+  if (!others.length) return null
+
+  return (
+    <section className={p.more}>
+      <div className={p.moreHead}>
+        <h2 className={p.moreTitle}>{title}</h2>
+        <div className={p.arrows}>
+          <button className={p.arrowBtn} onClick={() => go(-1)} aria-label={prev}><Arrow dir="left" /></button>
+          <button className={p.arrowBtn} onClick={() => go(1)} aria-label={next}><Arrow dir="right" /></button>
+        </div>
+      </div>
+      <div ref={rail} className={p.moreRail}>
+        {others.map(f => {
+          const c = f[lang]
+          // Portada: la primera captura de su galería
+          const cover = f.id === 'dynamicrsvp' ? `${D}crop/${SCREENS[0][0]}.png` : f.gallery?.[0]?.src || f.img
+          return (
+            <Link key={f.id} href={projectHref(f.id)} className={p.moreCard}>
+              <div className={p.moreMedia}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {cover && <img src={cover} alt="" loading="lazy" />}
+              </div>
+              <div className={p.moreBody}>
+                <span className={p.moreTag}>{c.tag}</span>
+                <span className={p.moreCardTitle}>{c.titleA.replace('\n', ' ')} {c.accent}</span>
+                <span className={p.moreLead}>{c.lead}</span>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 export default function ProjectView({ id }: { id: string }) {
   const { lang } = useLang()
   const t = PROJECT_COPY[lang]
@@ -123,7 +179,7 @@ export default function ProjectView({ id }: { id: string }) {
   const problemTitle = c.problemTitle || t.problemTitle
   const solutionTitle = c.solutionTitle || t.solutionTitle
   // El título siempre va en dos renglones: se encoge según su longitud (cqi del contenedor)
-  const fit = { '--tfit': `${(185 / Math.max(1, c.titleA.length)).toFixed(2)}cqi` } as React.CSSProperties
+  const fit = { '--tfit': `${(185 / Math.max(1, ...c.titleA.split('\n').map(l => l.length), c.accent.length)).toFixed(2)}cqi` } as React.CSSProperties
 
   const galleryFor = (scale: number): Shot[] => isRsvp
     ? SCREENS.map(([file, w, h], i) => {
@@ -273,7 +329,7 @@ export default function ProjectView({ id }: { id: string }) {
                 <span className={p.frameLabel}><FrameIcon size={12} />{caption}</span>
                 <div className={p.frame}>
                   {isRsvp || feat.heroVideo ? (
-                    <video src={isRsvp ? `${D}mockup-animado-v2.mp4` : feat.heroVideo} muted loop playsInline preload="none" className={p.frameVideo} />
+                    <video src={isRsvp ? `${D}mockup-animado-v2.mp4` : feat.heroVideo} poster={posterOf(isRsvp ? `${D}mockup-animado-v2.mp4` : feat.heroVideo)} muted loop playsInline preload="none" className={p.frameVideo} style={!isRsvp && feat.heroZoom ? { scale: feat.heroZoom } : undefined} />
                   ) : (
                     <div className={p.placeholderBottom}>Video / GIF</div>
                   )}
@@ -284,7 +340,7 @@ export default function ProjectView({ id }: { id: string }) {
             </div>
           </div>
 
-          <div className={p.body}>
+          <div className={`${p.body} ${c.business ? p.bodyBiz : ''}`}>
             <section className={p.problem}>
               <div className={p.storyHead}>
                 <span className={p.label}>{t.problem}</span>
@@ -303,6 +359,17 @@ export default function ProjectView({ id }: { id: string }) {
               <p className={p.storyText}>{c.what}</p>
             </section>
 
+            {c.business && (
+              <section className={`${p.solution} ${p.business}`}>
+                <div className={p.storyHead}>
+                  <span className={p.label}>{t.business}</span>
+                  <BusinessIcon size={56} />
+                  <h2 className={p.h3}>{c.business.title}</h2>
+                </div>
+                <p className={p.storyText}>{c.business.text}</p>
+              </section>
+            )}
+
             {[d1, d2, d3].filter(Boolean).map((d, i) => (
               <div key={d.k} className={p.principle} style={{ gridArea: `d${i + 1}` }}>
                 <span className={`${s.accent} ${p.principleN}`}>{d.n}</span>
@@ -314,9 +381,9 @@ export default function ProjectView({ id }: { id: string }) {
             <div className={p.flowCard}>
               <span className={p.flowLabel}>{t.flow}</span>
               {isRsvp ? (
-                <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.flowVideo} />
+                <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} poster={posterOf(`${D}rsvp-figma.mp4#t=2`)} muted loop playsInline preload="none" className={p.flowVideo} />
               ) : feat.flowVideo ? (
-                <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={feat.flowFit === 'cover' ? p.flowVideoFill : p.flowVideoContain} />
+                <video data-bgsync src={feat.flowVideo} poster={posterOf(feat.flowVideo)} muted loop playsInline preload="none" className={feat.flowFit === 'cover' ? p.flowVideoFill : p.flowVideoContain} />
               ) : (
                 <div className={p.placeholderCenter}>{screenshotPending}</div>
               )}
@@ -358,12 +425,12 @@ export default function ProjectView({ id }: { id: string }) {
             {/* La máscara recorta el video al celular del mockup */}
             {isRsvp ? (
               <div className={p.mFrame}>
-                <video src={`${D}mockup-animado-v2.mp4`} muted loop playsInline preload="none" className={p.mFrameVideo} />
+                <video src={`${D}mockup-animado-v2.mp4`} poster={posterOf(`${D}mockup-animado-v2.mp4`)} muted loop playsInline preload="none" className={p.mFrameVideo} />
               </div>
             ) : (
               <div className={`${p.mFrame} ${p.mFrameWide}`}>
                 {feat.heroVideo
-                  ? <video src={feat.heroVideo} muted loop playsInline preload="none" className={p.frameVideo} />
+                  ? <video src={feat.heroVideo} poster={posterOf(feat.heroVideo)} muted loop playsInline preload="none" className={p.frameVideo} style={feat.heroZoom ? { scale: feat.heroZoom } : undefined} />
                   : <div className={p.placeholderBottom}>Video / GIF</div>}
               </div>
             )}
@@ -383,13 +450,21 @@ export default function ProjectView({ id }: { id: string }) {
             <h2 className={p.mH3}>{solutionTitle}</h2>
             <p className={p.mText}>{c.what}</p>
           </div>
+          {c.business && (
+            <div className={`${p.mStory} ${p.mStoryLine}`}>
+              <span className={p.label}>{t.business}</span>
+              <BusinessIcon size={44} />
+              <h2 className={p.mH3}>{c.business.title}</h2>
+              <p className={p.mText}>{c.business.text}</p>
+            </div>
+          )}
 
           <div className={p.mFlow}>
             <span className={p.mFlowLabel}>{t.flow}</span>
             {isRsvp ? (
-              <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} muted loop playsInline preload="none" className={p.mFlowVideo} />
+              <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} poster={posterOf(`${D}rsvp-figma.mp4#t=2`)} muted loop playsInline preload="none" className={p.mFlowVideo} />
             ) : feat.flowVideo ? (
-              <video data-bgsync src={feat.flowVideo} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
+              <video data-bgsync src={feat.flowVideo} poster={posterOf(feat.flowVideo)} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
             ) : (
               <div className={`${p.placeholderCenter} ${p.mPlaceholder}`}>{screenshotPending}</div>
             )}
@@ -417,6 +492,8 @@ export default function ProjectView({ id }: { id: string }) {
           </div>
         </section>
       </div>
+
+      <MoreProjects id={id} title={t.more} prev={t.prev} next={t.next} />
     </div>
   )
 }

@@ -75,7 +75,7 @@
   container-type: inline-size;
 }
 
-/* Dos renglones siempre: --tfit (= 185 / largo del título, en cqi) encoge el texto hasta que quepa */
+/* Dos renglones siempre: --tfit (= 185 / largo del renglón más largo, en cqi) encoge el texto hasta que quepa */
 .h1 {
   margin: 0;
   font-size: min(56px, var(--tfit));
@@ -83,7 +83,8 @@
   letter-spacing: -0.05em;
   line-height: 1.04;
   color: var(--ink-2);
-  white-space: nowrap;
+  /* pre: un \n en el título lo parte en dos renglones */
+  white-space: pre;
 }
 
 /* Acento apilado, empalmado con la última línea del H1 */
@@ -243,6 +244,23 @@
     'd3 d3 vi vi vi vi'
     'ga ga ga ga ga ga'
     're re re re re re';
+}
+
+/* Con sección de negocio: va entre la solución y los principios */
+.bodyBiz {
+  grid-template-areas:
+    'pr pr pr pr pr pr'
+    'so so so so so so'
+    'bu bu bu bu bu bu'
+    'd1 d1 vi vi vi vi'
+    'd2 d2 vi vi vi vi'
+    'd3 d3 vi vi vi vi'
+    'ga ga ga ga ga ga'
+    're re re re re re';
+}
+
+.solution.business {
+  grid-area: bu;
 }
 
 .problem,
@@ -839,3 +857,135 @@
   text-wrap: balance;
 }
 
+
+/* ------------------------------------------- Proyectos que te pueden interesar --- */
+
+.more {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 64px 128px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.moreHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.moreTitle {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: var(--ink-2);
+}
+
+.moreRail {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.moreRail::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dos y media por vista: la tarjeta cortada avisa que hay más */
+.moreCard {
+  flex: 0 0 calc((100% - 32px) / 2.5);
+  scroll-snap-align: start;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: #FFFFFF;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+.moreMedia {
+  aspect-ratio: 4 / 3;
+  background: #F3F1F5;
+  overflow: hidden;
+}
+
+/* Captura completa, sin agrandarla más que su tamaño real */
+.moreMedia {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moreMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.moreBody {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moreTag {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.moreCardTitle {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--ink-2);
+}
+
+.moreLead {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 899px) {
+  .more {
+    padding: 56px 0 64px;
+    gap: 16px;
+  }
+
+  .moreHead {
+    padding: 0 20px;
+  }
+
+  .moreTitle {
+    font-size: 24px;
+  }
+
+  .moreRail {
+    gap: 10px;
+    padding: 0 20px;
+    scroll-padding: 0 20px;
+  }
+
+  .moreCard {
+    flex-basis: 82%;
+  }
+}

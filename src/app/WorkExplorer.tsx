@@ -11,7 +11,7 @@ import w from './work.module.css'
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
 // Destacadas primero, luego el resto en el orden del home
 // Por ahora el home solo muestra los casos con página de proyecto; con ONLY vacío vuelven todos y los filtros.
-const ONLY: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar']
+const ONLY: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar', 'flash']
 const ALL = (ONLY.length ? ONLY : [...FEATURED, ...FEATURE_ORDER.filter(id => !FEATURED.includes(id))])
   .map(id => byId[id]).filter(Boolean)
 
@@ -166,7 +166,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
             <div className={w.media}>
               <div className={w.mediaInner}>
                 {sel.video ? (
-                  <video key={sel.video} src={sel.video.includes('rsvp-figma') ? `${sel.video}#t=2` : sel.video} poster={sel.img ?? undefined} autoPlay muted loop playsInline className={w.video} />
+                  <video key={sel.video} src={sel.video.includes('rsvp-figma') ? `${sel.video}#t=2` : sel.video} poster={sel.img ?? sel.video.replace(/\.mp4$/, '.webp')} autoPlay muted loop playsInline className={w.video} />
                 ) : (
                   <Shot src={sel.img} alt={sel.caption} placeholder={t.noImg} sizes="(max-width: 760px) 100vw, 560px" className={w.shot} />
                 )}
@@ -175,7 +175,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
             </div>
             <div className={w.cardBody}>
               {/* Siempre dos renglones: el título se encoge según su longitud (cqi del contenedor) */}
-              <span className={w.cardTitle} style={{ '--tfit': `${(175 / Math.max(1, sel.titleA.length)).toFixed(2)}cqi` } as React.CSSProperties}>
+              <span className={w.cardTitle} style={{ '--tfit': `${(175 / Math.max(1, ...sel.titleA.split('\n').map(l => l.length), sel.accent.length)).toFixed(2)}cqi` } as React.CSSProperties}>
                 <span className={w.cardTitleA}>{sel.titleA}</span>
                 <span className={`${s.script} ${w.cardAccent}`}>{sel.accent}</span>
               </span>

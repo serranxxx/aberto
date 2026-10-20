@@ -14,8 +14,8 @@ export const PRODUCTS: Record<string, Product> = {
 };
 
 // Orden en el Home. Los ids dentro de un sub-arreglo se muestran juntos como un flujo.
-export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar'];
-export const FEATURED: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar'];
+export const FEATURE_ORDER: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar', 'flash'];
+export const FEATURED: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar', 'flash'];
 export const THEMES: Theme[] = [
   { id: 'all', es: 'Todas', en: 'All', ids: null }
 ];
@@ -111,5 +111,39 @@ export const FEATURES: Feature[] = [
         { k: 'Navigate first', v: 'Moving between pages is the most frequent task, so it’s the fastest: [keyboard shortcut, recent results, whatever applies].' },
         { k: 'The assistant, without leaving', v: 'Asking a question doesn’t mean leaving what the user is doing. The answer arrives in the same bar.' }
       ],
-      stat: '[Support calls dropped from X to Y].', statLabel: '[Someone new learns the app in N days instead of M].' } }
+      stat: '[Support calls dropped from X to Y].', statLabel: '[Someone new learns the app in N days instead of M].' } },
+  // Caso de I attend contado desde el anfitrión. Los [corchetes] son datos por llenar antes de publicar.
+  { id: 'flash', product: 'iattend', img: null, extra: [], video: '/flash/flow.mp4', heroVideo: '/flash/hero.mp4', heroZoom: 1.125, flowVideo: '/flash/flow.mp4',
+    gallery: [{ src: '/flash/gallery/01-en-blanco.webp', label: 'El anfitrión empieza en blanco' }, { src: '/flash/gallery/02-fondo.webp', label: 'El anfitrión añade un fondo' }, { src: '/flash/gallery/03-titulo.webp', label: 'El anfitrión escribe el título' }, { src: '/flash/gallery/04-tipografia.webp', label: 'El anfitrión ajusta la tipografía' }, { src: '/flash/gallery/05-elementos.webp', label: 'El anfitrión acomoda la portada' }, { src: '/flash/gallery/07-portada.webp', label: 'Le llega al invitado' }, { src: '/flash/gallery/08-itinerario.webp', label: 'El invitado ve el itinerario' }, { src: '/flash/gallery/09-como-llegar.webp', label: 'El invitado ve cómo llegar' }, { src: '/flash/gallery/10-confirmado.webp', label: 'El invitado confirma en un toque' }],
+    galleryWide: false,
+    es: { titleA: 'Organizar una reunión\nno debería', accent: 'tomar una tarde', tag: 'Eventos flash', caption: 'Eventos flash',
+      lead: 'Quien organiza una reunión no quiere diseñar una invitación. Quiere saber quién va. Los eventos flash de I attend resuelven eso, y nada más.',
+      facts: [{ k: 'Proyecto', v: 'I attend · Eventos flash' }, { k: 'Rol', v: 'Diseño UX [e implementación]' }, { k: 'Plataforma', v: 'Invitación digital · móvil' }, { k: 'Estado', v: 'En producción' }],
+      cursors: ['Anfitrión', 'Invitado'],
+      problemTitle: 'La invitación le quedaba grande.',
+      origin: 'Para una boda, I attend tiene todo: itinerario, pases, fotos, un asistente. Pero hay eventos pequeños: la tornaboda, una despedida, una reunión con amigos. Para esos, la invitación completa era demasiado. Así que el anfitrión volvía a lo de siempre: mandar un mensaje al grupo de WhatsApp, esperar respuestas sueltas y contar a mano quién iba.',
+      solutionTitle: 'Saber quién va, en minutos.',
+      what: 'Los eventos flash conservan lo que hace funcionar a I attend, el envío y la confirmación, y quitan todo lo que el anfitrión no necesita. El invitado confirma en un toque, y el anfitrión ve la lista en un solo lugar, sin contar mensajes.',
+      solves: 'Que el anfitrión sepa quién va sin contar mensajes en el chat.',
+      decisions: [
+        { k: 'Lo que el anfitrión necesita saber', v: 'Quién va. Fecha, lugar y confirmación; lo demás no está.' },
+        { k: 'Más rápido que el grupo de WhatsApp', v: 'Si armarlo toma más que mandar un mensaje, el anfitrión vuelve al chat. Se arma en minutos.' },
+        { k: 'Sencillo, no improvisado', v: 'Aunque el evento sea pequeño, el invitado recibe una invitación desarrollada con mucho cuidado y hecha para verse bien siempre.' }
+      ],
+      stat: 'Lo que empezó como un extra terminó ayudando a vender.', statLabel: 'Cada boda en I attend incluye dos eventos flash, y hoy pesan en la decisión de contratar.' },
+    en: { titleA: 'Organizing a get-together\nshouldn’t take', accent: 'all afternoon', tag: 'Flash events', caption: 'Flash events',
+      lead: 'Whoever organizes a get-together doesn’t want to design an invitation. They want to know who’s coming. I attend’s flash events solve that, and nothing else.',
+      facts: [{ k: 'Project', v: 'I attend · Flash events' }, { k: 'Role', v: 'UX design [and implementation]' }, { k: 'Platform', v: 'Digital invitation · mobile' }, { k: 'Status', v: 'Live' }],
+      cursors: ['Host', 'Guest'],
+      problemTitle: 'The invitation was too big for the party.',
+      origin: 'For a wedding, I attend has everything: a schedule, passes, photos, an assistant. But there are small events: the after-party, a farewell, a get-together with friends. For those, the full invitation was too much. So the host went back to the usual: a message to the WhatsApp group, scattered replies and counting by hand who was coming.',
+      solutionTitle: 'Know who’s coming, in minutes.',
+      what: 'Flash events keep what makes I attend work, sending and confirming, and remove everything the host doesn’t need. Guests confirm with a single tap, and the host sees the list in one place, without counting messages.',
+      solves: 'The host knows who’s coming without counting messages in the chat.',
+      decisions: [
+        { k: 'What the host needs to know', v: 'Who’s coming. Date, place and RSVP; everything else is gone.' },
+        { k: 'Faster than the WhatsApp group', v: 'If setting it up takes longer than sending a message, the host goes back to the chat. It’s set up in minutes.' },
+        { k: 'Simple, not improvised', v: 'Even when the event is small, guests get an invitation built with great care and made to always look right.' }
+      ],
+      stat: 'What started as an extra ended up helping sell.', statLabel: 'Every wedding on I attend includes two flash events, and today they weigh in the decision to book.' } }
 ];
