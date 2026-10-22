@@ -151,6 +151,16 @@
   flex: none;
 }
 
+/* Marca del home: "Clickable" en Inter itálica */
+.wordmark {
+  font-size: 17px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
 .brandName {
   font-size: 14px;
   font-weight: 700;

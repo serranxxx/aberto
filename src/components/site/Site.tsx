@@ -114,12 +114,7 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
     <header className={s.header}>
       <div className={`${s.container} ${s.headerInner}`}>
         <Link href="/#top" className={s.brand}>
-          <span className={s.logoTile}>
-            <Image src="/logo-cursor.svg" alt="" width={20} height={20} unoptimized />
-          </span>
-          <span className={s.brandName}>
-            Alberto<span className={s.brandLast}> Serrano</span>
-          </span>
+          <span className={s.wordmark}>Clickable</span>
         </Link>
         <nav className={s.nav}>
           {nav.map(n => (

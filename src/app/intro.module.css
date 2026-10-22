@@ -1,0 +1,198 @@
+/* --------------------------------------------- Intro "Clickable" del home --- */
+
+/* La sección ocupa 55vh en el flujo; la capa de 100vh se cruza con el parallax */
+.section {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 55vh;
+  background: #FBFBFC;
+}
+
+.layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  min-height: 263px;
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* Todo lo que va después de la intro (header → footer) sube 2× sobre ella */
+.rest {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  transform: translateY(45vh);
+  will-change: transform;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #FBFBFC;
+}
+
+.piece {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-position: center, center;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.word {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.prefix {
+  position: absolute;
+  right: 100%;
+  top: 0;
+  white-space: pre;
+}
+
+/* Resaltado de "Make it" al seleccionarlo */
+.prefixSel {
+  position: absolute;
+  right: 0.12em;
+  top: 0.04em;
+  bottom: -0.02em;
+  border-radius: 0.04em;
+  z-index: -1;
+}
+
+.obvious {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: pre;
+}
+
+.caret {
+  position: absolute;
+  border-radius: 2px;
+}
+
+.inCaret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 1em;
+  vertical-align: top;
+}
+
+.inCaret > span {
+  position: absolute;
+  left: 0.06em;
+  top: 0.12em;
+  width: 0.013em;
+  min-width: 2px;
+  height: 0.76em;
+  border-radius: 2px;
+}
+
+.box,
+.solid {
+  position: absolute;
+  z-index: 3;
+}
+
+.solid {
+  box-sizing: border-box;
+}
+
+.edge,
+.node {
+  position: absolute;
+}
+
+.node {
+  box-sizing: border-box;
+}
+
+.cursor {
+  position: absolute;
+  z-index: 5;
+  line-height: 0;
+  transform-origin: 15px 15px;
+}
+
+.glyph {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 12px 20px rgba(25, 22, 30, 0.28));
+}
+
+.ripple {
+  position: absolute;
+  z-index: 4;
+  border-radius: 50%;
+  border: 4px solid;
+}
+
+.subtitle {
+  position: absolute;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.subWord {
+  padding: 0 0 0.08em;
+}
+
+.signature {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.sigUx {
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.sigDesign {
+  padding: 6px 14px 14px 8px;
+  margin: -6px -14px -14px -8px;
+  font-family: var(--font-script);
+  font-weight: 400;
+  line-height: 1.25;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}

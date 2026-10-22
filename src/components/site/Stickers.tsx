@@ -43,8 +43,10 @@ export function Icon({ name, size, stroke, width = 1.5 }: { name: IconName; size
 }
 
 /** Ícono-sticker: contorno blanco grueso debajo y trazo con degradado encima. */
-export function StickerIcon({ name, size, inner = 1.35, outer = 5.5, anim, className, style }: {
+export function StickerIcon({ name, size, inner = 1.35, outer = 5.5, solid, anim, className, style }: {
   name: IconName
+  /** Color sólido de relleno en lugar del contorno con degradado */
+  solid?: string
   anim?: string
   size?: number | string
   inner?: number
@@ -66,7 +68,7 @@ export function StickerIcon({ name, size, inner = 1.35, outer = 5.5, anim, class
       aria-hidden
     >
       <use href={`#i-${name}`} fill="#FFFFFF" stroke="#FFFFFF" strokeWidth={outer} />
-      <use href={`#i-${name}`} fill="none" stroke="url(#g-accent)" strokeWidth={inner} />
+      <use href={`#i-${name}`} fill={solid ?? 'none'} stroke={solid ?? 'url(#g-accent)'} strokeWidth={inner} />
     </svg>
   )
 }
