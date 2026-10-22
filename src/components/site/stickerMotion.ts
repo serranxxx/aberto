@@ -38,41 +38,39 @@ const float = (c: Ctx, el: Element, delay: number, amp = 6, duration = 3000) =>
   }, delay)
 
 const MOTIONS: Record<string, (el: HTMLElement, i: number, c: Ctx) => void> = {
-  /** Cursor del hero: entra y luego hace "clic" en la última n de la frase acento. */
+  /** Cursor del hero: entra y luego hace clic en su lugar cada pocos segundos. */
   cursor: (el, _i, c) => {
     el.animate([{ opacity: 0, translate: '-12px 12px' }, { opacity: 1, translate: '0 0' }], {
       duration: 700, delay: 300, easing: 'cubic-bezier(.3,0,.1,1)', fill: 'backwards',
     })
-    // Distancia desde el cursor hasta el centro de la letra (la punta queda ~20% dentro de su caja)
-    const target = (): [number, number] => {
-      const node = el.previousElementSibling?.firstChild
-      if (!node || node.nodeType !== Node.TEXT_NODE) return [-30, 0]
-      const i = (node.nodeValue ?? '').lastIndexOf('n')
-      if (i < 0) return [-30, 0]
-      const range = document.createRange()
-      range.setStart(node, i)
-      range.setEnd(node, i + 1)
-      const bb = range.getBoundingClientRect()
-      const er = el.getBoundingClientRect()
-      return [bb.left + bb.width * 0.5 - (er.left + er.width * 0.2), bb.top + bb.height * 0.5 - (er.top + er.height * 0.2)]
-    }
+    // El clic se encoge hacia la punta de la flecha
+    el.style.transformOrigin = '23% 22%'
     const loop = () => {
-      const [dx, dy] = target()
-      const T = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`
+      // Baja con suavidad, rebota apenas y se asienta
       el.animate(
         [
-          { translate: '0px 0px', scale: '1', easing: 'cubic-bezier(.45,0,.25,1)' },
-          { translate: T, scale: '1', offset: 0.38, easing: 'cubic-bezier(.4,0,.6,1)' },
-          { translate: T, scale: '.86', offset: 0.46, easing: 'cubic-bezier(.4,0,.6,1)' },
-          { translate: T, scale: '1', offset: 0.56, easing: 'cubic-bezier(.4,0,.2,1)' },
-          { translate: T, scale: '1', offset: 0.64, easing: 'cubic-bezier(.45,0,.25,1)' },
-          { translate: '0px 0px', scale: '1' },
+          { scale: '1', easing: 'cubic-bezier(.45,0,.55,1)' },
+          { scale: '.86', offset: 0.32, easing: 'cubic-bezier(.3,0,.2,1)' },
+          { scale: '1.04', offset: 0.68, easing: 'cubic-bezier(.45,0,.55,1)' },
+          { scale: '1' },
         ],
-        { duration: 3400, easing: 'linear' },
+        { duration: 760 },
       )
-      c.later(loop, 5200)
+      c.later(loop, 2600)
     }
-    c.later(loop, 1200)
+    c.later(loop, 1300)
+  },
+
+  /** Comentarios de "¿Te suena?": aparecen uno tras otro, sin flotar. */
+  comment: (el, i) => {
+    el.animate(
+      [
+        { opacity: 0, scale: '.92', translate: '0 16px' },
+        { opacity: 1, scale: '1.02', translate: '0 -2px', offset: 0.65 },
+        { opacity: 1, scale: '1', translate: '0 0' },
+      ],
+      { duration: 560, delay: 120 + i * 160, easing: EZ, fill: 'backwards' },
+    )
   },
 
   pop: (el, i, c) => {
@@ -208,44 +206,6 @@ const MOTIONS: Record<string, (el: HTMLElement, i: number, c: Ctx) => void> = {
     c.later(run, 800)
     const loop = () => { run(); c.later(loop, 5600) }
     c.later(loop, 5000)
-  },
-
-  /** Menú de fuentes: alterna Inter ↔ Geist cada 2.6s. */
-  fontmenu: (el, _i, c) => {
-    pop(el, 150)
-    float(c, el, 900, 5, 3200)
-    const rows = [0, 1].map(n => el.querySelector<HTMLElement>(`[data-fm-row="${n}"]`))
-    const label = el.querySelector<HTMLElement>('[data-fm-label]')
-    if (!rows[0] || !rows[1] || !label) return
-    const names = ['Inter', 'Geist']
-    rows.forEach(r => { r!.style.transition = 'background-color .35s ease, color .35s ease' })
-    c.cleanup(() => {
-      rows.forEach((r, i) => {
-        r!.removeAttribute('style')
-        r!.dataset.on = String(i === 0)
-      })
-      label.textContent = names[0]
-    })
-    let cur = 0
-    const select = (n: number) => {
-      rows.forEach((r, i) => { r!.dataset.on = String(i === n) })
-      rows[n]!.querySelector('svg')?.animate([{ opacity: 0, scale: '.3' }, { opacity: 1, scale: '1.2', offset: 0.6 }, { opacity: 1, scale: '1' }], {
-        duration: 380, easing: EZ,
-      })
-      label.animate(
-        [
-          { opacity: 1, translate: '0 0' },
-          { opacity: 0, translate: '0 -6px', offset: 0.45 },
-          { opacity: 0, translate: '0 6px', offset: 0.5 },
-          { opacity: 1, translate: '0 0' },
-        ],
-        { duration: 420 },
-      )
-      c.later(() => { label.textContent = names[n] }, 190)
-      rows[n]!.animate([{ scale: '1' }, { scale: '.96', offset: 0.4 }, { scale: '1' }], { duration: 260 })
-    }
-    const loop = () => { cur = 1 - cur; select(cur); c.later(loop, 2600) }
-    c.later(loop, 1800)
   },
 }
 

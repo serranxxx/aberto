@@ -1,8 +1,6 @@
 .section {
   position: relative;
   overflow: hidden;
-  border-top: 1px solid #EBEBEB;
-  border-bottom: 1px solid #EBEBEB;
   /* Puntos de lienzo, centrados */
   background-color: #FBFBFC;
   background-image: radial-gradient(#DCDBDF 1.3px, transparent 1.5px);

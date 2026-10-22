@@ -8,7 +8,7 @@ const CURSOR_PATH = 'M5.4 4.25 18.9 9.6Q20 10.1 19.5 11.1Q19.2 11.7 18.5 11.8L14
 
 /*
  * Cada cursor recorre waypoints en % del bloque de texto ("x y").
- * Se expande desde el centro: 10% en escritorio, 21% en móvil (< 560px).
+ * Se expande desde el centro: 21% en escritorio, 33% en móvil (< 560px).
  */
 const CURSORS = [
   {
@@ -41,7 +41,7 @@ export function SoftwareBeautiful({ lang }: { lang: Lang }) {
 
     cursorsRef.current.forEach((el, i) => {
       if (!el) return
-      const spread = mobile ? 1.21 : 1.1
+      const spread = mobile ? 1.331 : 1.21
       const at = (v: string) => `${50 + (parseFloat(v) - 50) * spread}%`
       const pts = parse(CURSORS[i].path)
       const kf = [...pts, pts[0]].map(([x, y]) => ({ left: at(x), top: at(y), easing: 'cubic-bezier(.45,0,.25,1)' }))

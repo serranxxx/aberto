@@ -140,7 +140,7 @@
   position: relative;
   flex: none;
   margin-right: clamp(0px, 3vw, 48px);
-  transform: rotate(-6deg) scale(var(--deco-s));
+  transform: scale(var(--deco-s));
   transform-origin: right center;
 }
 
@@ -235,75 +235,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Proceso: menú de fuentes */
-
-.fontMenu {
-  position: absolute;
-  right: var(--gutter);
-  top: clamp(56px, 8vw, 104px);
-  z-index: 2;
-  border-radius: 22px;
-  scale: var(--deco-s);
-  transform-origin: right top;
-  transform: translate(0, 35px) rotate(7deg) scaleX(1.12);
-}
-
-.fmBox {
-  width: 220px;
-  border-radius: 16px;
-  background: #FFFFFF;
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-
-.fmHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 48px;
-  padding: 0 14px;
-  border-bottom: 1px solid var(--line);
-}
-
-.fmLabel {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink);
-}
-
-.fmList {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 6px;
-  font-size: 14px;
-  color: var(--ink-2);
-}
-
-.fmRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 36px;
-  padding: 0 10px;
-  border-radius: 10px;
-}
-
-.fmRow svg {
-  display: none;
-}
-
-.fmRow[data-on='true'] {
-  background: #F3F1F5;
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.fmRow[data-on='true'] svg {
-  display: block;
 }
 
 /* iPad */

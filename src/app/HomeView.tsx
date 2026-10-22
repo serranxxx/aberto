@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { COPY } from '@/data/copy'
 import { PRODUCTS } from '@/data/features'
@@ -10,7 +9,7 @@ import { formatCount, parseStat, useCountProgress } from '@/components/site/Coun
 import {
   BOOKING_URL, ContactSection, SiteFooter, SiteHeader, siteStyles as s,
 } from '@/components/site/Site'
-import { FontMenuSticker, ForkSticker, IconSprite, ServicesStickers, StickerIcon, WorkStickers } from '@/components/site/Stickers'
+import { ForkSticker, IconSprite, ServicesStickers, StickerIcon, WorkStickers } from '@/components/site/Stickers'
 import { startStickerMotion } from '@/components/site/stickerMotion'
 import { WhyStories } from './WhyStories'
 import { SoftwareBeautiful } from './SoftwareBeautiful'
@@ -20,11 +19,15 @@ import h from './home.module.css'
 import ic from './intro.module.css'
 
 const pad = (i: number) => String(i + 1).padStart(2, '0')
+// "Customer Success" → CS, "Soporte" → S
+const initials = (name: string) => name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 
 export default function HomeView() {
   const { lang } = useLang()
   const t = COPY[lang]
   const [openService, setOpenService] = useState<number | null>(0)
+  const stepsRef = useRef<HTMLDivElement>(null)
+  const ballRef = useRef<HTMLSpanElement>(null)
   const pageRef = useRef<HTMLDivElement>(null)
   const layerRef = useRef<HTMLDivElement>(null)
   const restRef = useRef<HTMLDivElement>(null)
@@ -33,6 +36,69 @@ export default function HomeView() {
   useEffect(() => {
     if (!pageRef.current) return
     return startStickerMotion(pageRef.current)
+  }, [])
+
+  // Proceso: cada punto negro alberga una bolita con degradado y se la lanza al siguiente.
+  // Del último sale por la derecha de la pantalla y vuelve a entrar por la izquierda hacia el primero.
+  useEffect(() => {
+    const ol = stepsRef.current, ball = ballRef.current
+    if (!ol || !ball) return
+    const dots = [...ol.querySelectorAll<HTMLElement>('[data-dot]')]
+    const n = dots.length
+    const center = (i: number) => {
+      const o = ol.getBoundingClientRect(), r = dots[i].getBoundingClientRect()
+      return { x: r.left + r.width / 2 - o.left, y: r.top + r.height / 2 - o.top }
+    }
+    const place = (i: number) => { const c = center(i); ball.style.translate = `${c.x}px ${c.y}px` }
+    let cur = n - 1
+    place(cur)
+    const onResize = () => place(cur)
+    window.addEventListener('resize', onResize)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => window.removeEventListener('resize', onResize)
+
+    type P = { x: number; y: number }
+    const inOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2)
+    const easeIn = (t: number) => t * t * t
+    const easeOut = (t: number) => 1 - (1 - t) ** 3
+    // Tiro en arco bajo: la altura crece con la distancia, hasta 22px
+    const arc = (a: P, b: P, ms: number, ease: (t: number) => number) => {
+      const h = Math.min(22, Math.hypot(b.x - a.x, b.y - a.y) * 0.08)
+      const frames = Array.from({ length: 17 }, (_, k) => {
+        const p = ease(k / 16)
+        return { translate: `${a.x + (b.x - a.x) * p}px ${a.y + (b.y - a.y) * p - h * 4 * p * (1 - p)}px` }
+      })
+      ball.style.translate = frames[frames.length - 1].translate
+      return ball.animate(frames, { duration: ms, easing: 'linear' }).finished
+    }
+    const launch = (i: number) => dots[i].animate([{ scale: '1' }, { scale: '.8', offset: 0.35 }, { scale: '1' }], { duration: 320, easing: 'ease-out' })
+    const receive = (i: number) => dots[i].animate([{ scale: '1' }, { scale: '1.3', offset: 0.35 }, { scale: '1' }], { duration: 360, easing: 'ease-out' })
+
+    let alive = true, timer: ReturnType<typeof setTimeout> | undefined
+    const hop = async () => {
+      if (!alive) return
+      const next = (cur + 1) % n
+      launch(cur)
+      try {
+        if (next === 0) {
+          const a = center(cur), b = center(0), o = ol.getBoundingClientRect()
+          await arc(a, { x: window.innerWidth - o.left + 24, y: a.y }, 520, easeIn)
+          await arc({ x: -o.left - 24, y: b.y }, b, 620, easeOut)
+        } else {
+          await arc(center(cur), center(next), 640, inOut)
+        }
+      } catch { return }
+      if (!alive) return
+      cur = next
+      receive(cur)
+      timer = setTimeout(hop, 1100)
+    }
+    timer = setTimeout(hop, 1200)
+    return () => {
+      alive = false
+      clearTimeout(timer)
+      ball.getAnimations().forEach(a => a.cancel())
+      window.removeEventListener('resize', onResize)
+    }
   }, [])
 
   // Parallax de la intro: el contenido sube 2× en los primeros 45vh mientras el video baja,
@@ -122,17 +188,28 @@ export default function HomeView() {
         </section>
 
         {/* ¿Te suena? */}
-        <section className={h.tinted}>
+        <section className={h.painSection}>
           <div className={`${s.container} ${h.painBlock}`}>
-            <div className={`${s.label} ${h.sectionLabel}`}>{t.painLabel}</div>
-            <h2 className={s.h2} style={{ maxWidth: '22ch' }}>{t.painTitle}</h2>
-            <div className={h.pains}>
-              {t.pains.map(p => (
-                <div key={p} className={h.pain}>
-                  <span className={h.quote}>“</span>
-                  <span className={h.painText}>{p}</span>
-                </div>
-              ))}
+            <div className={h.painGrid}>
+              <div className={h.painHead}>
+                <div className={`${s.label} ${h.sectionLabel}`}>{t.painLabel}</div>
+                <h2 className={`${s.h2} ${h.painTitle}`}>{t.painTitle}</h2>
+              </div>
+              {/* Comentarios del equipo, como en Figma: avatar, quién, cuándo y el comentario */}
+              <div className={h.pains}>
+                {t.pains.map((p, i) => (
+                  <div key={p.who} data-anim="comment" className={h.pain} data-tone={i}>
+                    <span className={h.painAvatar}>{initials(p.who)}</span>
+                    <div className={h.painCard}>
+                      <span className={h.painMeta}>
+                        <span className={h.painWho}>{p.who}</span>
+                        <span className={h.painWhen}>{p.when}</span>
+                      </span>
+                      <span className={h.painText}>{p.text}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             <p className={h.painClose}>
               {t.painClose} <span className={`${s.script} ${h.painAccent}`}>{t.painCloseAccent}</span>
@@ -203,16 +280,15 @@ export default function HomeView() {
         <section className={`${s.container} ${h.block} ${h.relative}`}>
           <div className={h.about}>
             <div className={h.aboutHead}>
-              <div className={h.avatar}>
-                <div className={h.avatarDisc} />
-                <Image src="/memoji-clean.png" alt={lang === 'es' ? 'Memoji de Alberto Serrano' : 'Alberto Serrano’s memoji'} width={470} height={701} sizes="170px" className={h.avatarImg} />
-              </div>
-              <div className={h.aboutTitleWrap} style={{ '--afit': `${(178 / Math.max(1, t.aboutAccent.length)).toFixed(2)}cqi` } as React.CSSProperties}>
+              <div className={h.aboutTitleWrap}>
                 <span className={s.label}>{t.aboutLabel}</span>
+                {/* Marca: "Clickable" en Inter y debajo la firma "UX design", como al final de la intro */}
                 <h2 className={h.aboutTitle}>
-                  {/* Invertido: el nombre manuscrito va arriba y se empalma con la línea en Inter */}
-                  <span className={`${s.script} ${h.aboutName}`}>{t.aboutTitle}</span>
-                  <span className={h.nowrap}>{t.aboutAccent}</span>
+                  <span>Clickable</span>
+                  <span className={h.aboutSig}>
+                    <span className={h.aboutUx}>UX</span>
+                    <span className={`${s.script} ${h.aboutDesign}`}>design</span>
+                  </span>
                 </h2>
               </div>
             </div>
@@ -230,7 +306,7 @@ export default function HomeView() {
           <div className={h.workHead}>
             <div className={`${s.label} ${h.sectionLabel}`}>{t.workLabel}</div>
             <h2 className={s.h2} style={{ maxWidth: '22ch' }}>{t.workTitle}</h2>
-            <p className={s.lead} style={{ maxWidth: '50ch' }}>{t.workLead}</p>
+            <p className={s.lead} style={{ maxWidth: '72ch', textWrap: 'balance' }}>{t.workLead}</p>
             <WorkStickers code={t.decoCode} />
           </div>
           <WorkExplorer lang={lang} />
@@ -238,23 +314,25 @@ export default function HomeView() {
 
         {/* Proceso */}
         <section id="proceso" className={`${s.container} ${h.block} ${h.relative}`}>
-          <FontMenuSticker />
           <div className={`${s.label} ${h.sectionLabel}`}>{t.processLabel}</div>
           <h2 className={s.h2} style={{ maxWidth: '20ch' }}>{t.processTitle}</h2>
-          <ol className={h.timeline}>
-            {t.steps.map((st, i) => (
-              <li key={st.k} className={h.step}>
-                <span className={h.stepDot} />
-                <div className={h.stepText}>
-                  <span className={h.stepHead}>
-                    <span className={s.label}>{pad(i)}</span>
-                    <span className={h.stepTitle}>{st.k}</span>
-                  </span>
-                  <span className={h.stepBody}>{st.v}</span>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <div ref={stepsRef} className={h.timelineWrap}>
+            <span ref={ballRef} className={h.stepBall} aria-hidden />
+            <ol className={h.timeline}>
+              {t.steps.map((st, i) => (
+                <li key={st.k} className={h.step}>
+                  <span data-dot className={h.stepDot} />
+                  <div className={h.stepText}>
+                    <span className={h.stepHead}>
+                      <span className={s.label}>{pad(i)}</span>
+                      <span className={h.stepTitle}>{st.k}</span>
+                    </span>
+                    <span className={h.stepBody}>{st.v}</span>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
           <div className={h.notFor}>
             <span className={h.notForTitle}>{t.notForTitle}</span>
             <p className={h.notForText}>{t.notFor}</p>
@@ -293,7 +371,6 @@ function ProofStats({ lang }: { lang: Lang }) {
             <span className={h.heroValue} aria-label={`${hero.prefix}${hero.target}${hero.suffix}`}>
               {hero.prefix}{formatCount(hero.target, progress)}<span className={s.accent}>{hero.suffix}</span>
             </span>
-            <span className={h.heroLabel2}>{hero.label}</span>
             {hero.note && <span className={h.heroNote}>{hero.note}</span>}
             <span className={h.heroTrack}>
               <span className={h.heroFill} style={{ width: `${progress * 100}%` }} />

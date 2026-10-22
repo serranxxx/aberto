@@ -8,7 +8,7 @@ const STORY_MS = 7000
 type Reason = { n: string; k: string; v: string; proof: string }
 
 /**
- * Razones de "Por qué yo" en formato stories: avanzan solas, se pausan con el
+ * Razones de "Por qué nosotros" en formato stories: avanzan solas, se pausan con el
  * cursor encima o fuera de pantalla, y se navegan tocando la historia
  * (tercio izquierdo regresa, el resto avanza) o las pestañas.
  */

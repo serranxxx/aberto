@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { PROJECT_COPY } from '@/data/copy'
 import { FEATURES } from '@/data/features'
-import { PROJECT_IDS, projectHref } from '@/data/routes'
+import { PROJECT_IDS } from '@/data/routes'
+import { FolderLink } from '@/components/site/Folder'
 import { useLang } from '@/components/site/LangProvider'
-import { SiteHeader, siteStyles as s } from '@/components/site/Site'
+import { CloseLink, SiteHeader, siteStyles as s } from '@/components/site/Site'
 import p from './project.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
@@ -142,22 +143,23 @@ function MoreProjects({ id, title, prev, next }: { id: string; title: string; pr
         </div>
       </div>
       <div ref={rail} className={p.moreRail}>
+        {/* Cada proyecto es una carpeta con su nombre en la solapa y, abajo, su título */}
         {others.map(f => {
           const c = f[lang]
-          // Portada: la primera captura de su galería
-          const cover = f.id === 'dynamicrsvp' ? `${D}crop/${SCREENS[0][0]}.png` : f.gallery?.[0]?.src || f.img
           return (
-            <Link key={f.id} href={projectHref(f.id)} className={p.moreCard}>
-              <div className={p.moreMedia}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                {cover && <img src={cover} alt="" loading="lazy" />}
-              </div>
-              <div className={p.moreBody}>
-                <span className={p.moreTag}>{c.tag}</span>
-                <span className={p.moreCardTitle}>{c.titleA.replace('\n', ' ')} {c.accent}</span>
-                <span className={p.moreLead}>{c.lead}</span>
-              </div>
-            </Link>
+            <FolderLink
+              key={f.id}
+              f={f}
+              label={c.tag}
+              className={p.moreCard}
+              after={(
+                <span className={p.moreBody}>
+                  <span className={p.moreCardTitle}>{c.titleA.replace('\n', ' ')} {c.accent}</span>
+                </span>
+              )}
+            >
+              <span className={p.moreFolderLabel}>{c.tag}</span>
+            </FolderLink>
           )
         })}
       </div>
@@ -408,7 +410,8 @@ export default function ProjectView({ id }: { id: string }) {
       {/* --------------------------------------------------------- Móvil --- */}
       <div className={p.mobile}>
         <div className={p.mBar}>
-          <Link href="/#trabajo" className={p.mBack}>{t.back}</Link>
+          <Link href="/" className={s.wordmark}>Clickable</Link>
+          <CloseLink />
         </div>
 
         <div className={p.mIntro}>

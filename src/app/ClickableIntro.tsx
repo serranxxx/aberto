@@ -69,17 +69,21 @@ function farKeys(K: Record<string, Key[]>, L: Layout, D: number) {
   })
   return out
 }
-// Posiciones de la punta del cursor relativas a la esquina superior izquierda de la palabra
-function teamKeys(L: Layout): Record<string, Key[]> {
-  const { W, H, CW, ls } = L, top = H * 0.03, bot = H * 0.94, kx = ls[4].x + ls[4].w * 0.5
+// El cursor del degradado recorre "UX design" de izquierda a derecha y la va escribiendo
+const SIG_T = [10.7, 11.6]
+// Posiciones de la punta del cursor relativas a la esquina superior izquierda de la palabra (sw: ancho de la firma)
+function teamKeys(L: Layout, sw: number): Record<string, Key[]> {
+  const { W, H, CW } = L, top = H * 0.03, bot = H * 0.94
   return {
-    // los recorridos nunca se cruzan: rosa arriba a la derecha → abajo, coral abajo a la derecha → arriba, el degradado viene de la izquierda
-    pink: [[0, kx - W * 0.25, H * 4.2], [3.6, kx - W * 0.25, H * 4.2], [4.4, kx, bot, kx - W * 0.2, bot + H * 1.2], [4.6, kx, bot], [5.35, W + 12, -H * 0.12], [5.85, W + 12, -H * 0.12],
-      [6.4, W + 700, -H * 2.8, W + 250, -H * 0.4]],
+    // los recorridos nunca se cruzan: el rosa entra arriba a la derecha y sale por la misma diagonal abajo a la izquierda,
+    // el coral va de abajo a la derecha hacia arriba, y el degradado viene de la izquierda
+    pink: [[0, W + 700, -H * 2.8], [3.6, W + 700, -H * 2.8], [4.4, W + 12, -H * 0.12, W + 250, -H * 0.4], [4.6, W + 12, -H * 0.12], [5.35, -16, bot], [5.85, -16, bot],
+      [6.4, -16 + (-16 - W - 12) * 4, bot + (bot + H * 0.12) * 4]],
     coral: [[0, W * 0.9, H * 4.2], [5.85, W * 0.9, H * 4.2], [6.65, W + 26, bot + H * 0.08, W * 1.25, H * 2.2], [6.75, W + 26, bot + H * 0.08],
       [7.55, -16, top], [8.05, -16, top], [8.6, -700, -H * 2.8, -W * 0.2, -H * 0.6]],
     grad: [[0, -W * 0.9, H * 3], [8.05, -W * 0.9, H * 3], [8.8, -H * 0.15, top - H * 0.07, -W * 0.45, H * 0.6], [8.85, -H * 0.15, top - H * 0.07],
-      [10.15, CW + H * 0.035, bot], [10.55, CW + H * 0.11, bot + H * 0.08]],
+      [10.15, CW + H * 0.035, bot], [10.35, CW + H * 0.035, bot],
+      [SIG_T[0], W - (sw || H * 1.2) - H * 0.04, H * 1.22], [SIG_T[1], W + H * 0.05, H * 1.22], [12.2, W + 1400, H * 1.22 + 160]],
   }
 }
 // Cada tramo se curva un poco hacia un lado; los arrastres van en línea recta
@@ -195,14 +199,11 @@ function CursorGlyph({ fill, grad }: { fill: string; grad?: boolean }) {
 function TeamCursor({ T, keys, m, ui }: { T: number; keys: Key[]; m: Member; ui: number }) {
   const [x, y] = cursorAt(keys, T)
   const grad = m.color === 'grad'
-  // al soltar la selección, el cursor del degradado se vuelve morado, 20% más chico, y desaparece
-  const settle = grad ? fade(T, m.drag[1], m.drag[1] + 0.35) : 0
-  const col = settle > 0.5 ? LILA : m.color
+  // el cursor del degradado no desaparece: escribe la firma y sale de la pantalla
   const press = 1 - 0.16 * Math.max(0, 1 - Math.abs(T - m.click) / 0.14)
-  const vis = grad ? 1 - fade(T, m.drag[1] + 0.2, m.drag[1] + 0.6) : 1
   return (
-    <div className={c.cursor} style={{ left: x - 15, top: y - 15, opacity: vis, transform: `scale(${press * ui * (1 - 0.2 * settle)})` }}>
-      <CursorGlyph fill={col === 'grad' ? 'url(#clk-grad)' : col} grad={grad} />
+    <div className={c.cursor} style={{ left: x - 15, top: y - 15, transform: `scale(${press * ui})` }}>
+      <CursorGlyph fill={grad ? 'url(#clk-grad)' : m.color} grad={grad} />
     </div>
   )
 }
@@ -280,7 +281,7 @@ function InCaret({ ink }: { ink: string }) {
 // Subtítulo tipo karaoke bajo la palabra: una frase por cursor; el color se extiende letra por letra
 // desde una letra de origen (la p de "product", la s de "works")
 const SUBS = [
-  { at: 4.5, who: 'pink', out: [5.85, 6.1], text: 'The UX your product is missing', origin: 12, color: PINK, fromDrag: true },
+  { at: 4.5, who: 'pink', out: [5.85, 6.1], text: 'The UX your product is missing', origin: 29, color: PINK, fromDrag: true },
   { at: 6.65, who: 'coral', out: [8.05, 8.3], text: 'UX for software that works', origin: 25, color: CORAL, fromDrag: false },
 ]
 function Subtitle({ T, ink, out, s, keys, L }: { T: number; ink: string; out: number; s: number; keys: Record<string, Key[]>; L: Layout }) {
@@ -322,11 +323,14 @@ function Subtitle({ T, ink, out, s, keys, L }: { T: number; ink: string; out: nu
   )
 }
 
-/** Firma "UX design": se escribe de izquierda a derecha cuando la palabra ya está completa. */
-function Signature({ T, ink, out, s }: { T: number; ink: string; out: number; s: number }) {
-  const p = EZ.easeInOutSine(CL((T - 10.65) / 0.9, 0, 1))
+/** Firma "UX design": se revela detrás del cursor del degradado (la firma va alineada a la derecha bajo la palabra). */
+function Signature({ T, ink, out, s, sigRef, sw, cx, W }: {
+  T: number; ink: string; out: number; s: number
+  sigRef: React.RefObject<HTMLDivElement | null>; sw: number; cx: number | null; W: number
+}) {
+  const p = T < SIG_T[0] || cx == null || !sw ? (T >= SIG_T[1] ? 1 : 0) : CL((cx - (W - sw)) / sw, 0, 1)
   return (
-    <div className={c.signature} style={{ marginTop: -19 * s, gap: 11 * s, opacity: out, clipPath: `inset(-30px ${(1 - p) * 100}% -30px -30px)` }}>
+    <div ref={sigRef} className={c.signature} style={{ marginTop: -19 * s, gap: 11 * s, opacity: out, clipPath: `inset(-30px ${(1 - p) * 100}% -30px -30px)` }}>
       <span className={c.sigUx} style={{ fontSize: 55 * s, color: ink }}>UX</span>
       <span className={c.sigDesign} style={{ fontSize: 62 * s, backgroundImage: GRAD_CSS }}>design</span>
     </div>
@@ -344,10 +348,15 @@ function Piece({ TG, fs, ui, dotK, farD }: { TG: number; fs: number; ui: number;
   const wordRef = useRef<HTMLSpanElement>(null), letterRefs = useRef<(HTMLSpanElement | null)[]>([])
   const L = useLayout(wordRef, letterRefs, fs)
 
-  // Ancho de "Make it " (para centrar la frase y llevar el cursor hasta su inicio)
+  const sigRef = useRef<HTMLDivElement>(null)
+  const [sw, setSw] = useState(0)
+
+  // Anchos de "Make it " (para centrar la frase) y de la firma (para que el cursor la recorra)
   useLayoutEffect(() => {
     const w = prefixRef.current?.offsetWidth
     if (w && w !== pw) setPw(w)
+    const ws = sigRef.current?.offsetWidth
+    if (ws && ws !== sw) setSw(ws)
   })
 
   let G: PrePath | null = null
@@ -356,7 +365,7 @@ function Piece({ TG, fs, ui, dotK, farD }: { TG: number; fs: number; ui: number;
     const ctr: Pt = [L.W / 2, L.H / 2]
     ;(['inA', 'outB', 'selA', 'exB'] as const).forEach(k => { if (G) G[k] = farPt(G[k], ctr, farD) })
   }
-  const keys = L ? farKeys(teamKeys(L), L, farD) : null
+  const keys = L ? farKeys(teamKeys(L, sw), L, farD) : null
   const typed = CL(Math.floor((T - TYPE_AT) / TYPE_STEP) + 1, 0, WORD.length)
   const out = 1 - fade(T, OUT[0], OUT[1])
   const f = P ? preDark(TG) : darkAt(T)
@@ -416,7 +425,7 @@ function Piece({ TG, fs, ui, dotK, farD }: { TG: number; fs: number; ui: number;
               </>
             )}
           </span>
-          <Signature T={T} ink={ink} out={out} s={s} />
+          <Signature T={T} ink={ink} out={out} s={s} sigRef={sigRef} sw={sw} cx={keys ? cursorAt(keys.grad, T)[0] : null} W={L ? L.W : 0} />
         </div>
       </div>
     </div>
@@ -425,18 +434,21 @@ function Piece({ TG, fs, ui, dotK, farD }: { TG: number; fs: number; ui: number;
 
 /**
  * Intro del home: llena su contenedor, se reproduce una vez a 1.05× y se queda en el
- * último cuadro compuesto (justo antes del fundido del reel). Con movimiento reducido, va directo al final.
+ * último cuadro compuesto (justo antes del fundido del reel). Un clic la reinicia. Con movimiento reducido, va directo al final.
  */
 export function ClickableIntro() {
   const box = useRef<HTMLDivElement>(null)
   const [T, setT] = useState(0)
   const [dim, setDim] = useState({ w: 0, h: 0, fs: 80 })
+  const play = useRef<() => void>(() => {})
 
   useEffect(() => {
     const END = OUT[0] + PRE.off - 0.01
     let raf = 0
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setT(END)
-    else {
+    // Arranca (o reinicia) el reloj desde cero
+    play.current = () => {
+      cancelAnimationFrame(raf)
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setT(END); return }
       const t0 = performance.now()
       const tick = (now: number) => {
         const t = (now - t0) / 1000 * HERO_SPEED
@@ -446,6 +458,7 @@ export function ClickableIntro() {
       }
       raf = requestAnimationFrame(tick)
     }
+    play.current()
     // El tamaño de la palabra depende del contenedor: así "Clickable" y los subtítulos siempre caben
     const fit = () => {
       const el = box.current
@@ -461,7 +474,8 @@ export function ClickableIntro() {
   }, [])
 
   return (
-    <div ref={box} className={c.stage} aria-hidden>
+    // Un clic en la intro la vuelve a reproducir desde el principio
+    <div ref={box} className={c.stage} aria-hidden onClick={() => play.current()}>
       {dim.w > 0 && <Piece TG={T} fs={dim.fs} ui={0.55} dotK={0.48} farD={Math.hypot(dim.w, dim.h) * 0.62} />}
     </div>
   )

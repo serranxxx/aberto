@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { COPY } from '@/data/copy'
+import { CloseLink as FolderClose } from './Folder'
 import { useLang } from './LangProvider'
 import s from './site.module.css'
 
@@ -66,6 +67,12 @@ function LangSwitch() {
   )
 }
 
+/** Botón redondo con una X que cierra el proyecto: la hoja regresa a su carpeta en el home. */
+export function CloseLink({ className }: { className?: string }) {
+  const { lang } = useLang()
+  return <FolderClose className={`${s.close} ${className ?? ''}`} label={lang === 'es' ? 'Cerrar proyecto' : 'Close project'} />
+}
+
 export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' | 'project' }) {
   const { lang } = useLang()
   const t = COPY[lang]
@@ -82,12 +89,9 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
       <header className={s.header}>
         <div className={`${s.container} ${s.headerInner} ${s.headerWide}`}>
           <Link href="/" className={s.brand}>
-            <span className={s.logoTile}>
-              <Image src="/logo-cursor.svg" alt="" width={20} height={20} unoptimized />
-            </span>
-            <span className={s.brandName}>Alberto Serrano</span>
+            <span className={s.wordmark}>Clickable</span>
           </Link>
-          <Link href="/#trabajo" className={s.projectBack}>{lang === 'es' ? '← Proyectos' : '← Projects'}</Link>
+          <CloseLink />
         </div>
       </header>
     )
@@ -156,11 +160,6 @@ export function ContactSection() {
           <a href={BOOKING_URL} target="_blank" rel="noreferrer" className={`${s.btn} ${s.btnLight}`}>{t.ctaMain} <span>→</span></a>
           <a href={`https://wa.me/${PHONE.slice(1)}`} target="_blank" rel="noreferrer" className={`${s.btn} ${s.btnGhostDark}`}>WhatsApp</a>
         </div>
-        <div className={s.contactLinks}>
-          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-          <a href="https://www.linkedin.com/in/albserranog" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-          <a href={`tel:${PHONE}`}>614 539 4836</a>
-        </div>
       </div>
     </section>
   )
@@ -172,7 +171,7 @@ export function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'feature' 
     return (
       <footer className={s.footerLight}>
         <div className={`${s.container} ${s.footerInner}`}>
-          <span>Alberto Serrano · {COPY[lang].discipline}</span>
+          <span>Clickable · {COPY[lang].discipline}</span>
           <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
         </div>
       </footer>
@@ -181,7 +180,7 @@ export function SiteFooter({ variant = 'home' }: { variant?: 'home' | 'feature' 
   return (
     <footer className={s.footer}>
       <div className={`${s.container} ${s.footerInner}`}>
-        <span>Alberto Serrano · {COPY[lang].discipline}</span>
+        <span>Clickable · {COPY[lang].discipline}</span>
         <span>Chihuahua, México · {new Date().getFullYear()}</span>
       </div>
     </footer>

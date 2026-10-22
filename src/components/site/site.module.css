@@ -203,14 +203,23 @@
   max-width: 1280px;
 }
 
-.projectBack {
-  font-size: 14px;
-  font-weight: 500;
+/* Cerrar proyecto */
+.close {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
   color: var(--ink-2);
-  transition: color 0.2s;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
-.projectBack:hover {
+.close:hover {
+  border-color: var(--ink-2);
   color: var(--ink);
 }
 
@@ -376,24 +385,6 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 36px;
-}
-
-.contactLinks {
-  display: flex;
-  gap: 12px 32px;
-  flex-wrap: wrap;
-  margin-top: clamp(48px, 7vw, 72px);
-  padding-top: 24px;
-  border-top: 1px solid var(--ink-2);
-  font-size: 14px;
-}
-
-.contactLinks a {
-  color: var(--line);
-}
-
-.contactLinks a:hover {
-  color: var(--paper);
 }
 
 .footer {

@@ -581,12 +581,6 @@
   border-bottom: 1px solid var(--line);
 }
 
-.mBack {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink-2);
-}
-
 .mIntro {
   padding: 40px 20px 0;
   display: flex;
@@ -887,7 +881,10 @@
 
 .moreRail {
   display: flex;
-  gap: 16px;
+  gap: 32px;
+  /* Espacio arriba para que las hojas que suben al pasar el cursor no se recorten */
+  padding-top: 40px;
+  margin-top: -40px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
@@ -898,71 +895,40 @@
   display: none;
 }
 
-/* Dos y media por vista: la tarjeta cortada avisa que hay más */
+/* Carpeta chica y, abajo, etiqueta y título */
 .moreCard {
-  flex: 0 0 calc((100% - 32px) / 2.5);
+  flex: 0 0 calc((100% - 32px * 2) / 6);
+  min-width: 170px;
   scroll-snap-align: start;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background: #FFFFFF;
-  overflow: hidden;
-  color: inherit;
-  text-decoration: none;
+  gap: 14px;
 }
 
-.moreMedia {
-  aspect-ratio: 4 / 3;
-  background: #F3F1F5;
-  overflow: hidden;
-}
-
-/* Captura completa, sin agrandarla más que su tamaño real */
-.moreMedia {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.moreMedia img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: scale-down;
+.moreFolderLabel {
+  font-size: clamp(11px, 6.4cqi, 13px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
 }
 
 .moreBody {
-  padding: 20px 22px 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.moreTag {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink-3);
+  gap: 6px;
+  /* La carpeta es display: block (estilos de Folder), así que el espacio va aquí y no como gap */
+  margin-top: 20px;
 }
 
 .moreCardTitle {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-  color: var(--ink-2);
-}
-
-.moreLead {
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--ink-3);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--ink);
+  text-wrap: balance;
+  opacity: 0.5;
 }
 
 @media (max-width: 899px) {
@@ -976,16 +942,27 @@
   }
 
   .moreTitle {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  /* En celular se desliza con el dedo: sin flechas */
+  .moreHead .arrows {
+    display: none;
   }
 
   .moreRail {
-    gap: 10px;
-    padding: 0 20px;
+    gap: 16px;
+    padding: 40px 20px 0;
     scroll-padding: 0 20px;
   }
 
+  /* Nunca más grandes que en escritorio (181px): en teléfono se ven dos y asoma la tercera */
   .moreCard {
-    flex-basis: 82%;
+    flex-basis: clamp(132px, 38vw, 181px);
+    min-width: 0;
+  }
+
+  .moreCardTitle {
+    font-size: 15px;
   }
 }

@@ -1,213 +1,87 @@
 'use client'
 
-import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { COPY } from '@/data/copy'
-import { FEATURED, FEATURE_ORDER, FEATURES, THEMES } from '@/data/features'
-import type { Feature, Lang } from '@/data/types'
-import { Shot, projectHref, siteStyles as s } from '@/components/site/Site'
+import { FEATURE_ORDER, FEATURES } from '@/data/features'
+import type { Lang } from '@/data/types'
+import { FolderLink, RETURN_KEY, folderVars } from '@/components/site/Folder'
 import w from './work.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
-// Destacadas primero, luego el resto en el orden del home
-// Por ahora el home solo muestra los casos con página de proyecto; con ONLY vacío vuelven todos y los filtros.
-const ONLY: string[] = ['dynamicrsvp', 'dashboardp', 'commandbar', 'flash']
-const ALL = (ONLY.length ? ONLY : [...FEATURED, ...FEATURE_ORDER.filter(id => !FEATURED.includes(id))])
-  .map(id => byId[id]).filter(Boolean)
-
-const OUT_MS = 180
-
-type Phase = 'in' | 'out' | 'pre'
-
-const view = (f: Feature, lang: Lang) => ({
-  id: f.id,
-  img: f.img,
-  video: f.video,
-  isTop: FEATURED.includes(f.id),
-  ...f[lang],
-})
-
-const NavArrow = ({ dir }: { dir: 'up' | 'down' }) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-    <path d={dir === 'up' ? 'M12 19V5M6 11l6-6 6 6' : 'M12 5v14M6 13l6 6 6-6'} />
-  </svg>
-)
+const LIST = FEATURE_ORDER.map(id => byId[id]).filter(Boolean)
 
 /**
- * Explorador de trabajo: filtros por tema, una rueda vertical para elegir
- * (escritorio) o una tira horizontal (móvil), y una tarjeta con la feature elegida.
+ * Proyectos en una ventana tipo Finder: carpetas de colores en la barra lateral y,
+ * en el panel, la descripción, dos cuadros del video del flujo, el título y la carpeta que abre el proyecto.
  */
 export function WorkExplorer({ lang }: { lang: Lang }) {
   const t = COPY[lang]
-  const [themeId, setThemeId] = useState('all')
-  const [selId, setSelId] = useState<string | null>(null)
-  const [shownId, setShownId] = useState<string | null>(null)
-  const [phase, setPhase] = useState<Phase>('in')
-  const timers = useRef<{ out?: ReturnType<typeof setTimeout>; raf?: number }>({})
+  const [selId, setSelId] = useState(LIST[0]?.id)
 
-  const theme = THEMES.find(x => x.id === themeId) ?? THEMES[0]
-  const list = ALL.filter(f => !theme.ids || theme.ids.includes(f.id))
-  const n = list.length
-  const idx = Math.max(0, list.findIndex(f => f.id === selId))
-  const shown = list.find(f => f.id === shownId) ?? list[idx]
-  const sel = shown ? view(shown, lang) : null
-
-  // La tarjeta sale, cambia de contenido y vuelve a entrar
-  const go = (i: number) => {
-    if (!n) return
-    const next = list[((i % n) + n) % n]
-    if (next.id === list[idx]?.id) return
-    setSelId(next.id)
-    setPhase('out')
-    clearTimeout(timers.current.out)
-    cancelAnimationFrame(timers.current.raf ?? 0)
-    timers.current.out = setTimeout(() => {
-      setShownId(next.id)
-      setPhase('pre')
-      timers.current.raf = requestAnimationFrame(() => {
-        timers.current.raf = requestAnimationFrame(() => setPhase('in'))
-      })
-    }, OUT_MS)
-  }
-
-  const pickTheme = (id: string) => {
-    clearTimeout(timers.current.out)
-    setThemeId(id)
-    setSelId(null)
-    setShownId(null)
-    setPhase('in')
-  }
-
+  // Al cerrar un proyecto, su hoja regresa a la carpeta: se selecciona ese proyecto
   useEffect(() => {
-    const t = timers.current
-    return () => {
-      clearTimeout(t.out)
-      cancelAnimationFrame(t.raf ?? 0)
-    }
+    const back = sessionStorage.getItem(RETURN_KEY)
+    if (back && LIST.some(f => f.id === back)) setSelId(back)
   }, [])
+  const idx = Math.max(0, LIST.findIndex(f => f.id === selId))
+  const sel = LIST[idx]
+  const c = sel?.[lang]
+
+  if (!sel || !c) return null
+  // Dos cuadros del video del flujo, segundos 5 y 10 (<video>-5s.webp, -10s.webp); sin video, la imagen del proyecto.
+  // En Eventos flash el segundo 10 cae en una transición, así que su -10s.webp es del segundo 11.
+  const frames = (sel.video ? ['-5s.webp', '-10s.webp'].map(x => sel.video!.replace(/\.mp4$/, x)) : [sel.img]).filter(Boolean) as string[]
 
   return (
-    <>
-      <div className={w.chips} hidden={ONLY.length > 0}>
-        {THEMES.map(x => {
-          const on = x.id === theme.id
-          const count = x.ids ? x.ids.filter(id => byId[id]).length : FEATURES.length
-          return (
-            <button key={x.id} onClick={() => pickTheme(x.id)} className={`${w.chip} ${on ? w.chipOn : ''}`} aria-pressed={on}>
-              {x[lang]}
-              <span className={w.count}>{count}</span>
+    <div className={w.window}>
+      <div className={w.side}>
+        <div className={w.lights} aria-hidden><span /><span /><span /></div>
+        <span className={w.sideLabel}>{lang === 'es' ? 'Proyectos' : 'Projects'}</span>
+        <div className={w.sideList}>
+          {LIST.map((f, i) => (
+            <button
+              key={f.id}
+              onClick={() => setSelId(f.id)}
+              className={`${w.sideItem} ${f.id === sel.id ? w.sideOn : ''}`}
+              style={folderVars(f, i)}
+              aria-pressed={f.id === sel.id}
+            >
+              <span className={w.sideIcon} aria-hidden><span /><span /></span>
+              {f[lang].tag}
             </button>
-          )
-        })}
+          ))}
+        </div>
       </div>
 
-      <div className={w.layout}>
-        {/* Rueda (escritorio): se navega con los botones o tocando una tarjeta, sin scroll */}
-        <div className={w.wheelCol}>
-        <div
-          className={w.wheel}
-          tabIndex={0}
-          aria-label={t.exploreTitle}
-          onKeyDown={e => {
-            if (e.key === 'ArrowDown') { e.preventDefault(); go(idx + 1) }
-            if (e.key === 'ArrowUp') { e.preventDefault(); go(idx - 1) }
-          }}
-        >
-          {list.map((f, i) => {
-            let d0 = ((i - idx) % n + n) % n
-            if (d0 > n / 2) d0 -= n
-            const far = Math.abs(d0) > 3
-            const d = Math.max(-4, Math.min(4, d0))
-            const a = Math.abs(d)
-            const on = d === 0
-            const c = view(f, lang)
-            return (
-              <button
-                key={f.id}
-                tabIndex={-1}
-                onClick={() => go(i)}
-                className={`${w.wheelItem} ${on ? w.wheelOn : ''}`}
-                style={{
-                  width: `calc(${on ? 100 : 100 - a * 6}% - 80px)`,
-                  height: on ? 124 : 72,
-                  transform: `translate(-50%, calc(-50% + ${on ? 0 : Math.sign(d) * (106 + (a - 1) * 76)}px)) scale(${on ? 1 : 1 - a * 0.03})`,
-                  zIndex: 10 - a,
-                  opacity: far ? 0 : 1,
-                  pointerEvents: far ? 'none' : 'auto',
-                }}
-              >
-                <span className={w.wheelContent} style={{ opacity: on ? 1 : far ? 0 : Math.max(0.35, 1 - a * 0.22) }}>
-                  <span className={w.meta}>
-                    {c.tag}
-                    {c.isTop && <span className={w.dot} />}
-                  </span>
-                  <span className={w.wheelTitle}>{c.titleA} {c.accent}</span>
-                  {on && <span className={w.wheelLead}>{c.lead}</span>}
-                </span>
-              </button>
-            )
-          })}
+      <div className={w.main}>
+        <div className={w.toolbar}>
+          <span className={w.toolbarTag}>{c.tag}</span>
+          <span className={w.toolbarCount}>{idx + 1} / {LIST.length}</span>
         </div>
-          {n > 1 && (
-            <div className={w.wheelNav}>
-              <button className={w.navBtn} onClick={() => go(idx - 1)} aria-label={lang === 'es' ? 'Proyecto anterior' : 'Previous project'}>
-                <NavArrow dir="up" />
-              </button>
-              <button className={w.navBtn} onClick={() => go(idx + 1)} aria-label={lang === 'es' ? 'Siguiente proyecto' : 'Next project'}>
-                <NavArrow dir="down" />
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Tarjeta de la feature elegida */}
-        {sel && (
-          <Link href={projectHref(sel.id)} className={w.card} data-phase={phase}>
+        <div className={w.body}>
+          <div className={w.left}>
+            <p className={w.lead}>{c.lead}</p>
             <div className={w.media}>
-              <div className={w.mediaInner}>
-                {sel.video ? (
-                  <video key={sel.video} src={sel.video.includes('rsvp-figma') ? `${sel.video}#t=2` : sel.video} poster={sel.img ?? sel.video.replace(/\.mp4$/, '.webp')} autoPlay muted loop playsInline className={w.video} />
-                ) : (
-                  <Shot src={sel.img} alt={sel.caption} placeholder={t.noImg} sizes="(max-width: 760px) 100vw, 560px" className={w.shot} />
-                )}
-              </div>
-              <span className={w.badge}>{sel.tag}</span>
-            </div>
-            <div className={w.cardBody}>
-              {/* Siempre dos renglones: el título se encoge según su longitud (cqi del contenedor) */}
-              <span className={w.cardTitle} style={{ '--tfit': `${(175 / Math.max(1, ...sel.titleA.split('\n').map(l => l.length), sel.accent.length)).toFixed(2)}cqi` } as React.CSSProperties}>
-                <span className={w.cardTitleA}>{sel.titleA}</span>
-                <span className={`${s.script} ${w.cardAccent}`}>{sel.accent}</span>
-              </span>
-              <span className={w.cardLead}>{sel.lead}</span>
-              <div className={w.cardFoot}>
-                <div className={w.solves}>
-                  <span className={w.solvesLabel}>{t.solvesLabel}</span>
-                  <span className={w.solvesText}>{sel.solves || sel.what}</span>
+              {frames.map((src, k) => (
+                <div key={src} className={w.frame}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt={k === 0 ? c.caption : ''} className={w.mediaImg} />
                 </div>
-                <span className={w.go} aria-label={t.seeFeature}>→</span>
-              </div>
+              ))}
             </div>
-          </Link>
-        )}
-
-        {/* Tira de selección (móvil) */}
-        <div className={w.strip}>
-          {list.map((f, i) => {
-            const c = view(f, lang)
-            const on = i === idx
-            return (
-              <button key={f.id} onClick={() => go(i)} className={`${w.stripItem} ${on ? w.stripOn : ''}`} aria-pressed={on}>
-                <span className={w.meta}>
-                  {c.tag}
-                  {c.isTop && <span className={w.dot} />}
-                </span>
-                <span className={w.stripTitle}>{c.titleA} {c.accent}</span>
-              </button>
-            )
-          })}
+          </div>
+          <div className={w.right}>
+            <div className={w.title}>
+              <span className={w.titleA}>{c.titleA.replace('\n', ' ')}</span>
+              <span className={w.titleAccent}>{c.accent}</span>
+            </div>
+            <FolderLink f={sel} i={idx} label={t.seeFeature} className={w.cta}>
+              <span className={w.flapLabel}>{t.seeFeature}</span>
+              <span className={w.flapArrow}>→</span>
+            </FolderLink>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

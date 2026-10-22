@@ -3,12 +3,12 @@
 import type { Feature, Product, Theme } from './types'
 
 export const PRODUCTS: Record<string, Product> = {
-  iattend: { name: 'I attend', badgeEs: 'Proyecto propio · SaaS', badgeEn: 'My own project · SaaS', es: 'SaaS para la gestión de eventos: invitaciones, invitados, confirmaciones y acomodo. La fundé, la diseñé y la desarrollé; hoy está en producción con usuarios reales que pagan.', en: 'A SaaS for event management: invitations, guests, RSVPs and seating. I founded, designed and built it; it’s live today with real, paying users.', roleEs: 'Fundador · diseño y desarrollo', roleEn: 'Founder · design and development',
+  iattend: { name: 'I attend', badgeEs: 'Proyecto propio · SaaS', badgeEn: 'Our own project · SaaS', es: 'SaaS para la gestión de eventos: invitaciones, invitados, confirmaciones y acomodo. La fundamos, la diseñamos y la desarrollamos; hoy está en producción con usuarios reales que pagan.', en: 'A SaaS for event management: invitations, guests, RSVPs and seating. We founded, designed and built it; it’s live today with real, paying users.', roleEs: 'Fundador · diseño y desarrollo', roleEn: 'Founder · design and development',
     // Datos reales de I attend (Admin → Analítica de iattend-vite), consultados el 15 oct 2026.
     // Eventos, envíos y confirmados incluyen invitaciones + side events + flash, también los de prueba.
     // Respuesta: 88.4% de los invitados que recibieron su invitación respondieron (sin pruebas), redondeado a 90%.
-    stats: [{ v: '+172', es: 'Eventos creados', en: 'Events created' }, { v: '+8,791', es: 'Invitaciones enviadas', en: 'Invitations sent' }, { v: '+6,231', es: 'Invitados confirmados', en: 'Guests confirmed' }, { v: '90%', es: 'de eficiencia en confirmaciones', en: 'RSVP efficiency', noteEs: 'Con I attend, mis usuarios saben quién viene y quién no en el 90% de sus invitados.', noteEn: 'With I attend, my users know who’s coming and who isn’t for 90% of their guests.' }, { v: '+2,050', es: 'Seguidores en Instagram', en: 'Instagram followers' }] },
-  canplast: { name: 'Canplast', badgeEs: 'Empresa · herramientas internas y e-commerce', badgeEn: 'Company · internal tools and e-commerce', es: 'El máximo especialista en cubrecanto de México, con centros de distribución en todo el país. Diseño las herramientas que usa su equipo todos los días, usuarios que no eligieron el software, y la experiencia de compra de fabricantes, distribuidores y carpinteros.', en: 'Mexico’s leading edge banding specialist, with distribution centers nationwide. I design the tools its team uses every day, for users who didn’t choose the software, and the buying experience for manufacturers, distributors and carpenters.', roleEs: 'Diseño de producto y desarrollo', roleEn: 'Product design and development',
+    stats: [{ v: '+172', es: 'Eventos creados', en: 'Events created' }, { v: '+8,791', es: 'Invitaciones enviadas', en: 'Invitations sent' }, { v: '+6,231', es: 'Invitados confirmados', en: 'Guests confirmed' }, { v: '90%', es: 'de eficiencia en confirmaciones', en: 'RSVP efficiency', noteEs: 'Con I attend, nuestros usuarios saben quién viene y quién no en el 90% de sus invitados.', noteEn: 'With I attend, our users know who’s coming and who isn’t for 90% of their guests.' }, { v: '+2,050', es: 'Seguidores en Instagram', en: 'Instagram followers' }] },
+  canplast: { name: 'Canplast', badgeEs: 'Empresa · herramientas internas y e-commerce', badgeEn: 'Company · internal tools and e-commerce', es: 'El máximo especialista en cubrecanto de México, con centros de distribución en todo el país. Diseñamos las herramientas que usa su equipo todos los días, usuarios que no eligieron el software, y la experiencia de compra de fabricantes, distribuidores y carpinteros.', en: 'Mexico’s leading edge banding specialist, with distribution centers nationwide. We design the tools its team uses every day, for users who didn’t choose the software, and the buying experience for manufacturers, distributors and carpenters.', roleEs: 'Diseño de producto y desarrollo', roleEn: 'Product design and development',
     stats: [{ v: '30+', es: 'Años especializados en cubrecanto', en: 'Years specialized in edge banding' }, { v: 'Millones', es: 'De metros en inventario', en: 'Of meters in stock' }] },
   findiur: { name: 'Findiur', badgeEs: 'Cliente · SaaS', badgeEn: 'Client · SaaS', es: 'SaaS basada en España.', en: 'A SaaS based in Spain.', roleEs: 'Diseño UX y sistema de diseño', roleEn: 'UX design and design system' }
 };
@@ -22,10 +22,10 @@ export const THEMES: Theme[] = [
 
 export const FEATURES: Feature[] = [
   { id: 'dynamicrsvp', product: 'iattend', img: '/iattend/dynamic/02-formulario.png', video: '/iattend/dynamic/rsvp-figma.mp4', extra: ['/iattend/dynamic/crop/06-pases.png', '/iattend/dynamic/crop/07-lia.png', '/iattend/dynamic/crop/08-photo-wall.png'],
-    es: { titleA: 'Herramientas que se', accent: 'presentan solas', tag: 'Dynamic RSVP', lead: 'La invitación digital tenía cuatro herramientas que casi nadie encontraba. Las reuní en una sola pieza que aparece cuando el invitado confirma.',
+    es: { titleA: 'Herramientas que se', accent: 'presentan solas', tag: 'Dynamic RSVP', lead: 'La invitación digital tenía cuatro herramientas que casi nadie encontraba. Las reunimos en una sola pieza que aparece cuando el invitado confirma.',
       facts: [{ k: 'Rol', v: 'Diseño UX e implementación' }, { k: 'Plataforma', v: 'Invitación digital · móvil' }, { k: 'Inspiración', v: 'Dynamic Island de Apple' }, { k: 'Estado', v: 'En producción' }],
-      origin: 'Fui sumando funciones a la invitación: confirmación, pases digitales, fotos en vivo y un asistente para resolver dudas. Cada una tenía sentido desde el lado de quien la construyó. Desde el lado del invitado, eran cuatro cosas sueltas sin un lugar claro. No llegaba a ellas: era desarrollo sin uso, y los problemas que las originaron seguían ahí.',
-      what: 'Lo único que todo invitado hace es confirmar. Usé ese momento como puerta: la isla aparece sola, se confirma en un toque y, al terminar, se queda como la barra que lleva a pases, fotos y Lia. El invitado no tiene que buscar nada. Las herramientas llegan cuando ya le sirven.',
+      origin: 'Fuimos sumando funciones a la invitación: confirmación, pases digitales, fotos en vivo y un asistente para resolver dudas. Cada una tenía sentido desde el lado de quien la construyó. Desde el lado del invitado, eran cuatro cosas sueltas sin un lugar claro. No llegaba a ellas: era desarrollo sin uso, y los problemas que las originaron seguían ahí.',
+      what: 'Lo único que todo invitado hace es confirmar. Usamos ese momento como puerta: la isla aparece sola, se confirma en un toque y, al terminar, se queda como la barra que lleva a pases, fotos y Lia. El invitado no tiene que buscar nada. Las herramientas llegan cuando ya le sirven.',
       solves: 'Que el invitado descubra herramientas que no sabía que existían, sin tener que explorar.',
       decisions: [
         { k: 'Un solo toque', v: 'El invitado no va a explorar la invitación. Todo tiene que estar a un toque.', shot: '/iattend/dynamic/crop/01-pildora.png' },
@@ -47,13 +47,13 @@ export const FEATURES: Feature[] = [
 
   { id: 'dashboardp', product: 'canplast', img: null, extra: [], video: '/dashboard/full-flow.mp4', flowVideo: '/dashboard/full-flow.mp4', heroVideo: '/dashboard/short-mockup.mp4',
     gallery: [{ src: '/dashboard/gallery/01-tablero.png', label: 'El tablero' }, { src: '/dashboard/gallery/02-redimensionar-grafica.png', label: 'Cada gráfica cambia de tamaño' }, { src: '/dashboard/gallery/03-grafica-2x2.png', label: 'Una gráfica ocupa 2×2' }, { src: '/dashboard/gallery/04-ajustar-tablero.png', label: 'El tablero se ajusta' }, { src: '/dashboard/gallery/05-densidad-4x3.png', label: 'Doce gráficas por página' }, { src: '/dashboard/gallery/06-densidad-6x3.png', label: 'Más gráficas por página' }, { src: '/dashboard/gallery/07-tema-oscuro.png', label: 'El tablero en tema oscuro' }, { src: '/dashboard/gallery/08-oscuro-3x2.png', label: 'Tema oscuro, 3×2' }, { src: '/dashboard/gallery/09-grafica-expandida.png', label: 'Una gráfica a pantalla completa' }],
-    es: { titleA: 'Un tablero que se adapta', accent: 'a quien lo lee', tag: 'Tablero de ventas', caption: 'Tablero de ventas', lead: 'El tablero de ventas: 15 gráficas que se reorganizan según quién lo usa, en qué pantalla y para qué.',
+    es: { titleA: 'Una UI que se adapta', accent: 'a quien la usa', tag: 'Tablero de ventas', caption: 'Tablero de ventas', lead: 'El tablero de ventas: 15 gráficas que se reorganizan según quién lo usa, en qué pantalla y para qué.',
       facts: [{ k: 'Proyecto', v: 'Plataforma de ventas' }, { k: 'Rol', v: 'Diseño UX y de interfaz' }, { k: 'Plataforma', v: 'Tableta, escritorio, TV y proyector' }],
       problemTitle: 'Cuatro pantallas. Distintas personas. Un solo tablero.',
       origin: 'Dirección de Ventas necesitaba analizar las ventas del año y presentarlas en juntas. El reto no eran las gráficas, sino el contexto: el mismo tablero tenía que leerse en una tableta, en una computadora, en una TV o proyectado en una junta. Y a cada persona le importaba un dato distinto.',
       solutionTitle: 'El orden lo pone cada persona. El acomodo, el tablero.',
-      what: 'Le di el orden al usuario y el acomodo al tablero. Cada persona decide qué gráficas ve y en qué orden; el tablero decide cómo caben en cada pantalla sin perder lo que va primero.',
-      keyIdea: 'Le di el orden al usuario y el acomodo al tablero.',
+      what: 'Le dimos el orden al usuario y el acomodo al tablero. Cada persona decide qué gráficas ve y en qué orden; el tablero decide cómo caben en cada pantalla sin perder lo que va primero.',
+      keyIdea: 'Le dimos el orden al usuario y el acomodo al tablero.',
       solves: 'Que cada persona lea su dato a la primera, en cualquier pantalla.',
       decisions: [
         { k: 'Cada quien arma el suyo', v: 'No hay un tablero para todos. Cada persona elige las gráficas que le sirven y en qué orden.' },
@@ -61,13 +61,13 @@ export const FEATURES: Feature[] = [
         { k: 'Hecho para presentar', v: 'En TV o proyector, el tablero se lee a distancia: menos ruido y cifras más grandes.' }
       ],
       stat: 'Interfaces que se adaptan al usuario,', statLabel: 'no usuarios que se adaptan a la interfaz.' },
-    en: { titleA: 'A board that adapts', accent: 'to whoever reads it', tag: 'Sales board', caption: 'Sales board', lead: 'The sales board: 15 charts that rearrange around who’s using it, on which screen, and why.',
+    en: { titleA: 'A UI that adapts', accent: 'to whoever uses it', tag: 'Sales board', caption: 'Sales board', lead: 'The sales board: 15 charts that rearrange around who’s using it, on which screen, and why.',
       facts: [{ k: 'Project', v: 'Sales platform' }, { k: 'Role', v: 'UX and interface design' }, { k: 'Platform', v: 'Tablet, desktop, TV and projector' }],
       problemTitle: 'Four screens. Different people. One board.',
       origin: 'Sales leadership needed to analyze the year’s sales and present them in meetings. The challenge wasn’t the charts but the context: the same board had to read on a tablet, a computer, a TV or projected in a meeting. And each person cared about a different number.',
       solutionTitle: 'Each person sets the order. The board sets the layout.',
-      what: 'I gave the order to the user and the layout to the board. Each person decides which charts they see and in what order; the board decides how they fit on each screen without losing what comes first.',
-      keyIdea: 'I gave the order to the user and the layout to the board.',
+      what: 'We gave the order to the user and the layout to the board. Each person decides which charts they see and in what order; the board decides how they fit on each screen without losing what comes first.',
+      keyIdea: 'We gave the order to the user and the layout to the board.',
       solves: 'Each person reads their number at first glance, on any screen.',
       decisions: [
         { k: 'Everyone builds their own', v: 'There’s no one board for everyone. Each person picks the charts they need and their order.' },
@@ -81,7 +81,7 @@ export const FEATURES: Feature[] = [
     gallery: [{ src: '/commandbar/gallery/01-barra.png', label: 'La barra' }, { src: '/commandbar/gallery/02-buscar.png', label: 'Busca un registro' }, { src: '/commandbar/gallery/03-modulos.png', label: 'Todos los módulos a un clic' }, { src: '/commandbar/gallery/04-asistente.png', label: 'El asistente' }, { src: '/commandbar/gallery/05-respuesta.png', label: 'Responde con datos' }],
     galleryWide: false,
     es: { titleA: 'Todo el día cabe en', accent: 'una sola barra', tag: 'Barra de comando', caption: 'Barra de comando',
-      lead: 'Navegación, búsquedas, consultas y un asistente vivían en lugares distintos de la aplicación. Los reuní en una sola barra, siempre a la mano.',
+      lead: 'Navegación, búsquedas, consultas y un asistente vivían en lugares distintos de la aplicación. Los reunimos en una sola barra, siempre a la mano.',
       facts: [{ k: 'Producto', v: '[Aplicación interna de operación / gestión]' }, { k: 'Rol', v: 'Diseño UX [e implementación]' }, { k: 'Plataforma', v: 'Escritorio' }, { k: 'Estado', v: '[En producción desde…]' }],
       cursors: ['[Ventas]', '[Almacén]'],
       problemTitle: 'Cuatro caminos para lo mismo.',
@@ -97,7 +97,7 @@ export const FEATURES: Feature[] = [
       ],
       stat: '[Las llamadas a soporte bajaron de X a Y].', statLabel: '[Alguien nuevo aprende la aplicación en N días en lugar de M].' },
     en: { titleA: 'The whole day fits in', accent: 'a single bar', tag: 'Command bar', caption: 'Command bar',
-      lead: 'Navigation, search, lookups and an assistant lived in different places across the app. I brought them together in a single bar, always at hand.',
+      lead: 'Navigation, search, lookups and an assistant lived in different places across the app. We brought them together in a single bar, always at hand.',
       facts: [{ k: 'Product', v: '[Internal operations / management app]' }, { k: 'Role', v: 'UX design [and implementation]' }, { k: 'Platform', v: 'Desktop' }, { k: 'Status', v: '[Live since…]' }],
       cursors: ['[Sales]', '[Warehouse]'],
       problemTitle: 'Four paths to the same thing.',
@@ -116,7 +116,7 @@ export const FEATURES: Feature[] = [
   { id: 'flash', product: 'iattend', img: null, extra: [], video: '/flash/flow.mp4', heroVideo: '/flash/hero.mp4', heroZoom: 1.125, flowVideo: '/flash/flow.mp4',
     gallery: [{ src: '/flash/gallery/01-en-blanco.webp', label: 'El anfitrión empieza en blanco' }, { src: '/flash/gallery/02-fondo.webp', label: 'El anfitrión añade un fondo' }, { src: '/flash/gallery/03-titulo.webp', label: 'El anfitrión escribe el título' }, { src: '/flash/gallery/04-tipografia.webp', label: 'El anfitrión ajusta la tipografía' }, { src: '/flash/gallery/05-elementos.webp', label: 'El anfitrión acomoda la portada' }, { src: '/flash/gallery/07-portada.webp', label: 'Le llega al invitado' }, { src: '/flash/gallery/08-itinerario.webp', label: 'El invitado ve el itinerario' }, { src: '/flash/gallery/09-como-llegar.webp', label: 'El invitado ve cómo llegar' }, { src: '/flash/gallery/10-confirmado.webp', label: 'El invitado confirma en un toque' }],
     galleryWide: false,
-    es: { titleA: 'Organizar una reunión\nno debería', accent: 'tomar una tarde', tag: 'Eventos flash', caption: 'Eventos flash',
+    es: { titleA: 'Una reunión lista', accent: 'en un minuto', tag: 'Eventos flash', caption: 'Eventos flash',
       lead: 'Quien organiza una reunión no quiere diseñar una invitación. Quiere saber quién va. Los eventos flash de I attend resuelven eso, y nada más.',
       facts: [{ k: 'Proyecto', v: 'I attend · Eventos flash' }, { k: 'Rol', v: 'Diseño UX [e implementación]' }, { k: 'Plataforma', v: 'Invitación digital · móvil' }, { k: 'Estado', v: 'En producción' }],
       cursors: ['Anfitrión', 'Invitado'],
@@ -131,7 +131,7 @@ export const FEATURES: Feature[] = [
         { k: 'Sencillo, no improvisado', v: 'Aunque el evento sea pequeño, el invitado recibe una invitación desarrollada con mucho cuidado y hecha para verse bien siempre.' }
       ],
       stat: 'Lo que empezó como un extra terminó ayudando a vender.', statLabel: 'Cada boda en I attend incluye dos eventos flash, y hoy pesan en la decisión de contratar.' },
-    en: { titleA: 'Organizing a get-together\nshouldn’t take', accent: 'all afternoon', tag: 'Flash events', caption: 'Flash events',
+    en: { titleA: 'A get-together ready', accent: 'in a minute', tag: 'Flash events', caption: 'Flash events',
       lead: 'Whoever organizes a get-together doesn’t want to design an invitation. They want to know who’s coming. I attend’s flash events solve that, and nothing else.',
       facts: [{ k: 'Project', v: 'I attend · Flash events' }, { k: 'Role', v: 'UX design [and implementation]' }, { k: 'Platform', v: 'Digital invitation · mobile' }, { k: 'Status', v: 'Live' }],
       cursors: ['Host', 'Guest'],

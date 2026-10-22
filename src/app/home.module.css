@@ -19,12 +19,12 @@
   margin-bottom: 20px;
 }
 
-.tinted {
-  background: var(--surface);
-}
-
+/* Fondo oscuro con puntos de lienzo, como el estado oscuro de la intro */
 .dark {
-  background: var(--ink);
+  background-color: var(--ink);
+  background-image: radial-gradient(#37333C 1.3px, transparent 1.5px);
+  background-size: 25px 25px;
+  background-position: center;
   color: var(--line);
 }
 
@@ -113,6 +113,8 @@
   vertical-align: -0.02em;
   transform: rotate(-15deg);
   pointer-events: none;
+  /* Sombra más suave que la del resto de los stickers */
+  filter: drop-shadow(0 2px 4px rgba(25, 22, 30, 0.16));
 }
 
 .heroLead {
@@ -127,54 +129,155 @@
 
 /* ¿Te suena? */
 
+.painSection {
+  background-color: var(--surface);
+  background-image: radial-gradient(#DCDBDF 1.3px, transparent 1.5px);
+  background-size: 25px 25px;
+  background-position: center;
+}
+
 .painBlock {
   padding-top: clamp(64px, 10vw, 120px);
   padding-bottom: clamp(64px, 10vw, 120px);
 }
 
-.pains {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  margin: clamp(40px, 6vw, 64px) calc(-1 * var(--gutter)) 0;
-  padding: 0 var(--gutter) 4px;
-  scroll-padding: 0 var(--gutter);
+.painGrid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 92px);
 }
 
-.pains::-webkit-scrollbar {
-  display: none;
+.painTitle {
+  /* Cada renglón entero: "Tu producto funciona." nunca se parte */
+  white-space: pre;
+}
+
+/* Comentarios escalonados: uno a la izquierda, el siguiente a la derecha */
+.pains {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .pain {
-  /* Cuatro por fila en escritorio; en pantallas chicas se desplazan */
-  flex: 0 0 max(calc((100% - 36px) / 4), min(72vw, 250px));
-  scroll-snap-align: start;
-  background: var(--paper);
-  border-radius: 20px;
-  padding: 24px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 28px;
-  min-height: 200px;
+  align-items: flex-start;
+  gap: 12px;
+  width: calc(100% - clamp(48px, 8.5vw, 120px));
 }
 
-.quote {
-  font-size: 28px;
-  line-height: 1;
-  color: var(--lilac);
+.pain:nth-child(even) {
+  align-self: flex-end;
+}
+
+/* Avatar con forma de pin de comentario (esquina inferior izquierda en punta) */
+.painAvatar {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  margin-top: 2px;
+  border-radius: 50% 50% 50% 6px;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 6px 14px -6px rgba(25, 22, 30, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
   font-weight: 700;
+  color: #FFFFFF;
+  background: #EE6F5F;
+}
+
+.pain[data-tone='1'] .painAvatar {
+  background: #DF72CB;
+}
+
+.pain[data-tone='2'] .painAvatar {
+  background: var(--lilac);
+}
+
+.pain[data-tone='3'] .painAvatar {
+  background: var(--grad);
+}
+
+.painCard {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #FFFFFF;
+  box-shadow: 0 14px 30px -18px rgba(25, 22, 30, 0.28);
+}
+
+.painMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.painWho {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.painWhen {
+  color: var(--ink-4);
 }
 
 .painText {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.35;
-  color: var(--ink-2);
+  line-height: 1.4;
+  color: var(--ink);
   text-wrap: pretty;
+}
+
+/* Tablet y teléfono: título arriba y comentarios a lo ancho */
+@media (max-width: 899px) {
+  .painGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pain {
+    width: calc(100% - 32px);
+  }
+}
+
+@media (max-width: 559px) {
+  .pains {
+    gap: 14px;
+  }
+
+  .pain {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .pain:nth-child(even) {
+    padding-left: 24px;
+  }
+
+  .painAvatar {
+    width: 38px;
+    height: 38px;
+    font-size: 12px;
+  }
+
+  .painCard {
+    padding: 14px 16px 16px;
+  }
+
+  .painText {
+    font-size: 16px;
+  }
 }
 
 .painClose {
@@ -403,22 +506,13 @@
 }
 
 .heroValue {
-  font-size: calc((clamp(88px, 12vw, 152px) - 36px) * 0.8);
+  font-size: calc((clamp(88px, 12vw, 152px) - 36px) * 0.8 + 10px);
   font-weight: 800;
   letter-spacing: -0.06em;
   line-height: 0.85;
   color: var(--paper);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-}
-
-.heroLabel2 {
-  margin-top: 4px;
-  font-size: clamp(16px, 1.76vw, 20.8px);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  color: var(--paper);
 }
 
 .heroNote {
@@ -490,31 +584,6 @@
   gap: clamp(18px, 2.9vw, 40px);
 }
 
-.avatar {
-  position: relative;
-  flex: none;
-  width: clamp(86px, 12.6vw, 166px);
-  aspect-ratio: 1;
-}
-
-.avatarDisc {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--grad);
-}
-
-/* La cabeza sobresale del círculo; abajo se recorta con su curva */
-.avatarImg {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 84%;
-  height: auto;
-  transform: translateX(-46%);
-  clip-path: inset(-100% -20% 0 -20% round 0 0 999px 999px);
-}
-
 .aboutTitleWrap {
   flex: 1;
   display: flex;
@@ -524,26 +593,38 @@
   container-type: inline-size;
 }
 
-.nowrap {
-  white-space: nowrap;
-}
-
 .aboutTitle {
   margin: 0;
   display: flex;
+  width: fit-content;
   flex-direction: column;
-  font-size: clamp(27px, 5vw, 65px);
+  align-items: flex-start;
+  font-size: clamp(40px, 7vw, 88px);
   font-weight: 700;
+  font-style: italic;
   letter-spacing: -0.05em;
-  line-height: 1.08;
+  line-height: 1;
   color: var(--ink-2);
 }
 
-/* Nombre manuscrito arriba, empalmado con la línea en Inter */
-.aboutName {
-  display: block;
-  margin-bottom: -0.42em;
-  font-size: 0.72em;
+/* Firma "UX design" bajo la marca, alineada a la derecha como en la intro */
+.aboutSig {
+  align-self: flex-end;
+  display: flex;
+  align-items: baseline;
+  gap: 0.1em;
+  margin-top: -0.06em;
+  white-space: nowrap;
+}
+
+.aboutUx {
+  font-size: 0.34em;
+  letter-spacing: -0.04em;
+}
+
+.aboutDesign {
+  font-size: 0.4em;
+  font-style: normal;
 }
 
 .aboutText {
@@ -563,16 +644,30 @@
   text-wrap: pretty;
 }
 
+/* Dos columnas a la misma altura: la segunda es más larga, así que es más ancha */
+@media (min-width: 760px) {
+  .aboutText {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  }
+
+  .aboutP {
+    max-width: none;
+  }
+}
+
 /* Trabajo */
 
 .workHead {
   position: relative;
   display: block;
-  border-top: 1px solid var(--line);
   padding-top: clamp(56px, 8vw, 96px);
 }
 
 /* Proceso (línea de tiempo) */
+
+.timelineWrap {
+  position: relative;
+}
 
 .timeline {
   list-style: none;
@@ -591,17 +686,27 @@
 
 .stepDot {
   position: absolute;
-  top: -6px;
+  top: -7px;
   left: 0;
-  width: 11px;
-  height: 11px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--ink-2);
   box-shadow: 0 0 0 4px var(--paper);
 }
 
-.step:last-child .stepDot {
+/* Bolita con degradado: va dentro del punto negro (que queda como su borde) y salta de uno a otro */
+.stepBall {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
   background: var(--grad);
+  pointer-events: none;
 }
 
 .stepText,
@@ -727,19 +832,3 @@
   }
 }
 
-/* Quién soy: "Ingeniero y diseñador UX" siempre en un renglón; bajo 1100px el H2 se ajusta al ancho */
-@media (max-width: 1099px) {
-  .aboutTitle {
-    font-size: max(22px, min(clamp(27px, 5vw, 65px), var(--afit)));
-  }
-}
-
-@media (max-width: 559px) {
-  .aboutHead {
-    gap: 12px;
-  }
-
-  .avatar {
-    width: 52px;
-  }
-}
