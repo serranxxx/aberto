@@ -16,11 +16,6 @@
   color: var(--ink-4);
 }
 
-.icon {
-  display: block;
-  overflow: visible;
-}
-
 /* Escritorio ≥ 900px, móvil debajo */
 .mobile {
   display: none;
@@ -246,23 +241,6 @@
     're re re re re re';
 }
 
-/* Con sección de negocio: va entre la solución y los principios */
-.bodyBiz {
-  grid-template-areas:
-    'pr pr pr pr pr pr'
-    'so so so so so so'
-    'bu bu bu bu bu bu'
-    'd1 d1 vi vi vi vi'
-    'd2 d2 vi vi vi vi'
-    'd3 d3 vi vi vi vi'
-    'ga ga ga ga ga ga'
-    're re re re re re';
-}
-
-.solution.business {
-  grid-area: bu;
-}
-
 .problem,
 .solution {
   display: grid;
@@ -285,23 +263,83 @@
 .storyHead {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+}
+
+/* Colores del bloque: coral para el problema, morado para la solución */
+.toneProblem {
+  --tone: #FF6B5B;
+  --tone-bg: rgba(255, 107, 91, 0.14);
+}
+
+.toneSolution {
+  --tone: #AF86F7;
+  --tone-bg: rgba(175, 134, 247, 0.16);
+}
+
+/* Etiqueta con un punto de color */
+.storyLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.storyLabel::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tone);
 }
 
 .h3 {
   margin: 0;
-  font-size: 40px;
+  font-size: clamp(40px, 4.4vw, 60px);
   font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
+  letter-spacing: -0.05em;
+  line-height: 1.04;
   color: var(--ink-2);
-  max-width: 14ch;
+  max-width: 11ch;
   text-wrap: balance;
+}
+
+.storyBody {
+  padding-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Frase de entrada: más grande, con la idea clave resaltada */
+.storyLead,
+.mLead {
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.storyLead {
+  font-size: clamp(22px, 2.2vw, 28px);
+}
+
+.storyLead mark,
+.mLead mark {
+  padding: 0 0.12em;
+  border-radius: 4px;
+  background: var(--tone-bg);
+  color: inherit;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .storyText {
   margin: 0;
-  padding-top: 44px;
   font-size: 17px;
   line-height: 1.65;
   color: var(--ink-3);
@@ -413,6 +451,21 @@
   background: transparent;
 }
 
+/* El video (4:3, centrado) se funde en sus orillas con el fondo liso del recuadro:
+   así no se ve el corte entre sus puntos y el resto del recuadro */
+.flowVideoContain.flowFade {
+  inset: auto;
+  top: calc(50% + 20px);
+  left: 0;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  translate: 0 -50%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent), linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent), linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  mask-composite: intersect;
+}
+
 /* Galería de pantallas */
 .galleryDesk {
   grid-area: ga;
@@ -518,6 +571,29 @@
   font-size: 12px;
   font-weight: 500;
   color: var(--ink-3);
+}
+
+/* Captura a todo el recuadro (4:3), sin marco; la etiqueta va encima en una pastilla */
+.tile.tileFull {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+}
+
+.tileFull .tileFill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tileFull .tileLabel {
+  z-index: 1;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink-2);
 }
 
 .tileLabel {
@@ -715,6 +791,10 @@
   text-wrap: balance;
 }
 
+.mLead {
+  font-size: 20px;
+}
+
 .mText {
   margin: 0;
   font-size: 16px;
@@ -821,6 +901,11 @@
 
 .galleryMob .tile:not(.tileWide):has(.tileFill) {
   flex: 0 0 72%;
+}
+
+.galleryMob .tile.tileFull {
+  height: auto;
+  padding: 0;
 }
 
 .galleryMob .tileWide {

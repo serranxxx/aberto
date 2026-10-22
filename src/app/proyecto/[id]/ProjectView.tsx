@@ -7,11 +7,13 @@ import { FEATURES } from '@/data/features'
 import { PROJECT_IDS } from '@/data/routes'
 import { FolderLink } from '@/components/site/Folder'
 import { useLang } from '@/components/site/LangProvider'
-import { CloseLink, SiteHeader, siteStyles as s } from '@/components/site/Site'
+import { CloseLink, SiteHeader, Wordmark, siteStyles as s } from '@/components/site/Site'
 import p from './project.module.css'
 
 const byId = Object.fromEntries(FEATURES.map(f => [f.id, f]))
 const pad = (i: number) => String(i + 1).padStart(2, '0')
+// "Texto *resaltado* texto": lo que va entre asteriscos se marca con el color del bloque
+const mark = (text: string) => text.split('*').map((part, i) => (i % 2 ? <mark key={i}>{part}</mark> : part))
 const D = '/iattend/dynamic/'
 
 // Pantallas recortadas a tamaño real (ancho, alto). Se muestran a ~62% (máx 268 px de alto).
@@ -46,29 +48,6 @@ const FrameIcon = ({ size }: { size: number }) => (
   </svg>
 )
 
-const ProblemIcon = ({ size }: { size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="url(#pg-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={p.icon} aria-hidden>
-    <rect x="3" y="3.5" width="7" height="7" rx="1.6" />
-    <rect x="14.5" y="2.5" width="7" height="7" rx="1.6" transform="rotate(12 18 6)" />
-    <rect x="2.5" y="14" width="7" height="7" rx="1.6" transform="rotate(-10 6 17.5)" />
-    <rect x="14" y="14" width="7" height="7" rx="1.6" transform="rotate(6 17.5 17.5)" />
-  </svg>
-)
-
-const SolutionIcon = ({ size }: { size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="url(#pg-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={p.icon} aria-hidden>
-    <rect x="3" y="3" width="18" height="18" rx="4.5" />
-    <path d="M8 12h8M13 8.5l3.5 3.5-3.5 3.5" />
-  </svg>
-)
-
-const BusinessIcon = ({ size }: { size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="url(#pg-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={p.icon} aria-hidden>
-    <rect x="3" y="8.5" width="18" height="12.5" rx="3" />
-    <path d="M2.5 8.5h19M12 8.5V21M12 8.5c-1.5-3.5-5.5-4.5-5.5-2s3.5 2 5.5 2c2 0 5.5.5 5.5-2s-4-1.5-5.5 2" />
-  </svg>
-)
-
 const Arrow = ({ dir }: { dir: 'left' | 'right' }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
     <path d={dir === 'left' ? 'M19 12H5M11 6l-6 6 6 6' : 'M5 12h14M13 6l6 6-6 6'} />
@@ -81,8 +60,8 @@ const posterOf = (src?: string) => src?.replace(/#.*$/, '').replace(/\.mp4$/, '.
 type Shot = { src: string; label: string; w?: number; h?: number }
 
 /** Carril horizontal de pantallas con flechas. Con w/h la imagen va a tamaño fijo; sin ellos, llena el tile. */
-function Gallery({ items, title, prev, next, wide, pending, className }: {
-  items: Shot[]; title: string; prev: string; next: string; wide: boolean; pending: string; className: string
+function Gallery({ items, title, prev, next, wide, full, pending, className }: {
+  items: Shot[]; title: string; prev: string; next: string; wide: boolean; full?: boolean; pending: string; className: string
 }) {
   const rail = useRef<HTMLDivElement>(null)
   const go = (d: number) => {
@@ -101,7 +80,7 @@ function Gallery({ items, title, prev, next, wide, pending, className }: {
       </div>
       <div ref={rail} className={p.rail}>
         {items.map((g, i) => (
-          <div key={`${i}-${g.label}`} className={`${p.tile} ${wide ? p.tileWide : ''}`}>
+          <div key={`${i}-${g.label}`} className={`${p.tile} ${wide ? p.tileWide : ''} ${full ? p.tileFull : ''}`}>
             <span className={p.tileLabel}>{pad(i)} · {g.label}</span>
             {g.src ? (
               /* eslint-disable-next-line @next/next/no-img-element */
@@ -268,7 +247,8 @@ export default function ProjectView({ id }: { id: string }) {
         r = Math.round(r / n); g = Math.round(g / n); b = Math.round(b / n)
         const light = r * 0.299 + g * 0.587 + b * 0.114 > 128
         box.style.backgroundColor = `rgb(${r},${g},${b})`
-        box.style.backgroundImage = light ? 'radial-gradient(#D9D8DD 1.1px, transparent 1.3px)' : 'none'
+        // Con data-bgplain el video trae sus propios puntos: el contenedor va liso para que no se vea el corte
+        box.style.backgroundImage = light && !v.dataset.bgplain ? 'radial-gradient(#D9D8DD 1.1px, transparent 1.3px)' : 'none'
         box.style.borderColor = light ? '#ECEAEE' : 'transparent'
         const label = box.querySelector('span')
         if (label) label.style.color = light ? '#605D66' : '#C2C0C7'
@@ -342,35 +322,28 @@ export default function ProjectView({ id }: { id: string }) {
             </div>
           </div>
 
-          <div className={`${p.body} ${c.business ? p.bodyBiz : ''}`}>
+          <div className={p.body}>
             <section className={p.problem}>
               <div className={p.storyHead}>
-                <span className={p.label}>{t.problem}</span>
-                <ProblemIcon size={56} />
+                <span className={`${p.storyLabel} ${p.toneProblem}`}>{t.problem}</span>
                 <h2 className={p.h3}>{problemTitle}</h2>
               </div>
-              <p className={p.storyText}>{c.origin}</p>
+              <div className={p.storyBody}>
+                {c.problemLead && <p className={`${p.storyLead} ${p.toneProblem}`}>{mark(c.problemLead)}</p>}
+                <p className={p.storyText}>{c.origin}</p>
+              </div>
             </section>
 
             <section className={p.solution}>
               <div className={p.storyHead}>
-                <span className={p.label}>{t.solution}</span>
-                <SolutionIcon size={56} />
+                <span className={`${p.storyLabel} ${p.toneSolution}`}>{t.solution}</span>
                 <h2 className={p.h3}>{solutionTitle}</h2>
               </div>
-              <p className={p.storyText}>{c.what}</p>
+              <div className={p.storyBody}>
+                {c.solutionLead && <p className={`${p.storyLead} ${p.toneSolution}`}>{mark(c.solutionLead)}</p>}
+                <p className={p.storyText}>{c.what}</p>
+              </div>
             </section>
-
-            {c.business && (
-              <section className={`${p.solution} ${p.business}`}>
-                <div className={p.storyHead}>
-                  <span className={p.label}>{t.business}</span>
-                  <BusinessIcon size={56} />
-                  <h2 className={p.h3}>{c.business.title}</h2>
-                </div>
-                <p className={p.storyText}>{c.business.text}</p>
-              </section>
-            )}
 
             {[d1, d2, d3].filter(Boolean).map((d, i) => (
               <div key={d.k} className={p.principle} style={{ gridArea: `d${i + 1}` }}>
@@ -385,14 +358,14 @@ export default function ProjectView({ id }: { id: string }) {
               {isRsvp ? (
                 <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} poster={posterOf(`${D}rsvp-figma.mp4#t=2`)} muted loop playsInline preload="none" className={p.flowVideo} />
               ) : feat.flowVideo ? (
-                <video data-bgsync src={feat.flowVideo} poster={posterOf(feat.flowVideo)} muted loop playsInline preload="none" className={feat.flowFit === 'cover' ? p.flowVideoFill : p.flowVideoContain} />
+                <video data-bgsync data-bgplain={feat.flowFit === 'fade' || undefined} src={feat.flowVideo} poster={posterOf(feat.flowVideo)} muted loop playsInline preload="none" className={feat.flowFit === 'cover' ? p.flowVideoFill : `${p.flowVideoContain} ${feat.flowFit === 'fade' ? p.flowFade : ''}`} />
               ) : (
                 <div className={p.placeholderCenter}>{screenshotPending}</div>
               )}
             </div>
 
             {hasGallery && (
-              <Gallery className={p.galleryDesk} items={galleryFor(1)} wide={!isRsvp && feat.galleryWide !== false} title={t.screens} prev={t.prev} next={t.next} pending={screenshotPending} />
+              <Gallery className={p.galleryDesk} items={galleryFor(1)} wide={!isRsvp && feat.galleryWide !== false} full={feat.galleryFull} title={t.screens} prev={t.prev} next={t.next} pending={screenshotPending} />
             )}
 
             <section className={p.result}>
@@ -410,7 +383,7 @@ export default function ProjectView({ id }: { id: string }) {
       {/* --------------------------------------------------------- Móvil --- */}
       <div className={p.mobile}>
         <div className={p.mBar}>
-          <Link href="/" className={s.wordmark}>Clickable</Link>
+          <Link href="/" className={s.brand}><Wordmark /></Link>
           <CloseLink />
         </div>
 
@@ -442,32 +415,24 @@ export default function ProjectView({ id }: { id: string }) {
 
         <div className={p.mBody}>
           <div className={p.mStory}>
-            <span className={p.label}>{t.problem}</span>
-            <ProblemIcon size={44} />
+            <span className={`${p.storyLabel} ${p.toneProblem}`}>{t.problem}</span>
             <h2 className={p.mH3}>{problemTitle}</h2>
+            {c.problemLead && <p className={`${p.mLead} ${p.toneProblem}`}>{mark(c.problemLead)}</p>}
             <p className={p.mText}>{c.origin}</p>
           </div>
           <div className={`${p.mStory} ${p.mStoryLine}`}>
-            <span className={p.label}>{t.solution}</span>
-            <SolutionIcon size={44} />
+            <span className={`${p.storyLabel} ${p.toneSolution}`}>{t.solution}</span>
             <h2 className={p.mH3}>{solutionTitle}</h2>
+            {c.solutionLead && <p className={`${p.mLead} ${p.toneSolution}`}>{mark(c.solutionLead)}</p>}
             <p className={p.mText}>{c.what}</p>
           </div>
-          {c.business && (
-            <div className={`${p.mStory} ${p.mStoryLine}`}>
-              <span className={p.label}>{t.business}</span>
-              <BusinessIcon size={44} />
-              <h2 className={p.mH3}>{c.business.title}</h2>
-              <p className={p.mText}>{c.business.text}</p>
-            </div>
-          )}
 
           <div className={p.mFlow}>
             <span className={p.mFlowLabel}>{t.flow}</span>
             {isRsvp ? (
               <video data-bgsync src={`${D}rsvp-figma.mp4#t=2`} poster={posterOf(`${D}rsvp-figma.mp4#t=2`)} muted loop playsInline preload="none" className={p.mFlowVideo} />
             ) : feat.flowVideo ? (
-              <video data-bgsync src={feat.flowVideo} poster={posterOf(feat.flowVideo)} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
+              <video data-bgsync data-bgplain={feat.flowFit === 'fade' || undefined} src={feat.flowVideo} poster={posterOf(feat.flowVideo)} muted loop playsInline preload="none" className={p.mFlowVideoContain} />
             ) : (
               <div className={`${p.placeholderCenter} ${p.mPlaceholder}`}>{screenshotPending}</div>
             )}
@@ -485,7 +450,7 @@ export default function ProjectView({ id }: { id: string }) {
         </div>
 
         {hasGallery && (
-          <Gallery className={p.galleryMob} items={galleryFor(0.9)} wide={!isRsvp && feat.galleryWide !== false} title={t.screens} prev={t.prev} next={t.next} pending={screenshotPending} />
+          <Gallery className={p.galleryMob} items={galleryFor(0.9)} wide={!isRsvp && feat.galleryWide !== false} full={feat.galleryFull} title={t.screens} prev={t.prev} next={t.next} pending={screenshotPending} />
         )}
 
         <section className={p.mResult}>

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params
   const f = FEATURES.find(x => x.id === id)
   if (!f) return {}
-  return { title: `${f.es.tag} · ${f.es.titleA.replace('\n', ' ')} ${f.es.accent} · Alberto Serrano`, description: f.es.lead }
+  return { title: `${f.es.tag} · ${f.es.titleA.replace('\n', ' ')} ${f.es.accent} · Clickable UX design`, description: f.es.lead }
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {

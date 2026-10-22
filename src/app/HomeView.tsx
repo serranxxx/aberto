@@ -39,7 +39,7 @@ export default function HomeView() {
   }, [])
 
   // Proceso: cada punto negro alberga una bolita con degradado y se la lanza al siguiente.
-  // Del último sale por la derecha de la pantalla y vuelve a entrar por la izquierda hacia el primero.
+  // Del último sale de la pantalla (por la derecha, o por abajo si los pasos van en columna) y vuelve al primero.
   useEffect(() => {
     const ol = stepsRef.current, ball = ballRef.current
     if (!ol || !ball) return
@@ -60,9 +60,9 @@ export default function HomeView() {
     const inOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2)
     const easeIn = (t: number) => t * t * t
     const easeOut = (t: number) => 1 - (1 - t) ** 3
-    // Tiro en arco bajo: la altura crece con la distancia, hasta 22px
+    // Tiro en arco bajo: la altura crece con la distancia, hasta 22px. En vertical cae en línea recta
     const arc = (a: P, b: P, ms: number, ease: (t: number) => number) => {
-      const h = Math.min(22, Math.hypot(b.x - a.x, b.y - a.y) * 0.08)
+      const h = Math.abs(b.x - a.x) < 1 ? 0 : Math.min(22, Math.hypot(b.x - a.x, b.y - a.y) * 0.08)
       const frames = Array.from({ length: 17 }, (_, k) => {
         const p = ease(k / 16)
         return { translate: `${a.x + (b.x - a.x) * p}px ${a.y + (b.y - a.y) * p - h * 4 * p * (1 - p)}px` }
@@ -81,8 +81,15 @@ export default function HomeView() {
       try {
         if (next === 0) {
           const a = center(cur), b = center(0), o = ol.getBoundingClientRect()
-          await arc(a, { x: window.innerWidth - o.left + 24, y: a.y }, 520, easeIn)
-          await arc({ x: -o.left - 24, y: b.y }, b, 620, easeOut)
+          if (Math.abs(a.x - b.x) < 1) {
+            // Pasos en columna (celular): cae hasta abajo de la pantalla y vuelve a caer desde arriba
+            await arc(a, { x: a.x, y: window.innerHeight - o.top + 24 }, 560, easeIn)
+            await arc({ x: b.x, y: -o.top - 24 }, b, 680, easeOut)
+          } else {
+            // Pasos en fila: sale por la derecha y vuelve a entrar por la izquierda
+            await arc(a, { x: window.innerWidth - o.left + 24, y: a.y }, 520, easeIn)
+            await arc({ x: -o.left - 24, y: b.y }, b, 620, easeOut)
+          }
         } else {
           await arc(center(cur), center(next), 640, inOut)
         }
@@ -103,11 +110,19 @@ export default function HomeView() {
 
   // Parallax de la intro: el contenido sube 2× en los primeros 45vh mientras el video baja,
   // así la intro de 100vh se cruza en ~55vh de scroll. Escrituras directas al DOM, sin estado.
+  // Si el navegador tiene animaciones ligadas al scroll, el parallax lo hace el CSS (intro.module.css)
+  // en el hilo del compositor: así no se traba en Safari móvil. Si no, se hace aquí en cada scroll.
   useEffect(() => {
     const rest = restRef.current, layer = layerRef.current
     if (!rest || !layer) return
-    const offset = () => Math.max(0, 0.45 * window.innerHeight - window.scrollY)
+    const cssParallax = CSS.supports('animation-timeline: scroll()')
+    // Desplazamiento actual del contenido (sea del CSS o de este código), para calcular los anclas
+    const offset = () => {
+      const t = getComputedStyle(rest).transform
+      return t && t !== 'none' ? new DOMMatrixReadOnly(t).m42 : 0
+    }
     const onPara = () => {
+      if (cssParallax) return
       const sy = window.scrollY, vh = window.innerHeight
       rest.style.transform = sy < 0.45 * vh ? `translateY(${0.45 * vh - sy}px)` : 'none'
       // "Clickable" se mantiene centrado en la franja que sigue visible (del borde superior al contenido)

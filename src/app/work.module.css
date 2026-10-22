@@ -188,6 +188,18 @@
   box-shadow: 0 0 0 1px rgba(25, 22, 30, 0.08), 0 18px 36px -20px rgba(25, 22, 30, 0.35);
 }
 
+.framePending {
+  /* Ocupa lo mismo que los dos cuadros (4:3 + 4:3) para no alargar la ventana */
+  grid-column: 1 / -1;
+  aspect-ratio: 8 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9A97A0;
+}
+
 .mediaImg {
   position: absolute;
   inset: 0;

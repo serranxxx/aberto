@@ -19,7 +19,7 @@ const PALETTE: [string, string, string][] = [
   ['#DBAB1F', 'linear-gradient(180deg, #FFD761, #FFC724)', '#19161E'], // amarillo
   ['#54A13C', 'linear-gradient(180deg, #8ECE7A, #62BB46)', '#FFFFFF'], // verde
 ]
-const PALETTE_BY_ID: Record<string, number> = { dynamicrsvp: 2, dashboardp: 0, commandbar: 1, flash: 4 }
+const PALETTE_BY_ID: Record<string, number> = { dynamicrsvp: 2, dashboardp: 0, commandbar: 1, flash: 4, designsystem: 6 }
 
 /** Variables CSS con los colores de la carpeta de un proyecto (también las usan los íconos de la barra lateral). */
 export const folderVars = (f: Feature, i = 0) => {

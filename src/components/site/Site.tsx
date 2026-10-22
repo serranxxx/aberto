@@ -67,6 +67,20 @@ function LangSwitch() {
   )
 }
 
+/** Marca: "Clickable" en Inter itálica y la firma "UX design" (UX en Inter, design manuscrita). */
+export function Wordmark() {
+  return (
+    <span className={s.wordmark}>
+      Clickable
+      <span className={s.wordDot} aria-hidden>·</span>
+      <span className={s.wordSig}>
+        <span className={s.wordUx}>UX</span>
+        <span className={`${s.script} ${s.wordDesign}`}>design</span>
+      </span>
+    </span>
+  )
+}
+
 /** Botón redondo con una X que cierra el proyecto: la hoja regresa a su carpeta en el home. */
 export function CloseLink({ className }: { className?: string }) {
   const { lang } = useLang()
@@ -89,7 +103,7 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
       <header className={s.header}>
         <div className={`${s.container} ${s.headerInner} ${s.headerWide}`}>
           <Link href="/" className={s.brand}>
-            <span className={s.wordmark}>Clickable</span>
+            <Wordmark />
           </Link>
           <CloseLink />
         </div>
@@ -103,7 +117,7 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
         <div className={`${s.container} ${s.headerInner}`}>
           <Link href="/" className={s.brand}>
             <Image src="/logo-cursor.svg" alt="" width={22} height={22} unoptimized />
-            <span className={s.brandFeature}>Alberto Serrano · {t.discipline}</span>
+            <span className={s.brandFeature}>Clickable · {t.discipline}</span>
           </Link>
           <div className={s.headerActions} style={{ gap: 24 }}>
             <Link href="/#trabajo" className={s.backLink}>← Features</Link>
@@ -118,7 +132,7 @@ export function SiteHeader({ variant = 'home' }: { variant?: 'home' | 'feature' 
     <header className={s.header}>
       <div className={`${s.container} ${s.headerInner}`}>
         <Link href="/#top" className={s.brand}>
-          <span className={s.wordmark}>Clickable</span>
+          <Wordmark />
         </Link>
         <nav className={s.nav}>
           {nav.map(n => (

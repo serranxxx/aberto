@@ -34,8 +34,9 @@ export type FeatureCopy = {
   problemTitle?: string
   solutionTitle?: string
   keyIdea?: string
-  // Sección opcional entre la solución y los principios (ej. una decisión de negocio)
-  business?: { title: string; text: string }
+  // Frase de entrada del problema y de la solución; lo que va entre *asteriscos* se resalta
+  problemLead?: string
+  solutionLead?: string
   // Etiquetas de los cursores del hero (roles de quien usa la pieza)
   cursors?: [string, string]
 }
@@ -51,10 +52,13 @@ export type Feature = {
   /** Zoom del video del hero (ej. 1.25), para acercar un mockup con mucho aire alrededor */
   heroZoom?: number
   // 'cover' llena el contenedor de "Flujo completo" (recorta los lados); por defecto se ve completo
-  flowFit?: 'cover' | 'contain'
+  // 'fade': completo, con las orillas desvanecidas sobre un fondo liso (para videos con fondo de puntos propio)
+  flowFit?: 'cover' | 'contain' | 'fade'
   gallery?: { src: string; label: string }[]
   /** false: cuatro capturas por vista en vez de dos (capturas recortadas al contenido) */
   galleryWide?: boolean
+  /** La captura llena todo el recuadro (4:3) y la etiqueta va encima: para capturas con fondo propio */
+  galleryFull?: boolean
   extra: string[]
   source?: string
   pins?: [number, number][]

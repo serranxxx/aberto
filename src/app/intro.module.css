@@ -1,11 +1,29 @@
 /* --------------------------------------------- Intro "Clickable" del home --- */
 
-/* La sección ocupa 55vh en el flujo; la capa de 100vh se cruza con el parallax */
+/* La sección ocupa 55vh en el flujo; la capa de 100vh se cruza con el parallax.
+   --peek: alto extra para cubrir lo que queda bajo la barra flotante de Safari en iPhone
+   (esa franja no cuenta en vh, y sin esto el header asoma abajo al cargar) */
+.section,
+.layer,
+.rest {
+  --peek: 0px;
+}
+
+@media (hover: none) {
+  .section,
+  .layer,
+  .rest {
+    --peek: 96px;
+  }
+}
+
 .section {
   position: relative;
   z-index: 0;
   width: 100%;
   height: 55vh;
+  /* lvh: la pantalla completa en Safari, incluyendo lo que queda bajo la barra flotante */
+  height: 55lvh;
   background: #FBFBFC;
 }
 
@@ -14,7 +32,8 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh + var(--peek));
+  height: calc(100lvh + var(--peek));
   min-height: 263px;
   overflow: hidden;
   will-change: transform;
@@ -25,8 +44,38 @@
   position: relative;
   z-index: 1;
   background: var(--paper);
-  transform: translateY(45vh);
+  transform: translateY(calc(45vh + var(--peek)));
+  transform: translateY(calc(45lvh + var(--peek)));
   will-change: transform;
+}
+
+/* Parallax en el compositor: el contenido sube 2× en los primeros 45vh de scroll y la intro baja
+   para mantener "Clickable" centrado en la franja visible (la misma cuenta que el respaldo en HomeView) */
+@supports (animation-timeline: scroll()) {
+  .rest {
+    transform: none;
+    animation: restRise linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 calc(45lvh + var(--peek));
+  }
+
+  .layer {
+    animation: layerDrift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120lvh;
+  }
+}
+
+@keyframes restRise {
+  from { transform: translateY(calc(45lvh + var(--peek))); }
+  to { transform: none; }
+}
+
+/* 45vh de 120vh = 37.5%; 55vh = 45.83% */
+@keyframes layerDrift {
+  0%, 37.5% { transform: translateY(0); }
+  45.83% { transform: translateY(5lvh); }
+  100% { transform: translateY(70lvh); }
 }
 
 .stage {
@@ -47,6 +96,8 @@
 .center {
   position: absolute;
   inset: 0;
+  /* La franja extra (--peek) queda en parte bajo la barra de Safari: se compensa para centrar en lo visible */
+  padding-bottom: calc(var(--peek, 0px) / 2);
   display: flex;
   align-items: center;
   justify-content: center;

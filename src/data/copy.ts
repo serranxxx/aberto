@@ -30,7 +30,7 @@ export const COPY = {
     why: [
       { n: '01', k: 'Diseñamos lo que se puede construir', v: 'Venimos de la ingeniería y desarrollamos lo que diseñamos. Sabemos cuánto cuesta cada decisión antes de proponerla, así que lo que te entregamos tu equipo lo puede construir.', proof: 'Prueba: I attend, diseñado y construido por nosotros' },
       { n: '02', k: 'Pensamos como dueños de producto', v: 'Tenemos un SaaS propio que hoy está en producción. Sabemos lo que es priorizar con tiempo y dinero propios, y diseñamos con eso en mente.', proof: 'Prueba: las cifras de abajo' },
-      { n: '03', k: 'Diseñamos para quien no eligió el software', v: 'En Canplast diseñamos herramientas que el equipo usa todo el día porque es su trabajo, no porque quiera. Ahí no hay margen para lo confuso.', proof: 'Prueba: Consola y WhatsApp + CRM' },
+      { n: '03', k: 'Diseñamos para quien no eligió el software', v: 'Para una empresa industrial diseñamos herramientas que su equipo usa todo el día porque es su trabajo, no porque quiera. Ahí no hay margen para lo confuso.', proof: 'Prueba: Tablero de ventas y Barra de comando' },
       { n: '04', k: 'Cada decisión tiene una razón', v: 'El argumento nunca es «así se ve mejor». Es «así lo entiende quien lo usa». Cada decisión te llega explicada, para que la puedas defender.', proof: 'Prueba: cualquier feature documentada' }
     ],
     proofLead: 'La prueba: I attend,', proofRest: 'nuestro SaaS de gestión de eventos, diseñado y construido por nosotros.', statsIntro: 'SaaS para la gestión de eventos: invitaciones, invitados, confirmaciones y acomodo. Lo fundamos, lo diseñamos y lo construimos.', statsLink: 'Ver cómo está hecho',
@@ -81,7 +81,7 @@ export const COPY = {
     why: [
       { n: '01', k: 'We design what can be built', v: 'We come from engineering and we build what we design. We know what each decision costs before proposing it, so your team can build what we deliver.', proof: 'Proof: I attend, designed and built by us' },
       { n: '02', k: 'We think like product owners', v: 'We run our own SaaS, live today. We know what it’s like to prioritize with our own time and money, and we design with that in mind.', proof: 'Proof: the numbers below' },
-      { n: '03', k: 'We design for people who didn’t choose the software', v: 'At Canplast we design tools the team uses all day because it’s their job, not because they want to. There’s no room for confusion there.', proof: 'Proof: Console and WhatsApp + CRM' },
+      { n: '03', k: 'We design for people who didn’t choose the software', v: 'For an industrial company we design tools its team uses all day because it’s their job, not because they want to. There’s no room for confusion there.', proof: 'Proof: Sales board and Command bar' },
       { n: '04', k: 'Every decision has a reason', v: 'The argument is never “it looks better.” It’s “this is how users understand it.” Every decision comes explained, so you can defend it.', proof: 'Proof: any documented feature' }
     ],
     proofLead: 'The proof: I attend,', proofRest: 'our event management SaaS, designed and built by us.', statsIntro: 'A SaaS for event management: invitations, guests, RSVPs and seating. We founded, designed and built it.', statsLink: 'See how it’s made',
@@ -111,7 +111,7 @@ export type Copy = (typeof COPY)['es']
 // Textos fijos de la página de proyecto (por ahora, solo Dynamic RSVP).
 export const PROJECT_COPY = {
   es: {
-    back: '← Proyectos', problem: 'El problema', solution: 'La solución', business: 'La decisión de negocio',
+    back: '← Proyectos', problem: 'El problema', solution: 'La solución',
     problemTitle: 'Cuatro herramientas que casi nadie encontraba.', solutionTitle: 'Usamos la confirmación como puerta.',
     flow: 'Flujo completo', screens: 'Pantallas', prev: 'Anterior', next: 'Siguiente',
     result: 'El resultado',
@@ -120,7 +120,7 @@ export const PROJECT_COPY = {
     gallery: ['Aparece sola', 'Se confirma en un toque', 'Agradece y agenda', 'Se queda como menú', 'Lleva a los pases', 'Responde con Lia', 'Muestra las fotos'],
   },
   en: {
-    back: '← Projects', problem: 'The problem', solution: 'The solution', business: 'The business decision',
+    back: '← Projects', problem: 'The problem', solution: 'The solution',
     problemTitle: 'Four tools almost nobody found.', solutionTitle: 'We used the RSVP as the door.',
     flow: 'Full flow', screens: 'Screens', prev: 'Previous', next: 'Next',
     result: 'The result',

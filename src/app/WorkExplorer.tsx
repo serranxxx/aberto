@@ -29,7 +29,7 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
 
   if (!sel || !c) return null
   // Dos cuadros del video del flujo, segundos 5 y 10 (<video>-5s.webp, -10s.webp); sin video, la imagen del proyecto.
-  // En Eventos flash el segundo 10 cae en una transición, así que su -10s.webp es del segundo 11.
+  // Cuando ese segundo cae en una transición se usa otro cercano: Eventos flash usa el 11; Sistema de diseño, el 6.5 y el 2.5.
   const frames = (sel.video ? ['-5s.webp', '-10s.webp'].map(x => sel.video!.replace(/\.mp4$/, x)) : [sel.img]).filter(Boolean) as string[]
 
   return (
@@ -62,6 +62,8 @@ export function WorkExplorer({ lang }: { lang: Lang }) {
           <div className={w.left}>
             <p className={w.lead}>{c.lead}</p>
             <div className={w.media}>
+              {/* Sin capturas todavía: un recuadro con aviso */}
+              {!frames.length && <div className={`${w.frame} ${w.framePending}`}>{t.noImg}</div>}
               {frames.map((src, k) => (
                 <div key={src} className={w.frame}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}

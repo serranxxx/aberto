@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Alberto Serrano · Diseño UX",
+  title: "Clickable · UX design",
   description:
-    "Diseño UX para SaaS y herramientas internas. Diseño, y cuando hace falta construyo, desde el primer flujo hasta la pantalla en producción.",
+    "Diseño UX para SaaS y herramientas internas. Diseñamos, y cuando hace falta construimos, desde el primer flujo hasta la pantalla en producción.",
 };
 
 export default function RootLayout({
