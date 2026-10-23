@@ -13,9 +13,6 @@
   display: block;
   width: 100%;
   aspect-ratio: 1 / 0.74;
-  perspective: 800px;
-  /* Sombra suave de toda la carpeta */
-  filter: drop-shadow(0 2px 3px rgba(25, 22, 30, 0.05)) drop-shadow(0 5px 8px rgba(25, 22, 30, 0.08));
 }
 
 .back,
@@ -33,6 +30,9 @@
   bottom: 0;
   border-radius: 3cqi 9cqi 9cqi 9cqi;
   background: var(--back);
+  /* Sombra suave de la carpeta. Antes era un filter drop-shadow en todo el bloque: eso lo volvía una capa
+     aparte que el navegador redibujaba con medio pixel de diferencia cuando algo cerca se animaba ("vibraba") */
+  box-shadow: 0 2px 3px rgba(25, 22, 30, 0.05), 0 5px 8px rgba(25, 22, 30, 0.08);
 }
 
 .tab {
@@ -88,18 +88,22 @@
   transition: transform 0.45s cubic-bezier(.2, .8, .2, 1);
 }
 
-/* Al pasar el cursor: las hojas suben y la solapa se abre */
-.folder:hover .paper1,
-.folder:focus-visible .paper1 {
-  transform: translateY(-26%) rotate(-3deg);
-}
+/* Al pasar el cursor (solo con mouse: en táctil el hover se queda pegado) */
+@media (hover: hover) {
+  .folder:hover .paper1,
+  .folder:focus-visible .paper1 {
+    transform: translateY(-26%) rotate(-3deg);
+  }
 
-.folder:hover .paper2,
-.folder:focus-visible .paper2 {
-  transform: translateY(-34%) rotate(6deg);
-}
+  .folder:hover .paper2,
+  .folder:focus-visible .paper2 {
+    transform: translateY(-34%) rotate(6deg);
+  }
 
-.folder:hover .flap,
-.folder:focus-visible .flap {
-  transform: rotateX(-20deg);
+  /* La perspectiva va solo en el estado abierto: en reposo la carpeta es 2D.
+     Con perspectiva permanente las capas 3D se redondeaban distinto al hacer scroll y la carpeta "vibraba" */
+  .folder:hover .flap,
+  .folder:focus-visible .flap {
+    transform: perspective(800px) rotateX(-20deg);
+  }
 }
