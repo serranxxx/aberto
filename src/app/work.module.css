@@ -244,27 +244,27 @@
   grid-area: folder;
   align-self: start;
   justify-self: end;
-  width: 161px;
-  /* 30% más chica que el diseño original, con todo y texto */
-  zoom: 0.7;
+  /* 30% más chica que el diseño original (161px). Sin zoom: en Safari hacía vibrar la carpeta;
+     el texto y la flecha van en cqi para escalar con ella */
+  width: 113px;
 }
 
 .flapLabel {
-  font-size: 12px;
+  font-size: 7.5cqi;
   font-weight: 700;
   letter-spacing: -0.02em;
   white-space: nowrap;
 }
 
 .flapArrow {
-  width: 22px;
-  height: 22px;
+  width: 13.7cqi;
+  height: 13.7cqi;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
-  font-size: 12px;
+  font-size: 7.5cqi;
   font-weight: 600;
   color: var(--ink);
   transition: transform 0.3s;
