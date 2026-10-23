@@ -224,8 +224,11 @@
 
 .titleAccent {
   display: inline-block;
-  margin-top: -0.05em;
-  padding: 0 0.12em 0.12em 0;
+  /* El degradado solo pinta dentro de la caja: relleno amplio para que no se corten
+     los trazos de la manuscrita (descendentes y remates), compensado con margen negativo */
+  margin: -0.05em -0.2em -0.3em -0.12em;
+  padding: 0.05em 0.2em 0.3em 0.12em;
+  line-height: 1.25;
   font-family: var(--font-script);
   font-weight: 400;
   letter-spacing: 0;

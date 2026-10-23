@@ -95,6 +95,7 @@ export function FolderLink({ f, i = 0, label, className, children, after }: {
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Con teclas modificadoras (abrir en otra pestaña) o movimiento reducido, el enlace funciona normal
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+    if (location.pathname === '/') sessionStorage.setItem(SCROLL_KEY, String(window.scrollY))
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !paperRef.current) return
     e.preventDefault()
     router.prefetch(href)
@@ -119,6 +120,8 @@ export function FolderLink({ f, i = 0, label, className, children, after }: {
 
 /** Al volver del proyecto, el home selecciona la carpeta de la que salió (lo lee WorkExplorer). */
 export const RETURN_KEY = 'clk-folder-return'
+// Scroll del home al abrir un proyecto: al cerrarlo se regresa justo ahí
+const SCROLL_KEY = 'clk-home-scroll'
 
 const makeSheet = () => {
   const sheet = document.createElement('div')
@@ -133,7 +136,7 @@ const makeSheet = () => {
  * Salida del proyecto: la página se vuelve una hoja, regresa al home y se guarda en su carpeta
  * (la inversa de openSheet).
  */
-function closeToFolder(id: string, img: string, go: () => void) {
+function closeToFolder(id: string, img: string, go: () => void, homeY: number | null) {
   const sheet = makeSheet()
   const pic = document.createElement('img')
   pic.src = img
@@ -148,12 +151,21 @@ function closeToFolder(id: string, img: string, go: () => void) {
     const t0 = performance.now()
     let last = '', still = 0
     const find = () => {
-      const target = location.pathname === '/' ? document.querySelector<HTMLElement>(`[data-folder-paper="${id}"]`) : null
+      const home = location.pathname === '/'
+      // Regresa al scroll que tenía el home (se repite mientras la página termina de crecer)
+      if (home && homeY != null && Math.abs(window.scrollY - homeY) > 1) window.scrollTo({ top: homeY, behavior: 'instant' })
+      const target = home ? document.querySelector<HTMLElement>(`[data-folder-paper="${id}"]`) : null
       const r = target?.getBoundingClientRect()
-      const key = r ? `${Math.round(r.left)},${Math.round(r.top)}` : ''
+      const key = r ? `${Math.round(r.left)},${Math.round(r.top)},${Math.round(window.scrollY)}` : ''
       still = key && key === last ? still + 1 : 0
       last = key
-      if (r && still >= 8 && r.width) return fly(r)
+      if (r && still >= 8 && r.width) {
+        // Si la carpeta no está a la vista, la hoja solo se desvanece
+        if (r.bottom > 0 && r.top < window.innerHeight) return fly(r)
+        sheet.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).finished.then(() => sheet.remove())
+        sessionStorage.removeItem(RETURN_KEY)
+        return
+      }
       if (performance.now() - t0 > 5000) {
         sheet.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).finished.then(() => sheet.remove())
         sessionStorage.removeItem(RETURN_KEY)
@@ -194,7 +206,10 @@ export function CloseLink({ className, label }: { className?: string; label: str
     if (!f || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     e.preventDefault()
-    closeToFolder(f.id, papers(f)[0], () => router.push('/#trabajo'))
+    const saved = sessionStorage.getItem(SCROLL_KEY)
+    const homeY = saved != null ? Number(saved) : null
+    // Con un scroll guardado se vuelve al mismo punto del home; si no, a la sección de trabajo
+    closeToFolder(f.id, papers(f)[0], () => (homeY != null ? router.push('/', { scroll: false }) : router.push('/#trabajo')), homeY)
   }
 
   return (

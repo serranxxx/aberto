@@ -34,13 +34,15 @@ const CUR_PATH = 'M5.4 4.25 18.9 9.6Q20 10.1 19.5 11.1Q19.2 11.7 18.5 11.8L14.4 
 const TYPE_AT = 0.5, TYPE_STEP = 0.17
 const OUT = [13.65, 14.25]
 const HERO_SPEED = 1.05
+// Momento (reloj global) en que la intro ya está compuesta: firma visible y cursor del degradado fuera
+const AUTO_SCROLL_AT = 14.6
 
 // Tres cursores: cada uno entra, hace clic, arrastra su selección y sale cuando llega el siguiente
 type Member = { id: 'pink' | 'coral' | 'grad'; color: string; click: number; drag: [number, number]; fade?: [number, number]; solid?: boolean }
 const TEAM: Member[] = [
   { id: 'pink', color: PINK, click: 4.5, drag: [4.6, 5.35], fade: [5.85, 6.4], solid: true },
   { id: 'coral', color: CORAL, click: 6.65, drag: [6.75, 7.55], fade: [8.05, 8.6], solid: true },
-  { id: 'grad', color: 'grad', click: 8.85, drag: [8.85, 10.15] },
+  { id: 'grad', color: 'grad', click: 8.85, drag: [8.85, 9.65] },
 ]
 // El fondo cambia de golpe en el cuadro exacto de cada clic
 const DARK_SWITCH: [number, number][] = [[4.5, 1], [13.95, 0]]
@@ -69,8 +71,8 @@ function farKeys(K: Record<string, Key[]>, L: Layout, D: number) {
   })
   return out
 }
-// El cursor del degradado recorre "UX design" de izquierda a derecha y la va escribiendo
-const SIG_T = [10.7, 11.6]
+// "UX design" aparece (sube y se desvanece hacia arriba) mientras el cursor del degradado pasa sobre ella en un solo arco
+const SIG_T = [9.7, 10.3]
 // Posiciones de la punta del cursor relativas a la esquina superior izquierda de la palabra (sw: ancho de la firma)
 function teamKeys(L: Layout, sw: number): Record<string, Key[]> {
   const { W, H, CW } = L, top = H * 0.03, bot = H * 0.94
@@ -81,9 +83,10 @@ function teamKeys(L: Layout, sw: number): Record<string, Key[]> {
       [6.4, -16 + (-16 - W - 12) * 4, bot + (bot + H * 0.12) * 4]],
     coral: [[0, W * 0.9, H * 4.2], [5.85, W * 0.9, H * 4.2], [6.65, W + 26, bot + H * 0.08, W * 1.25, H * 2.2], [6.75, W + 26, bot + H * 0.08],
       [7.55, -16, top], [8.05, -16, top], [8.6, -700, -H * 2.8, -W * 0.2, -H * 0.6]],
-    grad: [[0, -W * 0.9, H * 3], [8.05, -W * 0.9, H * 3], [8.8, -H * 0.15, top - H * 0.07, -W * 0.45, H * 0.6], [8.85, -H * 0.15, top - H * 0.07],
-      [10.15, CW + H * 0.035, bot], [10.35, CW + H * 0.035, bot],
-      [SIG_T[0], W - (sw || H * 1.2) - H * 0.04, H * 1.22], [SIG_T[1], W + H * 0.05, H * 1.22], [12.2, W + 1400, H * 1.22 + 160]],
+    // el degradado selecciona "Click" y, sin detenerse, sale en un arco que pasa sobre la firma
+    grad: [[0, -W * 0.9, H * 3], [8.05, -W * 0.9, H * 3], [8.8, -H * 0.03, top - H * 0.07, -W * 0.45, H * 0.6], [8.85, -H * 0.03, top - H * 0.07],
+      [9.65, CW + H * 0.035, bot],
+      [11.0, W + 700, H * 1.35, W - (sw || H * 1.2) * 0.3, H * 1.45]],
   }
 }
 // Cada tramo se curva un poco hacia un lado; los arrastres van en línea recta
@@ -148,6 +151,8 @@ function Box({ T, keys, ui }: { T: number; keys: Key[]; ui: number }) {
   const hs = handle(ui, { border: `${hw}px solid transparent`, background: `linear-gradient(#FFFFFF,#FFFFFF) padding-box, ${GRAD_CSS} border-box` })
   return (
     <div className={c.box} style={{ left: l, top: t, width: r - l, height: b - t, opacity: 1 - fade(T, OUT[0], OUT[1]) }}>
+      {/* Relleno con el degradado al 16%: tiñe las letras seleccionadas */}
+      <div className={c.edge} style={{ inset: 0, background: GRAD_CSS, opacity: 0.16 }} />
       <div className={c.edge} style={{ left: 0, right: 0, top: 0, height: hw, background: GRAD_CSS }} />
       <div className={c.edge} style={{ left: 0, right: 0, bottom: 0, height: hw, background: GRAD_CSS }} />
       <div className={c.edge} style={{ left: 0, top: 0, bottom: 0, width: hw, background: CORAL }} />
@@ -323,16 +328,34 @@ function Subtitle({ T, ink, out, s, keys, L }: { T: number; ink: string; out: nu
   )
 }
 
-/** Firma "UX design": se revela detrás del cursor del degradado (la firma va alineada a la derecha bajo la palabra). */
+/**
+ * Firma "UX design": aparece bajo la palabra (alineada a la derecha). "design" empieza en el color del
+ * texto y se pinta con el degradado de izquierda a derecha justo donde va pasando el cursor.
+ */
 function Signature({ T, ink, out, s, sigRef, sw, cx, W }: {
   T: number; ink: string; out: number; s: number
   sigRef: React.RefObject<HTMLDivElement | null>; sw: number; cx: number | null; W: number
 }) {
-  const p = T < SIG_T[0] || cx == null || !sw ? (T >= SIG_T[1] ? 1 : 0) : CL((cx - (W - sw)) / sw, 0, 1)
+  const p = fade(T, SIG_T[0], SIG_T[1])
+  const dRef = useRef<HTMLSpanElement>(null)
+  const [dOff, setDOff] = useState<number | null>(null)
+  useLayoutEffect(() => {
+    const d = dRef.current?.offsetLeft
+    if (d != null && d !== dOff) setDOff(d)
+  })
+  // Borde del pintado: posición del cursor respecto al inicio de "design", con orilla suave de ±40px×s
+  const dl = dOff != null && sw ? W - sw + dOff : null
+  const pos = cx == null || dl == null ? (T > SIG_T[1] + 1.5 ? 1e4 : -1e4) : cx - dl
+  const soft = 40 * s
+  const gradMask = `linear-gradient(90deg, #000 ${pos - soft}px, transparent ${pos + soft}px)`
+  const inkMask = `linear-gradient(90deg, transparent ${pos - soft}px, #000 ${pos + soft}px)`
   return (
-    <div ref={sigRef} className={c.signature} style={{ marginTop: -19 * s, gap: 11 * s, opacity: out, clipPath: `inset(-30px ${(1 - p) * 100}% -30px -30px)` }}>
+    <div ref={sigRef} className={c.signature} style={{ marginTop: -19 * s, gap: 11 * s, opacity: out * p, transform: `translateY(${(1 - p) * 14 * s}px)` }}>
       <span className={c.sigUx} style={{ fontSize: 55 * s, color: ink }}>UX</span>
-      <span className={c.sigDesign} style={{ fontSize: 62 * s, backgroundImage: GRAD_CSS }}>design</span>
+      <span ref={dRef} className={c.sigDesign} style={{ fontSize: 62 * s }}>
+        <span style={{ color: ink, WebkitMaskImage: inkMask, maskImage: inkMask }}>design</span>
+        <span className={c.sigGrad} style={{ backgroundImage: GRAD_CSS, WebkitMaskImage: gradMask, maskImage: gradMask }}>design</span>
+      </span>
     </div>
   )
 }
@@ -445,13 +468,49 @@ export function ClickableIntro() {
   useEffect(() => {
     const END = OUT[0] + PRE.off - 0.01
     let raf = 0
+    let endTimer: ReturnType<typeof setTimeout> | undefined
+    let scrolled = false
+    let scrollRaf = 0
+    // Deja el header a ~23% de la pantalla, con "Clickable" todavía a la vista en la franja de arriba.
+    // Mientras dura el parallax el header sube 2 px por cada px de scroll: scroll = (posición actual − destino) / 2
+    const autoScroll = () => {
+      if (window.scrollY > 10) return
+      const header = document.querySelector('header')
+      if (!header) return
+      const target = Math.max(window.innerHeight * 0.23, 200)
+      const top = (header.getBoundingClientRect().top - target) / 2
+      if (top <= 0) return
+      // Scroll propio (el 'smooth' del navegador es corto y brusco): 1.6 s con entrada y salida suaves.
+      // Si la persona toca, usa la rueda o una tecla, se suelta
+      const from = window.scrollY, dist = top - from, dur = 1600, t0 = performance.now()
+      const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2)
+      let stop = false
+      const cancel = () => { stop = true }
+      const evs = ['wheel', 'touchstart', 'keydown', 'mousedown'] as const
+      evs.forEach(e => window.addEventListener(e, cancel, { passive: true, once: true }))
+      const step = (now: number) => {
+        const p = Math.min(1, (now - t0) / dur)
+        if (stop) return
+        window.scrollTo({ top: from + dist * ease(p), behavior: 'instant' })
+        if (p < 1) scrollRaf = requestAnimationFrame(step)
+        else evs.forEach(e => window.removeEventListener(e, cancel))
+      }
+      scrollRaf = requestAnimationFrame(step)
+    }
     // Arranca (o reinicia) el reloj desde cero
     play.current = () => {
       cancelAnimationFrame(raf)
+      clearTimeout(endTimer)
+      scrolled = false
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setT(END); return }
       const t0 = performance.now()
       const tick = (now: number) => {
         const t = (now - t0) / 1000 * HERO_SPEED
+        // En cuanto el cursor del degradado sale (la firma ya está), baja sola si la persona sigue arriba
+        if (!scrolled && t >= AUTO_SCROLL_AT) {
+          scrolled = true
+          endTimer = setTimeout(autoScroll, 200)
+        }
         if (t >= END) { setT(END); return }
         setT(t)
         raf = requestAnimationFrame(tick)
@@ -470,7 +529,7 @@ export function ClickableIntro() {
     fit()
     const ro = new ResizeObserver(fit)
     if (box.current) ro.observe(box.current)
-    return () => { cancelAnimationFrame(raf); ro.disconnect() }
+    return () => { cancelAnimationFrame(raf); cancelAnimationFrame(scrollRaf); clearTimeout(endTimer); ro.disconnect() }
   }, [])
 
   return (

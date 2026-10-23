@@ -29,7 +29,10 @@
   box-sizing: border-box;
 }
 
+/* Sin scroll horizontal: en iOS el overflow del body no llega al viewport, así que va también en html.
+   clip (no hidden) para no romper los position: sticky */
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: 64px;
 }

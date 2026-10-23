@@ -67,18 +67,9 @@ function LangSwitch() {
   )
 }
 
-/** Marca: "Clickable" en Inter itálica y la firma "UX design" (UX en Inter, design manuscrita). */
+/** Marca: "Clickable" en Inter itálica. */
 export function Wordmark() {
-  return (
-    <span className={s.wordmark}>
-      Clickable
-      <span className={s.wordDot} aria-hidden>·</span>
-      <span className={s.wordSig}>
-        <span className={s.wordUx}>UX</span>
-        <span className={`${s.script} ${s.wordDesign}`}>design</span>
-      </span>
-    </span>
-  )
+  return <span className={s.wordmark}>Clickable</span>
 }
 
 /** Botón redondo con una X que cierra el proyecto: la hoja regresa a su carpeta en el home. */

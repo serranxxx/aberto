@@ -73,18 +73,25 @@ export default function HomeView() {
     const launch = (i: number) => dots[i].animate([{ scale: '1' }, { scale: '.8', offset: 0.35 }, { scale: '1' }], { duration: 320, easing: 'ease-out' })
     const receive = (i: number) => dots[i].animate([{ scale: '1' }, { scale: '1.3', offset: 0.35 }, { scale: '1' }], { duration: 360, easing: 'ease-out' })
 
+    // Solo se anima mientras la sección está a la vista
+    let visible = false
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting }, { threshold: 0.2 })
+    io.observe(ol)
+
     let alive = true, timer: ReturnType<typeof setTimeout> | undefined
     const hop = async () => {
       if (!alive) return
+      if (!visible) { timer = setTimeout(hop, 400); return }
       const next = (cur + 1) % n
       launch(cur)
       try {
         if (next === 0) {
           const a = center(cur), b = center(0), o = ol.getBoundingClientRect()
           if (Math.abs(a.x - b.x) < 1) {
-            // Pasos en columna (celular): cae hasta abajo de la pantalla y vuelve a caer desde arriba
-            await arc(a, { x: a.x, y: window.innerHeight - o.top + 24 }, 560, easeIn)
-            await arc({ x: b.x, y: -o.top - 24 }, b, 680, easeOut)
+            // Pasos en columna (celular): cae bajo la lista y vuelve a caer desde arriba de ella
+            // (la lista recorta en vertical, así la bolita no pasa sobre otras secciones)
+            await arc(a, { x: a.x, y: o.height + 24 }, 520, easeIn)
+            await arc({ x: b.x, y: -24 }, b, 620, easeOut)
           } else {
             // Pasos en fila: sale por la derecha y vuelve a entrar por la izquierda
             await arc(a, { x: window.innerWidth - o.left + 24, y: a.y }, 520, easeIn)
@@ -102,6 +109,7 @@ export default function HomeView() {
     timer = setTimeout(hop, 1200)
     return () => {
       alive = false
+      io.disconnect()
       clearTimeout(timer)
       ball.getAnimations().forEach(a => a.cancel())
       window.removeEventListener('resize', onResize)

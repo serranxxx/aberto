@@ -151,43 +151,14 @@
   flex: none;
 }
 
-/* Marca: "Clickable" en Inter itálica, con la firma "UX design" al lado */
+/* Marca: "Clickable" en Inter itálica */
 .wordmark {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 7px;
   font-size: 17px;
   font-weight: 700;
   font-style: italic;
   letter-spacing: -0.04em;
   color: var(--ink);
   white-space: nowrap;
-}
-
-.wordDot {
-  font-style: normal;
-  color: var(--ink-4);
-}
-
-.wordSig {
-  display: inline-flex;
-  align-items: baseline;
-  /* Mismas proporciones que la firma de la intro: design ~1.13× UX y muy juntos */
-  gap: 3px;
-}
-
-.wordUx {
-  /* Igual que "Clickable": hereda tamaño, peso e itálica */
-  font-size: inherit;
-  letter-spacing: -0.04em;
-}
-
-/* La manuscrita sin el relleno de .script, para que no empuje el header */
-.wordDesign {
-  padding: 0 0.15em 0 0;
-  font-size: 19px;
-  font-style: normal;
-  line-height: 1;
 }
 
 .brandName {

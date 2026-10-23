@@ -2,6 +2,8 @@
   width: 100%;
   min-height: 100vh;
   background: var(--paper);
+  /* Lo que sale de la pantalla (cursores de la intro, la bolita del proceso) no debe crear scroll lateral */
+  overflow-x: clip;
 }
 
 .col {
@@ -252,10 +254,6 @@
 }
 
 @media (max-width: 559px) {
-  .pains {
-    gap: 14px;
-  }
-
   .pain {
     width: 100%;
     gap: 10px;
@@ -265,18 +263,29 @@
     padding-left: 24px;
   }
 
+  .pains {
+    gap: 10px;
+  }
+
   .painAvatar {
-    width: 38px;
-    height: 38px;
-    font-size: 12px;
+    width: 30px;
+    height: 30px;
+    border-width: 2px;
+    font-size: 10px;
   }
 
   .painCard {
-    padding: 14px 16px 16px;
+    gap: 4px;
+    padding: 10px 12px 12px;
+    border-radius: 10px;
+  }
+
+  .painMeta {
+    font-size: 11px;
   }
 
   .painText {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -667,6 +676,9 @@
 
 .timelineWrap {
   position: relative;
+  /* La bolita puede salir por los lados (escritorio), pero no por arriba ni abajo de la lista */
+  overflow-y: clip;
+  overflow-clip-margin: 12px;
 }
 
 .timeline {

@@ -61,15 +61,14 @@ const MOTIONS: Record<string, (el: HTMLElement, i: number, c: Ctx) => void> = {
     c.later(loop, 1300)
   },
 
-  /** Comentarios de "¿Te suena?": aparecen uno tras otro, sin flotar. */
+  /** Comentarios de "¿Te suena?": aparecen uno tras otro, deslizándose suave y sin rebote. */
   comment: (el, i) => {
     el.animate(
       [
-        { opacity: 0, scale: '.92', translate: '0 16px' },
-        { opacity: 1, scale: '1.02', translate: '0 -2px', offset: 0.65 },
+        { opacity: 0, scale: '.98', translate: '0 18px' },
         { opacity: 1, scale: '1', translate: '0 0' },
       ],
-      { duration: 560, delay: 120 + i * 160, easing: EZ, fill: 'backwards' },
+      { duration: 900, delay: 100 + i * 140, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' },
     )
   },
 
